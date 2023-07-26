@@ -1,0 +1,29 @@
+.css-levciy-MuiTablePagination-displayedRows{
+    display: none !important;
+    background-color: red !important ;
+}
+.css-16c50h-MuiInputBase-root-MuiTablePagination-select{
+    margin-right: 0px !important;
+}
+.css-m3l1ig-MuiNativeSelect-select-MuiInputBase-input:not([multiple]) option, .css-m3l1ig-MuiNativeSelect-select-MuiInputBase-input:not([multiple]) optgroup {
+    background-color: #dc3545;
+    text-align: center;
+}
+.e-grid .e-groupcaption { 
+    display: none; 
+} 
+
+div.MuiDataGrid-columnHeaderTitleContainer {
+    display: flex;
+    justify-content: center;
+}
+/* div{
+    display: flex;
+    justify-content: end;
+} */
+.MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.MuiTablePagination-toolbar.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar{
+/* margin-left: 1330px; */
+}
+.custom-data-grid .MuiDataGrid-root .MuiDataGrid-footerContainer {
+    display: none;
+  }

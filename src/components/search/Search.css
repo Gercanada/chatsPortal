@@ -1,0 +1,55 @@
+#search-result-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#search-result-table td,
+#search-result-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.search-result-table-th-dark {
+  color: #ddd !important;
+}
+
+.search-result-table-th-light {
+  color: black !important;
+}
+
+/*
+
+#search-result-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+#search-result-table tr:hover {
+  background-color: #ddd;
+}
+*/
+
+#search-result-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  /*background-color: #2d3e49;*/
+  color: black;
+  font-weight: bold;
+}
+
+#search-result-table-title {
+  background-color: #2d3e49;
+}
+
+#search-result-table-title th {
+  color: white;
+  font-size: 16px;
+}
+
+.search-result-table-body-tr-light:hover {
+  background-color: #ddd;
+}
+
+.search-result-table-body-tr-dark:hover {
+  background-color: #979797;
+}
