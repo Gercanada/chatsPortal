@@ -119,7 +119,8 @@ export const Sidebar = () => {
               alignItems: 'center',
             }}
           >
-            <img style={{padding: '20px'}} src='/images/LOGOPORTAL.png' width='250px' alt='logo' />
+            {/* <img style={{padding: '20px'}} src='/images/LOGOPORTAL.png' width='250px' alt='logo' /> */}
+            <h1>ViveChatGPT</h1>
           </ListSubheader>
           <Divider />
           <ListItemButton onClick={() => navigateTo('/')}>

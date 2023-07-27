@@ -70,11 +70,13 @@ export default function Navigator(props) {
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
-        <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}>
-          <Typography variant='h6' component='h6' display='flex'>
-            <img src='/images/LOGOPORTAL.png' width='200px' alt='' />
+        {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
+          <Typography variant='h1' component='h6' display='flex'>
+            {/* <img src='/images/LOGOPORTAL.png' width='200px' alt='' /> */}
+            ViveChatGPT no fake V5.0
+      
           </Typography>
-        </ListItem>
+        {/* </ListItem> */}
         <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
           <ListItem sx={{ py: 2, px: 0 }}>
             <ListItemButton>
