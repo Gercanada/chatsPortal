@@ -1,4 +1,4 @@
-import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { Breadcrumbs, Grid, Link, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { SearchBar } from '../../components/search/SearchBar';
 import { Navbar, Sidebar } from '../components';

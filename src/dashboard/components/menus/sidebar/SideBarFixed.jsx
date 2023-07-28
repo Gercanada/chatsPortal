@@ -167,7 +167,7 @@ theme = {
   },
 };
 
-const drawerWidth = 256;
+const drawerWidth = 258;
 
 export function SideBarFixed({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -201,7 +201,7 @@ export function SideBarFixed({ children }) {
         </Box>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <Header onDrawerToggle={handleDrawerToggle} />
-          <Box component="main" sx={{ flex: 1, px: 1 }}>
+          <Box sx={{ flex: 1 }}>
           {children}
           </Box>
         </Box>

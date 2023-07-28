@@ -3,11 +3,14 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
+import ChatIcon from '@mui/icons-material/Chat';
+import PersonIcon from '@mui/icons-material/Person';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import ForumIcon from '@mui/icons-material/Forum';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -52,11 +55,11 @@ export default function Navigator(props) {
 
   const categories = [
     {
-      id: t('submenu_cases'),
+      id: t('submenu_contacts'),
       children: [
         {
-          id: 'submenu_cases',
-          icon: <PersonAddIcon />,
+          id: 'submenu_constacts',
+          icon: <PersonIcon />,
           url: '/cases',
         },
       ],
@@ -81,9 +84,9 @@ export default function Navigator(props) {
           <ListItem sx={{ py: 2, px: 0 }}>
             <ListItemButton>
               <ListItemIcon>
-                <HomeIcon />
+                <ForumIcon />
               </ListItemIcon>
-              <ListItemText>Dashboard</ListItemText>
+              <ListItemText>Chats</ListItemText>
             </ListItemButton>
           </ListItem>
         </Link>
