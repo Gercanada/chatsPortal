@@ -30,6 +30,102 @@ import { logout } from '../../../../store/slices/auth';
 import { clearLocalStorage } from '../../../../functions/localStorageUtil';
 import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import PopoverField from '../../../../components/Popovers/PopoverField';
+
+export const data = {"data": [
+  {
+      "id": 2,
+      "avatar": null,
+      "username": "heriberto",
+      "name": "Heriberto",
+      "last_name": "Hernandez",
+      "email": "heriberto.h@gercanada.com",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  },
+  {
+      "id": 8,
+      "avatar": null,
+      "username": "pablo_s",
+      "name": "Pablo",
+      "last_name": "Sainz",
+      "email": "pablo.s@immcase.com",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  },
+  {
+      "id": 9,
+      "avatar": null,
+      "username": "amy_m",
+      "name": "Amy",
+      "last_name": "Martinez",
+      "email": "amy.m@gercanada.com",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  },
+  {
+      "id": 10,
+      "avatar": null,
+      "username": "cecilia_v",
+      "name": "Cecilia",
+      "last_name": "Verduzco",
+      "email": "cecilia.v@laborem.ca",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  },
+  {
+      "id": 12,
+      "avatar": null,
+      "username": "josue_r",
+      "name": "Josue",
+      "last_name": "Rocha",
+      "email": "josue.r@gercanada.com",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  },
+  {
+      "id": 13,
+      "avatar": "/documents/users/26072023_143800.png",
+      "username": "lizeth_r",
+      "name": "Lizeth Anahi",
+      "last_name": "Ramirez Rodriguez",
+      "email": "lizeth.r@gercanada.com",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  },
+  {
+      "id": 14,
+      "avatar": null,
+      "username": "mayja_m",
+      "name": "Mayja",
+      "last_name": "Madrid",
+      "email": "mayja.m@gercanada.com",
+      "active": 1,
+      "role_id": {
+          "id": 2,
+          "value": "Agent"
+      }
+  }
+]
+}
 
 const itemCategory = {
   boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
@@ -77,7 +173,6 @@ export default function Navigator(props) {
           <Typography variant='h1' component='h6' display='flex'>
             {/* <img src='/images/LOGOPORTAL.png' width='200px' alt='' /> */}
             ViveChatGPT no fake V5.0
-      
           </Typography>
         {/* </ListItem> */}
         <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -86,7 +181,12 @@ export default function Navigator(props) {
               <ListItemIcon>
                 <ForumIcon />
               </ListItemIcon>
-              <ListItemText>Chats</ListItemText>
+              <ListItemText>
+              <PopoverField
+                values={data?.data}
+                title={'Chats'}
+              />
+              </ListItemText>
             </ListItemButton>
           </ListItem>
         </Link>
