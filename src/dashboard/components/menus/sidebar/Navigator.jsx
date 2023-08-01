@@ -24,13 +24,14 @@ import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { logout } from '../../../../store/slices/auth';
 import { clearLocalStorage } from '../../../../functions/localStorageUtil';
 import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PopoverField from '../../../../components/Popovers/PopoverField';
+import AddCommentIcon from '@mui/icons-material/AddComment';
 
 export const data = {
   data: [
@@ -151,18 +152,12 @@ export default function Navigator(props) {
 
   const categories = [
     {
-      id: t('submenu_contacts'),
-      children: [
-        {
-          id: 'submenu_constacts',
-          icon: <PersonIcon />,
+      id: t('new_conversation'),
+      children: [ {
+          id: 'chats',
+          icon: <ForumIcon />,
           url: '/cases',
-        },
-      ],
-    },
-    {
-      id: t('submenu_checklist'),
-      children: [{ id: 'submenu_checklist', icon: <PlaylistAddCheckIcon />, url: '/checklist' }],
+        },{ id: 'new_conversation', icon: <AddCommentIcon />, url: '/checklist' }],
     },
   ];
 
@@ -177,7 +172,7 @@ export default function Navigator(props) {
         {/* </ListItem> */}
         {/* <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}> */}
         <ListItem sx={{ py: 2, px: 0 }}>
-          <Typography
+          <Grid
             sx={{
               cursor: 'pointer',
               width: '100%',
@@ -190,16 +185,16 @@ export default function Navigator(props) {
             }}
           >
             <ListItemIcon sx={{ml:1}}>
-              <ForumIcon />
+              <PersonIcon />
             </ListItemIcon>
             <ListItemText>
-              <PopoverField values={data?.data} title={'Chats'} />
+              <PopoverField values={data?.data} title={'Contacts'} />
             </ListItemText>
-          </Typography>
+          </Grid>
         </ListItem>
         {/* </Link> */}
-        {categories.map(({ id, children }) => (
-          <React.Fragment key={id}>
+        {categories.map(({ id, children },index) => (
+          <React.Fragment key={index}>
             <Accordion defaultExpanded sx={{ boxShadow: '0', background: 'inherit' }}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -210,7 +205,7 @@ export default function Navigator(props) {
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
                 {children.map(({ id: childId, icon, active, url }) => (
-                  <Link key={id} to={url} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Link key={`${index}-${childId}`} to={url} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <ListItem disablePadding key={childId} onClick={() => navigateTo(url)}>
                       <ListItemButton selected={active}>
                         <ListItemIcon>{icon}</ListItemIcon>

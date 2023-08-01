@@ -27,17 +27,13 @@ const PopoverField = ({ values = [], title }) => {
 
   return (
     <Grid>
-      <Typography
-        onClick={(e) => handlePopoverOpen(e)}
-        sx={{ textDecoration: 'underline', cursor: 'pointer' }}
-        variant='p'
-      >
-        + {t(title)}
+      <Typography onClick={(e) => handlePopoverOpen(e)} sx={{ cursor: 'pointer' }}>
+        {t(title)}
       </Typography>
       <>
         <Popover
           open={openPopup}
-          anchorReference="anchorPosition"
+          anchorReference='anchorPosition'
           anchorPosition={{ top: 200, left: 450 }}
           anchorOrigin={{
             vertical: 'center',
@@ -56,7 +52,7 @@ const PopoverField = ({ values = [], title }) => {
           }}
         >
           <Box onClick={handlePopoverClose} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button sx={{ ml: 0.5, mr: 0.5, p: 0, }} variant='outlined' color='error' size='small'>
+            <Button sx={{ ml: 0.5, mr: 0.5, p: 0 }} variant='outlined' color='error' size='small'>
               X
             </Button>
           </Box>
@@ -65,12 +61,13 @@ const PopoverField = ({ values = [], title }) => {
             <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
               {values &&
                 values.map((item, index) => (
-                  <Grid sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb:1 }} key={index}>
+                  <Grid
+                    sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
+                    key={index}
+                  >
                     <Avatar alt='user_photo' src={''} />
                     <Button>
-                    <Typography>
-                      {`${item.name} ${item.last_name}`}
-                    </Typography>
+                      <Typography>{`${item.name} ${item.last_name}`}</Typography>
                     </Button>
                   </Grid>
                 ))}
