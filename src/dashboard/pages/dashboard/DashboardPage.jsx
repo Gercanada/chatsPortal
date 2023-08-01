@@ -13,6 +13,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import ArticleIcon from '@mui/icons-material/Article';
 
 import './chatsStyles.css';
+import ChatView from '../chat/ChatView';
 
 export const DashboardPage = () => {
   const { t } = useTranslation();
@@ -50,14 +51,15 @@ export const DashboardPage = () => {
       <Grid className={'container'}  container>
         <Grid container>
           <Grid item xs={12}>
-            <Card className='navbar_chat'>
+            <ChatView/>
+            {/* <Card className='navbar_chat'>
             <Grid className='navbar_content'>
             <Avatar alt='user_photo' src={ ''} />
             <Typography sx={{m:1}}>
             josue rocha
             </Typography>
             </Grid>
-            </Card>
+            </Card> */}
           </Grid>
         </Grid>
       </Grid>

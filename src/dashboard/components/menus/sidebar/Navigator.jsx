@@ -32,100 +32,102 @@ import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PopoverField from '../../../../components/Popovers/PopoverField';
 
-export const data = {"data": [
-  {
-      "id": 2,
-      "avatar": null,
-      "username": "heriberto",
-      "name": "Heriberto",
-      "last_name": "Hernandez",
-      "email": "heriberto.h@gercanada.com",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  },
-  {
-      "id": 8,
-      "avatar": null,
-      "username": "pablo_s",
-      "name": "Pablo",
-      "last_name": "Sainz",
-      "email": "pablo.s@immcase.com",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  },
-  {
-      "id": 9,
-      "avatar": null,
-      "username": "amy_m",
-      "name": "Amy",
-      "last_name": "Martinez",
-      "email": "amy.m@gercanada.com",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  },
-  {
-      "id": 10,
-      "avatar": null,
-      "username": "cecilia_v",
-      "name": "Cecilia",
-      "last_name": "Verduzco",
-      "email": "cecilia.v@laborem.ca",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  },
-  {
-      "id": 12,
-      "avatar": null,
-      "username": "josue_r",
-      "name": "Josue",
-      "last_name": "Rocha",
-      "email": "josue.r@gercanada.com",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  },
-  {
-      "id": 13,
-      "avatar": "/documents/users/26072023_143800.png",
-      "username": "lizeth_r",
-      "name": "Lizeth Anahi",
-      "last_name": "Ramirez Rodriguez",
-      "email": "lizeth.r@gercanada.com",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  },
-  {
-      "id": 14,
-      "avatar": null,
-      "username": "mayja_m",
-      "name": "Mayja",
-      "last_name": "Madrid",
-      "email": "mayja.m@gercanada.com",
-      "active": 1,
-      "role_id": {
-          "id": 2,
-          "value": "Agent"
-      }
-  }
-]
-}
+export const data = {
+  data: [
+    {
+      id: 2,
+      avatar: null,
+      username: 'heriberto',
+      name: 'Heriberto',
+      last_name: 'Hernandez',
+      email: 'heriberto.h@gercanada.com',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    {
+      id: 8,
+      avatar: null,
+      username: 'pablo_s',
+      name: 'Pablo',
+      last_name: 'Sainz',
+      email: 'pablo.s@immcase.com',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    {
+      id: 9,
+      avatar: null,
+      username: 'amy_m',
+      name: 'Amy',
+      last_name: 'Martinez',
+      email: 'amy.m@gercanada.com',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    {
+      id: 10,
+      avatar: null,
+      username: 'cecilia_v',
+      name: 'Cecilia',
+      last_name: 'Verduzco',
+      email: 'cecilia.v@laborem.ca',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    {
+      id: 12,
+      avatar: null,
+      username: 'josue_r',
+      name: 'Josue',
+      last_name: 'Rocha',
+      email: 'josue.r@gercanada.com',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    {
+      id: 13,
+      avatar: '/documents/users/26072023_143800.png',
+      username: 'lizeth_r',
+      name: 'Lizeth Anahi',
+      last_name: 'Ramirez Rodriguez',
+      email: 'lizeth.r@gercanada.com',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    {
+      id: 14,
+      avatar: null,
+      username: 'mayja_m',
+      name: 'Mayja',
+      last_name: 'Madrid',
+      email: 'mayja.m@gercanada.com',
+      active: 1,
+      role_id: {
+        id: 2,
+        value: 'Agent',
+      },
+    },
+    
+  ],
+};
 
 const itemCategory = {
   boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
@@ -139,13 +141,11 @@ export default function Navigator(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-
   const handleLogout = () => {
     dispatch(logout());
     clearLocalStorage();
   };
   const navigateTo = (url) => {
-
     navigate(url);
   };
 
@@ -170,29 +170,37 @@ export default function Navigator(props) {
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
         {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
-          <Typography variant='h1' component='h6' display='flex'>
-            {/* <img src='/images/LOGOPORTAL.png' width='200px' alt='' /> */}
-            ViveChatGPT no fake V5.0
-          </Typography>
+        <Typography variant='h1' component='h6' display='flex'>
+          {/* <img src='/images/LOGOPORTAL.png' width='200px' alt='' /> */}
+          ViveChatGPT no fake V5.0
+        </Typography>
         {/* </ListItem> */}
-        <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <ListItem sx={{ py: 2, px: 0 }}>
-            <ListItemButton>
-              <ListItemIcon>
-                <ForumIcon />
-              </ListItemIcon>
-              <ListItemText>
-              <PopoverField
-                values={data?.data}
-                title={'Chats'}
-              />
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
-        </Link>
+        {/* <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}> */}
+        <ListItem sx={{ py: 2, px: 0 }}>
+          <Typography
+            sx={{
+              cursor: 'pointer',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              flexFlow:'wrap',
+              "&:hover": {
+                background: 'rgba(0, 0, 0, 0.04)' 
+              }
+            }}
+          >
+            <ListItemIcon sx={{ml:1}}>
+              <ForumIcon />
+            </ListItemIcon>
+            <ListItemText>
+              <PopoverField values={data?.data} title={'Chats'} />
+            </ListItemText>
+          </Typography>
+        </ListItem>
+        {/* </Link> */}
         {categories.map(({ id, children }) => (
           <React.Fragment key={id}>
-            <Accordion  defaultExpanded sx={{boxShadow:'0', background: 'inherit'}} >
+            <Accordion defaultExpanded sx={{ boxShadow: '0', background: 'inherit' }}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls='panel1a-content'
@@ -200,10 +208,10 @@ export default function Navigator(props) {
               >
                 <Typography>{id}</Typography>
               </AccordionSummary>
-              <AccordionDetails sx={{paddingBottom:'8px',px: 0}}>
+              <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
                 {children.map(({ id: childId, icon, active, url }) => (
                   <Link key={id} to={url} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <ListItem  disablePadding key={childId} onClick={() => navigateTo(url)}>
+                    <ListItem disablePadding key={childId} onClick={() => navigateTo(url)}>
                       <ListItemButton selected={active}>
                         <ListItemIcon>{icon}</ListItemIcon>
                         <ListItemText>{t(childId)}</ListItemText>
