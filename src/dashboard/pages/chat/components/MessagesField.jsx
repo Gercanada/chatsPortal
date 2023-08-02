@@ -1,7 +1,11 @@
 import { Card, Grid, IconButton, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client'
+
+const socket =io("/")
+
 
 const MessagesField = ({ setNewMessage,messages }) => {
   const [valueMessage, setValueMessage] = useState('');
@@ -34,8 +38,20 @@ const MessagesField = ({ setNewMessage,messages }) => {
       ...prevState,
       data: [...prevState.data, newMessage],
     }));
+    socket.emit('message',newMessage)
     setValueMessage(''); 
   };
+  useEffect(()=>{
+    socket.on('message',messages=>{
+      setNewMessage((prevState) => ({
+        ...prevState,
+        data: [...prevState.data, messages],
+      }));
+    })
+    return () =>{
+      socket.off('messagge')
+    }
+  },[])
 
   return (
     <Grid>

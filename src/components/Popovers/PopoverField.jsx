@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 const PopoverField = ({ values = [], title }) => {
-  console.log('values', values);
+  // console.log('values', values);
   const { isLightTheme } = useSelector((state) => state.ui);
   const { t } = useTranslation();
   const dispatch = useDispatch();
