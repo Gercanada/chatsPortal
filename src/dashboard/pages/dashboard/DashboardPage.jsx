@@ -51,15 +51,8 @@ export const DashboardPage = () => {
       <Grid className={'container'}  container>
         <Grid container>
           <Grid item xs={12}>
-            <ChatView/>
-            {/* <Card className='navbar_chat'>
-            <Grid className='navbar_content'>
-            <Avatar alt='user_photo' src={ ''} />
-            <Typography sx={{m:1}}>
-            josue rocha
-            </Typography>
-            </Grid>
-            </Card> */}
+            {/* <ChatView/> */}
+            chats 
           </Grid>
         </Grid>
       </Grid>

@@ -15,6 +15,7 @@ import { ProfileDetails } from '../pages/accountPage/ProfileDetails';
 import { ProfilePage } from '../pages/accountPage/ProfilePage';
 import ChangePassword from '../pages/accountPage/ChangePassword';
 import CheckListEforms from '../pages/immigration/checklists/CheckListEforms';
+import ChatView from '../pages/chat/ChatView';
 
 export const DashboardRouter = () => {
   return (
@@ -27,6 +28,11 @@ export const DashboardRouter = () => {
         <Route path='/profile' element={<ProfilePage />} />
         {/* <Route path='/profile/password' element={<ChangePassword />} /> */}
       </Route>
+
+      {/* <Route path="/chat" >
+ 
+      <Route path='/chat/:id' element={<ChatView/>}/>
+      </Route> */}
 
       <Route path='/cases'>
         <Route path='/cases' element={<CasesPage />} /> {/* Cases */}

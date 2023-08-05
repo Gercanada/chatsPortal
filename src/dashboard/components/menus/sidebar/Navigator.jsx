@@ -139,6 +139,7 @@ const itemCategory = {
 export default function Navigator(props) {
   const { ...other } = props;
   const dispatch = useDispatch();
+  const [contactId, setContactId] = React.useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -152,7 +153,7 @@ export default function Navigator(props) {
 
   const categories = [
     {
-      id: t('new_conversation'),
+      id: t('conversations'),
       children: [ {
           id: 'chats',
           icon: <ForumIcon />,
@@ -188,7 +189,7 @@ export default function Navigator(props) {
               <PersonIcon />
             </ListItemIcon>
             <ListItemText>
-              <PopoverField values={data?.data} title={'Contacts'} />
+              <PopoverField setContactId={setContactId} values={data?.data} title={'Contacts'} />
             </ListItemText>
           </Grid>
         </ListItem>

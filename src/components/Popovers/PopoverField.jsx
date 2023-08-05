@@ -2,9 +2,9 @@ import { Avatar, Box, Button, Card, Grid, Popover, Typography } from '@mui/mater
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const PopoverField = ({ values = [], title }) => {
+const PopoverField = ({ values = [], title,setContactId }) => {
   // console.log('values', values);
   const { isLightTheme } = useSelector((state) => state.ui);
   const { t } = useTranslation();
@@ -16,6 +16,10 @@ const PopoverField = ({ values = [], title }) => {
   const [openPopup, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const navigateTo = (url) => {
+    navigate(url);
+  };
+
   const handlePopoverOpen = (event) => {
     setOpen(true);
     setAnchorEl(event.currentTarget);
@@ -24,6 +28,16 @@ const PopoverField = ({ values = [], title }) => {
   const handlePopoverClose = () => {
     setOpen(false);
   };
+
+  const handleOnclick =(e)=>{
+    console.log('eeeee',e.target.id)
+    console.log('eeeee2322222',e)
+    const id = e.target.id
+    setContactId(id)
+ //return <Link to={`/chat/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}/>
+    navigateTo('/chat')
+
+  }
 
   return (
     <Grid>
@@ -61,15 +75,17 @@ const PopoverField = ({ values = [], title }) => {
             <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
               {values &&
                 values.map((item, index) => (
+               
                   <Grid
                     sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
                     key={index}
                   >
+                    <Button name={item.name} id={item.id} onClick={()=>{    navigateTo('/chat')}} >
                     <Avatar alt='user_photo' src={''} />
-                    <Button>
                       <Typography>{`${item.name} ${item.last_name}`}</Typography>
                     </Button>
                   </Grid>
+
                 ))}
             </Grid>
           </Grid>

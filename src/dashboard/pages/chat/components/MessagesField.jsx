@@ -2,9 +2,9 @@ import { Card, Grid, IconButton, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client'
+//import io from 'socket.io-client'
 
-const socket =io("/")
+//const socket =io("/")
 
 
 const MessagesField = ({ setNewMessage,messages }) => {
@@ -33,25 +33,24 @@ const MessagesField = ({ setNewMessage,messages }) => {
       email: 'josue.r@gercanada.com',
     };
 
-    // Usa el spread operator para copiar los mensajes existentes y agregar el nuevo mensaje
     setNewMessage((prevState) => ({
       ...prevState,
       data: [...prevState.data, newMessage],
     }));
-    socket.emit('message',newMessage)
+    // socket.emit('message',newMessage)
     setValueMessage(''); 
   };
-  useEffect(()=>{
-    socket.on('message',messages=>{
-      setNewMessage((prevState) => ({
-        ...prevState,
-        data: [...prevState.data, messages],
-      }));
-    })
-    return () =>{
-      socket.off('messagge')
-    }
-  },[])
+  // useEffect(()=>{
+  //   socket.on('message',messages=>{
+  //     setNewMessage((prevState) => ({
+  //       ...prevState,
+  //       data: [...prevState.data, messages],
+  //     }));
+  //   })
+  //   return () =>{
+  //     socket.off('messagge')
+  //   }
+  // },[])
 
   return (
     <Grid>
