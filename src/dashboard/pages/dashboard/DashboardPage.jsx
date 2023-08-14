@@ -52,7 +52,6 @@ export const DashboardPage = () => {
         <Grid container>
           <Grid item xs={12}>
             <ChatView/>
-            chats 
           </Grid>
         </Grid>
       </Grid>

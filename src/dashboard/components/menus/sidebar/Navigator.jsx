@@ -32,6 +32,10 @@ import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import PopoverField from '../../../../components/Popovers/PopoverField';
 import AddCommentIcon from '@mui/icons-material/AddComment';
+import ModalForm from '../../../../components/Modal/ModalForm';
+import NewFormModal from '../../../../components/Modal/NewFormModal';
+import { useState } from 'react';
+import PhoneModal from '../../../../components/Modal/PhoneModal';
 
 export const data = {
   data: [
@@ -126,7 +130,6 @@ export const data = {
         value: 'Agent',
       },
     },
-    
   ],
 };
 
@@ -143,6 +146,12 @@ export default function Navigator(props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const [openModal, setOpenModal] = useState(false);
+  const [selectsQuickCreate, setSelectsQuickCreate] = useState(new Map);
+  const [openModalForm, setOpenModalForm] = useState(false);
+  const [extendionNumber, setExtensionNumber] = useState(0)
+  const [numberPhone, setNumberPhone] = useState(0)
+
   const handleLogout = () => {
     dispatch(logout());
     clearLocalStorage();
@@ -151,16 +160,56 @@ export default function Navigator(props) {
     navigate(url);
   };
 
+  const handleOpenModal = () => {
+      setOpenModalForm(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModalForm(false);
+};
+
   const categories = [
     {
       id: t('conversations'),
-      children: [ {
+      children: [
+        {
           id: 'chats',
           icon: <ForumIcon />,
           url: '/cases',
-        },{ id: 'new_conversation', icon: <AddCommentIcon />, url: '/checklist' }],
+          openModal:handleCloseModal
+        },
+        { id: 'new_conversation', icon: <AddCommentIcon />, url: '/checklist',openModal:handleOpenModal },
+      ],
     },
   ];
+
+  const onSubmit = async (formDataParam) => {
+    const formData = {};
+    Object.keys(formDataParam).forEach((item) => {
+      console.log('item', item);
+      if (
+        typeof formDataParam[item] === 'object' &&
+        formDataParam[item]?.value &&
+        formDataParam[item]?.label
+      ) {
+        formData[item] = formDataParam[item].value;
+      } else if (moment.isMoment(formDataParam[item])) {
+        formData[item] = formDataParam[item].format('YYYY-MM-DD');
+      } else {
+        formData[item] = formDataParam[item];
+      }
+    });
+    //const diffPayload = detectChanges(details, formData);
+    // const res = await dispatch(updateResponse(resource,diffPayload, id));
+    // if (res === 201 || res === 200) {
+       //if the status of the response to the endpoint is 201 it means that the creation of the new case was successful
+    //   setOpenModalForm(false);
+    //   await dispatch(readOneRespose(resource, id));
+    //   toast.success(t('save'));
+       // setIsReloadData(true);
+    // } else {
+    //   toast.error(t('fill_missing_fields'));
+    // }
+  };
 
   return (
     <Drawer variant='permanent' {...other}>
@@ -179,13 +228,13 @@ export default function Navigator(props) {
               width: '100%',
               display: 'flex',
               flexDirection: 'row',
-              flexFlow:'wrap',
-              "&:hover": {
-                background: 'rgba(0, 0, 0, 0.04)' 
-              }
+              flexFlow: 'wrap',
+              '&:hover': {
+                background: 'rgba(0, 0, 0, 0.04)',
+              },
             }}
           >
-            <ListItemIcon sx={{ml:1}}>
+            <ListItemIcon sx={{ ml: 1 }}>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText>
@@ -194,7 +243,7 @@ export default function Navigator(props) {
           </Grid>
         </ListItem>
         {/* </Link> */}
-        {categories.map(({ id, children },index) => (
+        {categories.map(({ id, children }, index) => (
           <React.Fragment key={index}>
             <Accordion defaultExpanded sx={{ boxShadow: '0', background: 'inherit' }}>
               <AccordionSummary
@@ -205,21 +254,29 @@ export default function Navigator(props) {
                 <Typography>{id}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-                {children.map(({ id: childId, icon, active, url }) => (
-                  <Link key={`${index}-${childId}`} to={url} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <ListItem disablePadding key={childId} onClick={() => navigateTo(url)}>
+                {children.map(({ id: childId, icon, active, url, openModal}) => (
+                  
+                    <ListItem disablePadding key={childId} onClick={openModal}>
                       <ListItemButton selected={active}>
                         <ListItemIcon>{icon}</ListItemIcon>
                         <ListItemText>{t(childId)}</ListItemText>
                       </ListItemButton>
                     </ListItem>
-                  </Link>
+          
                 ))}
               </AccordionDetails>
             </Accordion>
           </React.Fragment>
         ))}
       </List>
+      <PhoneModal
+        open={openModalForm}
+        onClose={setOpenModalForm}
+        onSubmit={onSubmit}
+        title={t(`add_chat`)}
+        setExtensionNumber={setExtensionNumber}
+        setNumberPhone={setNumberPhone}
+      />
     </Drawer>
   );
 }
