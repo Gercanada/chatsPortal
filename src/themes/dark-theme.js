@@ -60,7 +60,7 @@ export const darkTheme = createTheme({
 
     MuiButton: {
       defaultProps: {
-        variant: 'contained',
+       // variant: 'contained',
         size: 'small',
         disableElevation: true,
         color: 'info',
@@ -73,7 +73,7 @@ export const darkTheme = createTheme({
           borderRadius: 10,
           ':hover': {
             color: 'black',
-            background: 'rgba(0,0,0,0.05)',
+            background: 'orange',
             transition: 'all 0.3s ease-in-out',
           },
         },

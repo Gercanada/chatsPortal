@@ -24,7 +24,7 @@ import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Avatar, Button, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { logout } from '../../../../store/slices/auth';
 import { clearLocalStorage } from '../../../../functions/localStorageUtil';
@@ -147,6 +147,7 @@ export default function Navigator(props) {
   const [contactId, setContactId] = React.useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { isLightTheme } = useSelector((state) => state.ui);
 
   const [openModal, setOpenModal] = useState(false);
   const [selectsQuickCreate, setSelectsQuickCreate] = useState(new Map());
@@ -154,8 +155,7 @@ export default function Navigator(props) {
   const [extensionNumber, setExtensionNumber] = useState(0);
   const [numberPhone, setNumberPhone] = useState(0);
   const [message, setMessage] = useState('');
-  const { chats } = useSelector((state) => state.whatsApp);
-  console.log('chats',chats);
+  const { chats,loading } = useSelector((state) => state.whatsApp);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -194,8 +194,6 @@ export default function Navigator(props) {
   const onSubmit = async (formDataParam) => {
     const formData = {};
     const numberPhoneValue = `${extensionNumber}${numberPhone}`;
-    console.log('number', numberPhoneValue);
-    console.log('message', message);
 
   };
 
@@ -203,33 +201,9 @@ export default function Navigator(props) {
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
         {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
-        <Typography variant='h1' component='h6' sx={{textAlign:'center', ml:10}} display='flex'>
-          <img src='/images/logo_vive.png' width='100px' alt='' />
+        <Typography variant='h1' component='h6' sx={{textAlign:'center', ml:10, mt:1}} display='flex'>
+          <img src='/images/logochat.png' width='75px' alt='' />
         </Typography>
-        {/* </ListItem> */}
-        {/* <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}> */}
-        {/* <ListItem sx={{ py: 2, px: 0 }}>
-          <Grid
-            sx={{
-              cursor: 'pointer',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-              flexFlow: 'wrap',
-              '&:hover': {
-                background: 'rgba(0, 0, 0, 0.04)',
-              },
-            }}
-          >
-            <ListItemIcon sx={{ ml: 1 }}>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText>
-              <PopoverField setContactId={setContactId} values={data?.data} title={'Contacts'} />
-            </ListItemText>
-          </Grid>
-        </ListItem> */}
-        {/* </Link> */}
         {categories.map(({ id, children }, index) => (
           <React.Fragment key={index}>
             <Accordion defaultExpanded sx={{ boxShadow: '0', background: 'inherit' }}>
@@ -242,27 +216,46 @@ export default function Navigator(props) {
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
                 {children.map(({ id: childId, icon, active, url, openModal }) => (
-                  <ListItem disablePadding key={childId} onClick={openModal}>
-                    <Grid
-                      sx={{
-                        cursor: 'pointer',
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        flexFlow: 'wrap',
-                        '&:hover': {
-                          background: 'rgba(0, 0, 0, 0.04)',
-                        },
-                      }}
-                    >
-                      <ListItemIcon>{icon}</ListItemIcon>
-                      <PopoverField
-                        setContactId={setContactId}
-                        values={chats}
-                        title={'Chats'}
-                      />
-                    </Grid>
-                  </ListItem>
+                  <Accordion key={childId} sx={{ boxShadow: '0', background: 'inherit' }}>
+                  <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel1a-content'
+                id='panel1a-header'
+              >
+                 <ListItemIcon>{icon}</ListItemIcon>
+                 <Typography>Chats</Typography>
+                 
+              </AccordionSummary>
+              <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
+              <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
+              {chats &&
+                chats?.map((item, index) => (
+               
+                  <Grid
+                    sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
+                    key={index}
+                  >
+                    <Button name={item.number} id={index} sx={{width:'100%', display:'flex', justifyContent:'start'}} onClick={()=>{    navigateTo(`/chat/${item.number}/${item.name}`)}} >
+                    <Avatar alt='user_photo' src={''} />
+                    <Grid>
+                      <Typography>{item.name && `${item?.name}`}</Typography>
+                      <Grid display={'flex'}>
+                      <Typography>{`${item?.number} `}</Typography>
+                      <Typography sx={
+                        isLightTheme ?
+                        { borderRadius:'50%',width:'30px', ml:1, backgroundColor:'rgba(0, 0, 0, 0.12)', color:'grey' }
+                        :{ border:'1px solid white', borderRadius:'50%',width:'30px', ml:1, color:'white' }
+                         }>{`${item?.messages_count}`}</Typography>
+                      </Grid>
+                      </Grid>
+                    </Button>
+                  </Grid>
+
+                ))}
+            </Grid>
+              </AccordionDetails>
+                  </Accordion>
+                
                 ))}
               </AccordionDetails>
             </Accordion>
