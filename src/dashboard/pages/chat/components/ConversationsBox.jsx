@@ -6,7 +6,7 @@ import { Loader } from '../../../../components/Loader';
 const ConversationsBox = ({ messages }) => {
   const newMessageRef = useRef(null);
 
-  const backgroundImageUrl = '/public/images/que-ver-en-vancouver.jpg';
+  const backgroundImageUrl = '/images/que-ver-en-vancouver.jpg';
   //const backgroundImageUrl = '/public/images/immcaselogo.png';
   const gridStyle = {
     position: 'relative',

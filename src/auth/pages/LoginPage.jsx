@@ -78,7 +78,7 @@ export const LoginPage = () => {
       <FormGroup>
         <Card
           className='animate__animated animate__fadeIn'
-          sx={{ maxWidth: '400px' }}
+          sx={{ maxWidth: '400px',mt:10 }}
           item
           container
         >
@@ -99,7 +99,7 @@ export const LoginPage = () => {
                   >
                     <img
                       style={{ paddingBottom: '40px' }}
-                      src='/images/LOGOPORTAL.png'
+                      src='/images/logo_vive.png'
                       width='250px'
                       alt=''
                     />
