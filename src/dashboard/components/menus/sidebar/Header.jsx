@@ -41,9 +41,10 @@ function Header(props) {
   const onToggleTheme = () => dispatch(toggleTheme());
   const navigate = useNavigate();
 
+const userNameStorage =  localStorage.getItem('user_name') || '';
+
   const { isLightTheme, loading } = useSelector((state) => state.ui);
   const { userDetails } = useSelector((state) => state.users);
-  console.log('userDetails',userDetails);
 
   const [firstName, setFirstName] = useState(userDetails?.contact?.first_name);
   const [lastName, setLastName] = useState(userDetails?.contact?.last_name);
@@ -178,15 +179,15 @@ function Header(props) {
                         // src={response?.avatar || ''}
                       ></Avatar>
                     }
-                    title={!loading ? firstName + ' ' + lastName : 'user name'}
-                    subheader={
-                      <>
-                        <Typography textAlign=''> {`${userName}` || ''} </Typography>
-                        <Typography textAlign='' sx={{ color: 'info' }}>
-                          {/* {response?.role_id?.value || ''} */}
-                        </Typography>
-                      </>
-                    }
+                    title={userNameStorage}
+                    // subheader={
+                    //   <>
+                    //     <Typography textAlign=''> {`${userName}` || ''} </Typography>
+                    //     <Typography textAlign='' sx={{ color: 'info' }}>
+                    //       {/* {response?.role_id?.value || ''} */}
+                    //     </Typography>
+                    //   </>
+                    // }
                   />
                 </Card>
                 {/* <MenuItem
