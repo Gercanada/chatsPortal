@@ -452,5 +452,6 @@
   "Port of entry - land border":"Puerto de entrada - frontera terrestre",
   "Port of entry - airport":"Puerto de entrada - aeropuerto",
   "no_pending_eforms":"Sin eforms activos",
-  "my_pending_documents":"Mis documentos pendientes"
+  "my_pending_documents":"Mis documentos pendientes",
+  "conversations":"Conversaciones"
 }

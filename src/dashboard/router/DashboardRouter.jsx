@@ -29,10 +29,10 @@ export const DashboardRouter = () => {
         {/* <Route path='/profile/password' element={<ChangePassword />} /> */}
       </Route>
 
-      {/* <Route path="/chat" >
+      <Route path="/chat" >
  
-      <Route path='/chat/:id' element={<ChatView/>}/>
-      </Route> */}
+      <Route path='/chat/:id/:prefix' element={<ChatView/>}/>
+      </Route>
 
       <Route path='/cases'>
         <Route path='/cases' element={<CasesPage />} /> {/* Cases */}

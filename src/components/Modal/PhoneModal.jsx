@@ -1,4 +1,15 @@
-import { Box, Button, Card, Grid, Input, InputLabel, Modal, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  Input,
+  InputLabel,
+  Modal,
+  TextField,
+  TextareaAutosize,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -15,8 +26,8 @@ const PhoneModal = ({
   setNumberPhone,
   setExtensionNumber,
   data,
+  setMessage,
 }) => {
-  console.log('datukiiii', data);
   const {
     control,
     formState: { errors },
@@ -41,15 +52,34 @@ const PhoneModal = ({
     p: 4,
     overFlowY: 'visible',
   };
-  const handleExtensionNumber =(event)=>{
-    const value = event.target.value
-    setExtensionNumber(value)
-  }
 
-  const handleNumberPhone =(event)=>{
-    const value = event.target.value
-    setNumberPhone(value)
-  }
+  const [isDisabled, setIsDisabled] = useState(true)
+
+  const handleExtensionNumber = (event) => {
+    const value = event.target.value;
+    if (/^\d*$/.test(value) &&  value.length <= 3) {
+      setIsDisabled(false)
+      setExtensionNumber(value);
+    }else{
+      setIsDisabled(true)
+    }
+   
+  };
+
+  const handleNumberPhone = (event) => {
+    const value = event.target.value;
+    if (/^\d*$/.test(value) &&  value.length >= 8) {
+      setIsDisabled(false)
+      setNumberPhone(value);
+    }else{
+      setIsDisabled(true)
+    }
+  };
+
+  const handleMessage = (event) => {
+    const value = event.target.value;
+    setMessage(value);
+  };
 
   const handleClose = () => onClose(false);
   return (
@@ -71,20 +101,39 @@ const PhoneModal = ({
               <Typography variant='h4'>{title}</Typography>
             </Grid>
           </Grid>
-          <Grid sx={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
-            <Typography sx={{m:1}}>+</Typography>
-            <TextField onChange={handleExtensionNumber} sx={{width:'80px',m:1}}  type={'number'}/>
-            <TextField onChange={handleNumberPhone} sx={{m:1}} type={'number'}/>
+          <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <Typography sx={{ m: 1 }}>+</Typography>
+            <TextField
+              onChange={handleExtensionNumber}
+              sx={{ width: '80px', m: 1 }}
+              type={'phone'}
+              inputProps={{ maxLength: 3 }}
+            />
+            <TextField
+              onChange={handleNumberPhone}
+              sx={{ m: 1 }}
+              type={'phone'}
+              inputProps={{ maxLength: 10 }}
+            />
           </Grid>
-
+          <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <Typography sx={{ m: 1 }}>{t('message')}</Typography>
+            <TextareaAutosize
+              onChange={handleMessage}
+              name='Soft'
+              placeholder='Type message…'
+              color='primary' // Puedes usar 'default', 'primary' o 'secondary'
+            />
+          </Grid>
           <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
             <Button
               type='submit'
               size='large'
               sx={{ margin: '10px', width: '30%' }}
               color='primary'
+              disabled={isDisabled}
             >
-              {t('save')}
+              {t('send')}
             </Button>
 
             <Button

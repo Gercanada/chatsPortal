@@ -108,7 +108,7 @@ export const lightTheme = createTheme({
           },
           ':disabled': {
             color: 'black',
-            background: 'black',
+            background: 'rgb(107, 107, 107);',
             backgroundColor: 'rgba(0,0,0,0,2)',
             transition: 'all 0.3s ease-in-out',
           },

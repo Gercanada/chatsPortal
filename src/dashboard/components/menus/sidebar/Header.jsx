@@ -43,6 +43,7 @@ function Header(props) {
 
   const { isLightTheme, loading } = useSelector((state) => state.ui);
   const { userDetails } = useSelector((state) => state.users);
+  console.log('userDetails',userDetails);
 
   const [firstName, setFirstName] = useState(userDetails?.contact?.first_name);
   const [lastName, setLastName] = useState(userDetails?.contact?.last_name);
@@ -188,14 +189,14 @@ function Header(props) {
                     }
                   />
                 </Card>
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => {
                     navigateTo(`/profile`);
                   }}
                 >
                   <i className='bx bx-cog' />
                   <Typography textAlign='right'>{t('account_preferences')}</Typography>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleLogout}>
                   <i className='bx bx-log-out-circle' />
                   <Typography textAlign='right'> {t('menu_logout')}</Typography>

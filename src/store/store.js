@@ -17,6 +17,7 @@ import { selectSlice } from './slices/selectsInputs/selectSlice';
 import { dashboardSlice } from './slices/dashboard/dashboardSlice';
 import { immvisasItemsSlice } from './slices/immvisas/items/immvisasItemsSlice';
 import { immvisasCasesSlice } from './slices/immvisas/cases/immvisasCasesSlice';
+import { whatsAppSlice } from './slices/whatsApp/whatsAppSlice';
 
 export const store = configureStore({
   reducer: {
@@ -38,7 +39,8 @@ export const store = configureStore({
     dashboard: dashboardSlice.reducer,
     // IMMVISAS
     immvisasItems: immvisasItemsSlice.reducer,
-    immvisasCases:immvisasCasesSlice.reducer
+    immvisasCases:immvisasCasesSlice.reducer,
+    whatsApp: whatsAppSlice.reducer
   
   },
 });

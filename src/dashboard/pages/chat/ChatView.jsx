@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import ConversationNavbar from './components/ConversationNavbar';
 import ConversationsBox from './components/ConversationsBox';
 import MessagesField from './components/MessagesField';
+import { DashboardLayout } from '../../layouts/DashboardLayout';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getUserChat, sendMessage } from '../../../store/slices/whatsApp/thunks';
 export const messagesReponse = {
   data: [
     {
@@ -62,19 +67,37 @@ export const messagesReponse = {
 
 const ChatView = () => {
 const [messagesReponseState , setMessageResponseState] = useState(messagesReponse)
+const { onechat } = useSelector((state) => state.whatsApp);
+const [message, setMessage] = useState('');
+const dispatch = useDispatch();
+const {id} = useParams();
+
+useEffect(() => {
+  dispatch(getUserChat(id))
+}, [id,onechat?.length])
+
+const handleSendMessage = async() => {
+ const resp = await dispatch(sendMessage(id,message))
+ if(resp===200){
+  dispatch(getUserChat(id))
+ }
+}
+
 
   return (
+    <DashboardLayout>
     <Grid sx={{ display: 'flex', flexDirection: 'column',justifyContent:'start' }}>
       <Grid item xs={12}>
-        <ConversationNavbar />
+        <ConversationNavbar user={id} />
       </Grid>
       <Grid item xs={12}>
-        <ConversationsBox messages={messagesReponseState}/>
+        <ConversationsBox messages={onechat && onechat}/>
       </Grid>
       <Grid item xs={12}>
-        <MessagesField setNewMessage={setMessageResponseState} messages={messagesReponseState}/>
+        <MessagesField id={id} setMessage={setMessage} setNewMessage={setMessageResponseState} messages={messagesReponseState}/>
       </Grid>
     </Grid>
+    </DashboardLayout>
   );
 };
 

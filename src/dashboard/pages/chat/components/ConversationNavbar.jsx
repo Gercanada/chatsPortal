@@ -1,17 +1,18 @@
 import { Avatar, Card, Grid, Typography } from '@mui/material'
 import React from 'react'
 import './chatsStyles.css'
+import { useParams } from 'react-router-dom';
 
-const ConversationNavbar = () => {
+const ConversationNavbar = ({user}) => {
+  const {id,prefix} = useParams();
   return (
-    <Grid container>
+    <Grid  sx={{position:'sticky'}}>
     <Card className='navbar_chat'>
-    <Grid item className='navbar_content'>
     <Avatar alt='user_photo' src={ ''} />
     <Typography sx={{m:1}}>
-    josue rocha
+    {prefix !== 'null' ? prefix : id}
     </Typography>
-    </Grid>
+
     </Card>
   </Grid>
   )

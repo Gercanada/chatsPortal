@@ -74,15 +74,18 @@ const PopoverField = ({ values = [], title,setContactId }) => {
             <Typography variant='p'>{t(title)}</Typography>
             <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
               {values &&
-                values.map((item, index) => (
+                values?.map((item, index) => (
                
                   <Grid
                     sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
                     key={index}
                   >
-                    <Button name={item.name} id={item.id} onClick={()=>{    navigateTo('/chat')}} >
+                    <Button name={item.number} id={index} onClick={()=>{    navigateTo(`/chat/${item.number}/${item.name}`)}} >
                     <Avatar alt='user_photo' src={''} />
-                      <Typography>{`${item.name} ${item.last_name}`}</Typography>
+                    <Grid>
+                      <Typography>{item.name && `${item?.name}`}</Typography>
+                      <Typography>{`${item?.number}`}</Typography>
+                      </Grid>
                     </Button>
                   </Grid>
 

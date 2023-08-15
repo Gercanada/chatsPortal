@@ -439,5 +439,6 @@
   "item_status":"Statut du document",
   "items":"Documents",
   "my_pending_documents":"Mes documents en attente",
-  "Submitted":"Soumis"
+  "Submitted":"Soumis",
+  "conversations":"Conversations"
 }

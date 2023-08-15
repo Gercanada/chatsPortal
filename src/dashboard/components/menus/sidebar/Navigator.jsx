@@ -29,13 +29,15 @@ import { useTranslation } from 'react-i18next';
 import { logout } from '../../../../store/slices/auth';
 import { clearLocalStorage } from '../../../../functions/localStorageUtil';
 import { Link, Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PopoverField from '../../../../components/Popovers/PopoverField';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import ModalForm from '../../../../components/Modal/ModalForm';
 import NewFormModal from '../../../../components/Modal/NewFormModal';
 import { useState } from 'react';
 import PhoneModal from '../../../../components/Modal/PhoneModal';
+import { useEffect } from 'react';
+import { getChats } from '../../../../store/slices/whatsApp/thunks';
 
 export const data = {
   data: [
@@ -147,10 +149,13 @@ export default function Navigator(props) {
   const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState(false);
-  const [selectsQuickCreate, setSelectsQuickCreate] = useState(new Map);
+  const [selectsQuickCreate, setSelectsQuickCreate] = useState(new Map());
   const [openModalForm, setOpenModalForm] = useState(false);
-  const [extendionNumber, setExtensionNumber] = useState(0)
-  const [numberPhone, setNumberPhone] = useState(0)
+  const [extensionNumber, setExtensionNumber] = useState(0);
+  const [numberPhone, setNumberPhone] = useState(0);
+  const [message, setMessage] = useState('');
+  const { chats } = useSelector((state) => state.whatsApp);
+  console.log('chats',chats);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -161,11 +166,11 @@ export default function Navigator(props) {
   };
 
   const handleOpenModal = () => {
-      setOpenModalForm(true);
+    setOpenModalForm(true);
   };
   const handleCloseModal = () => {
     setOpenModalForm(false);
-};
+  };
 
   const categories = [
     {
@@ -175,53 +180,35 @@ export default function Navigator(props) {
           id: 'chats',
           icon: <ForumIcon />,
           url: '/cases',
-          openModal:handleCloseModal
+          openModal: handleCloseModal,
         },
-        { id: 'new_conversation', icon: <AddCommentIcon />, url: '/checklist',openModal:handleOpenModal },
+        //  { id: 'new_conversation', icon: <AddCommentIcon />, url: '/checklist',openModal:handleOpenModal },
       ],
     },
   ];
 
+  useEffect(() => {
+    dispatch(getChats());
+  }, []);
+
   const onSubmit = async (formDataParam) => {
     const formData = {};
-    Object.keys(formDataParam).forEach((item) => {
-      console.log('item', item);
-      if (
-        typeof formDataParam[item] === 'object' &&
-        formDataParam[item]?.value &&
-        formDataParam[item]?.label
-      ) {
-        formData[item] = formDataParam[item].value;
-      } else if (moment.isMoment(formDataParam[item])) {
-        formData[item] = formDataParam[item].format('YYYY-MM-DD');
-      } else {
-        formData[item] = formDataParam[item];
-      }
-    });
-    //const diffPayload = detectChanges(details, formData);
-    // const res = await dispatch(updateResponse(resource,diffPayload, id));
-    // if (res === 201 || res === 200) {
-       //if the status of the response to the endpoint is 201 it means that the creation of the new case was successful
-    //   setOpenModalForm(false);
-    //   await dispatch(readOneRespose(resource, id));
-    //   toast.success(t('save'));
-       // setIsReloadData(true);
-    // } else {
-    //   toast.error(t('fill_missing_fields'));
-    // }
+    const numberPhoneValue = `${extensionNumber}${numberPhone}`;
+    console.log('number', numberPhoneValue);
+    console.log('message', message);
+
   };
 
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
         {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
-        <Typography variant='h1' component='h6' display='flex'>
-          {/* <img src='/images/LOGOPORTAL.png' width='200px' alt='' /> */}
-          ViveChatGPT no fake V5.0
+        <Typography variant='h1' component='h6' sx={{textAlign:'center', ml:10}} display='flex'>
+          <img src='/images/logo_vive.png' width='100px' alt='' />
         </Typography>
         {/* </ListItem> */}
         {/* <Link to={'/'} style={{ textDecoration: 'none', color: 'inherit' }}> */}
-        <ListItem sx={{ py: 2, px: 0 }}>
+        {/* <ListItem sx={{ py: 2, px: 0 }}>
           <Grid
             sx={{
               cursor: 'pointer',
@@ -241,7 +228,7 @@ export default function Navigator(props) {
               <PopoverField setContactId={setContactId} values={data?.data} title={'Contacts'} />
             </ListItemText>
           </Grid>
-        </ListItem>
+        </ListItem> */}
         {/* </Link> */}
         {categories.map(({ id, children }, index) => (
           <React.Fragment key={index}>
@@ -254,15 +241,28 @@ export default function Navigator(props) {
                 <Typography>{id}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-                {children.map(({ id: childId, icon, active, url, openModal}) => (
-                  
-                    <ListItem disablePadding key={childId} onClick={openModal}>
-                      <ListItemButton selected={active}>
-                        <ListItemIcon>{icon}</ListItemIcon>
-                        <ListItemText>{t(childId)}</ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-          
+                {children.map(({ id: childId, icon, active, url, openModal }) => (
+                  <ListItem disablePadding key={childId} onClick={openModal}>
+                    <Grid
+                      sx={{
+                        cursor: 'pointer',
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexFlow: 'wrap',
+                        '&:hover': {
+                          background: 'rgba(0, 0, 0, 0.04)',
+                        },
+                      }}
+                    >
+                      <ListItemIcon>{icon}</ListItemIcon>
+                      <PopoverField
+                        setContactId={setContactId}
+                        values={chats}
+                        title={'Chats'}
+                      />
+                    </Grid>
+                  </ListItem>
                 ))}
               </AccordionDetails>
             </Accordion>
@@ -276,6 +276,7 @@ export default function Navigator(props) {
         title={t(`add_chat`)}
         setExtensionNumber={setExtensionNumber}
         setNumberPhone={setNumberPhone}
+        setMessage={setMessage}
       />
     </Drawer>
   );

@@ -51,7 +51,9 @@ export const DashboardPage = () => {
       <Grid className={'container'}  container>
         <Grid container>
           <Grid item xs={12}>
-            <ChatView/>
+      <Card sx={{textAlign:'center', width:'100%', height:'100%'}} >
+      <img src='/images/logo_vive.png' width='50%' alt='' style={{marginTop:'10%'}} />
+      </Card>
           </Grid>
         </Grid>
       </Grid>

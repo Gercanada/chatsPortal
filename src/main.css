@@ -136,7 +136,7 @@ th  {
 }
 
 .btn-group2 *:disabled {
-  background-color: black;
+  background-color: rgb(107, 107, 107);
   color: linen;
   opacity: 1;
 }
