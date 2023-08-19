@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   loading: false,
   chats:[], 
-  onechat:[]
+  onechat:[],
+  phoneAccounts:[]
 };
 
 export const whatsAppSlice = createSlice({
@@ -19,9 +20,12 @@ export const whatsAppSlice = createSlice({
     },
     setOneChat:(state, {payload}) => {
         state.onechat = payload;
-      }
+      },
+    setPhoneAccounts:(state, {payload}) => {
+        state.phoneAccounts = payload;
+     }
   }
 });
 
-export const {setLoading, setChats,setOneChat } =
+export const {setLoading, setChats,setOneChat,setPhoneAccounts } =
 whatsAppSlice.actions;

@@ -37,7 +37,7 @@ import NewFormModal from '../../../../components/Modal/NewFormModal';
 import { useState } from 'react';
 import PhoneModal from '../../../../components/Modal/PhoneModal';
 import { useEffect } from 'react';
-import { getChats } from '../../../../store/slices/whatsApp/thunks';
+import { getChats, getPhoneAccounts, getSwitchAccount } from '../../../../store/slices/whatsApp/thunks';
 
 export const data = {
   data: [
@@ -155,7 +155,8 @@ export default function Navigator(props) {
   const [extensionNumber, setExtensionNumber] = useState(0);
   const [numberPhone, setNumberPhone] = useState(0);
   const [message, setMessage] = useState('');
-  const { chats,loading } = useSelector((state) => state.whatsApp);
+  const [idAccount, setIdAccount] = useState(0);
+  const { chats,loading,phoneAccounts } = useSelector((state) => state.whatsApp);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -171,6 +172,12 @@ export default function Navigator(props) {
   const handleCloseModal = () => {
     setOpenModalForm(false);
   };
+
+  const handleAccount = (id) => {
+    console.log('aqui toy-----------------',id)
+    dispatch(getSwitchAccount(id))
+    setIdAccount(id)
+  }
 
   const categories = [
     {
@@ -188,14 +195,21 @@ export default function Navigator(props) {
   ];
 
   useEffect(() => {
+   
     dispatch(getChats());
+    
+  }, [idAccount]);
+
+  useEffect(() => {
+    dispatch(getPhoneAccounts())
   }, []);
 
   const onSubmit = async (formDataParam) => {
     const formData = {};
     const numberPhoneValue = `${extensionNumber}${numberPhone}`;
-
   };
+  console.log('phoneAccounts',phoneAccounts)
+  console.log('chats',chats)
 
   return (
     <Drawer variant='permanent' {...other}>
@@ -204,7 +218,30 @@ export default function Navigator(props) {
         <Typography variant='h1' component='h6' sx={{textAlign:'center', ml:10, mt:1}} display='flex'>
           <img src='/images/logochat.png' width='75px' alt='' />
         </Typography>
-        {categories.map(({ id, children }, index) => (
+        <Typography>{t('conversations')}</Typography>
+        {phoneAccounts && phoneAccounts?.map((account, index)=>(
+          <Accordion  sx={{ boxShadow: '0', background: 'inherit' }} onClick={()=>{handleAccount(account?.id)}}>
+          <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel1a-content'
+                id='panel1a-header'
+              >
+              {account?.name === 'Iphone chino'
+              ?<img src='/images/Vivetel.png' width='35px' alt='' />
+              :account?.name === 'Vive Wha'
+              ?<img src='/images/ViveCanada.png' width='35px' alt='' />
+              :account?.name === 'Test Number'
+              ?<img src='/images/laborem.png' width='35px' alt='' />
+              :''
+              }
+                <Typography sx={{m:1}}>{account.name}</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
+
+              </AccordionDetails>
+          </Accordion>
+        ))}
+        {/* {categories.map(({ id, children }, index) => (
           <React.Fragment key={index}>
             <Accordion defaultExpanded sx={{ boxShadow: '0', background: 'inherit' }}>
               <AccordionSummary
@@ -260,7 +297,7 @@ export default function Navigator(props) {
               </AccordionDetails>
             </Accordion>
           </React.Fragment>
-        ))}
+        ))} */}
       </List>
       <PhoneModal
         open={openModalForm}

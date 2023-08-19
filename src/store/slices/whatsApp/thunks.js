@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { immcaseApi } from '../../../api';
-import { setChats, setLoading, setOneChat } from './whatsAppSlice';
+import { setChats, setLoading, setOneChat, setPhoneAccounts } from './whatsAppSlice';
 
 export const sendMessage = ( recipient,message) => {
     return async (dispatch) => {
@@ -12,7 +12,7 @@ export const sendMessage = ( recipient,message) => {
         }
         const config = {
           method: 'post',
-          url: 'send_text',
+          url: 'whatsapp/messages',
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -35,8 +35,9 @@ export const sendMessage = ( recipient,message) => {
     return async (dispatch) => {
       dispatch(setLoading(true));
       try {
-        const resp = await immcaseApi.get('/threads');
-        await dispatch(setChats(resp.data.data));
+        const resp = await immcaseApi.get('/whatsapp/threads');
+        console.log('aqui toy chatsereeeeeee',resp)
+        await dispatch(setChats(resp?.data?.data));
         if (resp) {
             dispatch(setLoading(false));
             return resp.status;
@@ -53,8 +54,45 @@ export const sendMessage = ( recipient,message) => {
     return async (dispatch) => {
       dispatch(setLoading(true));
       try {
-        const resp = await immcaseApi.get(`/messages?contact=${phone}`);
+        const resp = await immcaseApi.get(`/whatsapp/messages?contact=${phone}`);
         await dispatch(setOneChat(resp.data.data))
+       
+        if (resp) {
+            dispatch(setLoading(false));
+            return resp.status;
+          }
+      } catch (error) {
+        console.error(error);
+        return error
+      }
+      dispatch(setLoading(false));
+    };
+  };
+
+  export const getPhoneAccounts = () => {
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      try {
+        const resp = await immcaseApi.get(`/whatsapp/accounts`);
+        await dispatch(setPhoneAccounts(resp.data.data))
+       
+        if (resp) {
+            dispatch(setLoading(false));
+            return resp.status;
+          }
+      } catch (error) {
+        console.error(error);
+        return error
+      }
+      dispatch(setLoading(false));
+    };
+  };
+
+  export const getSwitchAccount = (id) => {
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      try {
+        const resp = await immcaseApi.get(`/whatsapp/switch_account/${id}`);
        
         if (resp) {
             dispatch(setLoading(false));
