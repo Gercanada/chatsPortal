@@ -36,7 +36,7 @@ export const sendMessage = ( recipient,message) => {
       dispatch(setLoading(true));
       try {
         const resp = await immcaseApi.get('/whatsapp/threads');
-        console.log('aqui toy chatsereeeeeee',resp)
+        console.log('aqui toy chatsereeeeeee-----------------',resp?.data?.data)
         await dispatch(setChats(resp?.data?.data));
         if (resp) {
             dispatch(setLoading(false));
@@ -89,6 +89,7 @@ export const sendMessage = ( recipient,message) => {
   };
 
   export const getSwitchAccount = (id) => {
+    console.log("ididididididididid",id)
     return async (dispatch) => {
       dispatch(setLoading(true));
       try {
@@ -101,6 +102,32 @@ export const sendMessage = ( recipient,message) => {
       } catch (error) {
         console.error(error);
         return error
+      }
+      dispatch(setLoading(false));
+    };
+  };
+
+  export const setReadMessages = (ids) => {
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      try {
+   const data = {'messages':ids}
+        const config = {
+          method: 'post',
+          url: '/whatsapp/messages/mark_as_read',
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          data: data,
+        };
+  
+        const res = await immcaseApi(config);
+        if (res) {  
+          dispatch(setLoading(false));
+          return res?.status;
+        }
+      } catch (error) {
+       return error
       }
       dispatch(setLoading(false));
     };

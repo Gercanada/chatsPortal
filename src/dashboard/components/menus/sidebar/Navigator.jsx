@@ -38,6 +38,7 @@ import { useState } from 'react';
 import PhoneModal from '../../../../components/Modal/PhoneModal';
 import { useEffect } from 'react';
 import { getChats, getPhoneAccounts, getSwitchAccount } from '../../../../store/slices/whatsApp/thunks';
+import AdjustIcon from '@mui/icons-material/Adjust';
 
 export const data = {
   data: [
@@ -157,6 +158,7 @@ export default function Navigator(props) {
   const [message, setMessage] = useState('');
   const [idAccount, setIdAccount] = useState(0);
   const { chats,loading,phoneAccounts } = useSelector((state) => state.whatsApp);
+  const [expanded, setExpanded] = React.useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -174,9 +176,9 @@ export default function Navigator(props) {
   };
 
   const handleAccount = (id) => {
-    console.log('aqui toy-----------------',id)
-    dispatch(getSwitchAccount(id))
     setIdAccount(id)
+    dispatch(getSwitchAccount(id))
+    dispatch(getChats());
   }
 
   const categories = [
@@ -195,9 +197,7 @@ export default function Navigator(props) {
   ];
 
   useEffect(() => {
-   
     dispatch(getChats());
-    
   }, [idAccount]);
 
   useEffect(() => {
@@ -207,97 +207,60 @@ export default function Navigator(props) {
   const onSubmit = async (formDataParam) => {
     const formData = {};
     const numberPhoneValue = `${extensionNumber}${numberPhone}`;
+  }; 
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
-  console.log('phoneAccounts',phoneAccounts)
-  console.log('chats',chats)
 
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
         {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
         <Typography variant='h1' component='h6' sx={{textAlign:'center', ml:10, mt:1}} display='flex'>
-          <img src='/images/logochat.png' width='75px' alt='' />
+          <img src='/images/vivechat.png' width='75px' alt='' />
         </Typography>
         <Typography>{t('conversations')}</Typography>
         {phoneAccounts && phoneAccounts?.map((account, index)=>(
-          <Accordion  sx={{ boxShadow: '0', background: 'inherit' }} onClick={()=>{handleAccount(account?.id)}}>
+          <Accordion expanded={expanded === index} onChange={handleChange(index)}  sx={{ boxShadow: '0', background: 'inherit' }} onClick={()=>{handleAccount(account?.id)}}>
           <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls='panel1a-content'
                 id='panel1a-header'
               >
               {account?.name === 'Iphone chino'
-              ?<img src='/images/Vivetel.png' width='35px' alt='' />
+              ?<img src='/images/Vivetel.png' width='40px' alt='' />
               :account?.name === 'Vive Wha'
-              ?<img src='/images/ViveCanada.png' width='35px' alt='' />
+              ?<img src='/images/ViveCanada.png' width='40px' alt='' />
               :account?.name === 'Test Number'
-              ?<img src='/images/laborem.png' width='35px' alt='' />
+              ?<img src='/images/labores.png' width='40px' alt='' />
               :''
               }
                 <Typography sx={{m:1}}>{account.name}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-
-              </AccordionDetails>
-          </Accordion>
-        ))}
-        {/* {categories.map(({ id, children }, index) => (
-          <React.Fragment key={index}>
-            <Accordion defaultExpanded sx={{ boxShadow: '0', background: 'inherit' }}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1a-content'
-                id='panel1a-header'
-              >
-                <Typography>{id}</Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-                {children.map(({ id: childId, icon, active, url, openModal }) => (
-                  <Accordion key={childId} sx={{ boxShadow: '0', background: 'inherit' }}>
-                  <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1a-content'
-                id='panel1a-header'
-              >
-                 <ListItemIcon>{icon}</ListItemIcon>
-                 <Typography>Chats</Typography>
-                 
-              </AccordionSummary>
-              <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-              <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
               {chats &&
                 chats?.map((item, index) => (
-               
                   <Grid
                     sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
                     key={index}
                   >
-                    <Button name={item.number} id={index} sx={{width:'100%', display:'flex', justifyContent:'start'}} onClick={()=>{    navigateTo(`/chat/${item.number}/${item.name}`)}} >
+                    <Button name={item.number} id={index} sx={{width:'100%', display:'flex', justifyContent:'space-around'}} onClick={()=>{ navigateTo(`/chat/${item.number}/${item.name}`) , localStorage.setItem('chat_account_type',account?.name);}} >
+                    <Grid sx={{display:'flex'}}>
                     <Avatar alt='user_photo' src={''} />
-                    <Grid>
+                      <Grid display={'flex'} sx={{flexDirection:'column'}}>
                       <Typography>{item.name && `${item?.name}`}</Typography>
-                      <Grid display={'flex'}>
                       <Typography>{`${item?.number} `}</Typography>
-                      <Typography sx={
-                        isLightTheme ?
-                        { borderRadius:'50%',width:'30px', ml:1, backgroundColor:'rgba(0, 0, 0, 0.12)', color:'grey' }
-                        :{ border:'1px solid white', borderRadius:'50%',width:'30px', ml:1, color:'white' }
-                         }>{`${item?.messages_count}`}</Typography>
                       </Grid>
                       </Grid>
+                      {item?.unread > 0 ? <AdjustIcon/> : '' }
                     </Button>
                   </Grid>
 
                 ))}
-            </Grid>
               </AccordionDetails>
-                  </Accordion>
-                
-                ))}
-              </AccordionDetails>
-            </Accordion>
-          </React.Fragment>
-        ))} */}
+          </Accordion>
+        ))}
+        
       </List>
       <PhoneModal
         open={openModalForm}

@@ -60,7 +60,7 @@ const PopoverField = ({ values = [], title,setContactId }) => {
           onClose={handlePopoverClose}
           PaperProps={{
             sx: {
-              width: '230px',
+              width: '300px',
               //height: '100%',
             },
           }}
@@ -71,22 +71,26 @@ const PopoverField = ({ values = [], title,setContactId }) => {
             </Button>
           </Box>
           <Grid item sx={{ ml: 1, mr: 1 }}>
-            <Typography variant='p'>{t(title)}</Typography>
+            <Typography variant='h6'sx={{textAlign:'center'}}>{t(title)}</Typography>
             <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
               {values &&
                 values?.map((item, index) => (
                
                   <Grid
-                    sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
+                    sx={{ display: 'flex', flexDirection: 'row', mb: 1 }}
                     key={index}
                   >
-                    <Button name={item.number} id={index} onClick={()=>{    navigateTo(`/chat/${item.number}/${item.name}`)}} >
+                  {console.log("item",item)}
+                  <Typography>
+                    {item?.user?.name} {item?.user?.last_name}  {item?.at}
+                  </Typography>
+                    {/* <Button name={item.number} id={index} onClick={()=>{    navigateTo(`/chat/${item.number}/${item.name}`)}} >
                     <Avatar alt='user_photo' src={''} />
                     <Grid>
                       <Typography>{item.name && `${item?.name}`}</Typography>
                       <Typography>{`${item?.number}`}</Typography>
                       </Grid>
-                    </Button>
+                    </Button> */}
                   </Grid>
 
                 ))}

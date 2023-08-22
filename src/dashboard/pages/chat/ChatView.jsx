@@ -66,15 +66,19 @@ export const messagesReponse = {
 };
 
 const ChatView = () => {
-const [messagesReponseState , setMessageResponseState] = useState(messagesReponse)
-const { onechat } = useSelector((state) => state.whatsApp);
+  const { onechat } = useSelector((state) => state.whatsApp);
+const [messagesReponseState , setMessageResponseState] = useState(onechat?.data)
+
 const [message, setMessage] = useState('');
+const [sortMessages, setSortMessages] = useState([])
 const dispatch = useDispatch();
 const {id} = useParams();
 
 useEffect(() => {
   dispatch(getUserChat(id))
-}, [id,onechat?.length])
+  sortArray();
+  //console.log("onechat?.data[04444444444444444444444444]",onechat?.data[0])
+}, [id,onechat?.data?.length])
 
 const handleSendMessage = async() => {
  const resp = await dispatch(sendMessage(id,message))
@@ -82,6 +86,18 @@ const handleSendMessage = async() => {
   dispatch(getUserChat(id))
  }
 }
+
+const sortArray = () => { 
+  
+  const originalData = onechat?.data;
+  if (originalData) {
+    const sortValues = [...originalData].reverse();
+    console.log('sortValues', sortValues);
+    setSortMessages(sortValues)
+  }
+};
+
+console.log('onechat',onechat?.data)
 
 
   return (
@@ -91,7 +107,7 @@ const handleSendMessage = async() => {
         <ConversationNavbar user={id} />
       </Grid>
       <Grid item xs={12}>
-        <ConversationsBox messages={onechat && onechat}/>
+        <ConversationsBox messages={onechat?.data && onechat?.data}/>
       </Grid>
       <Grid item xs={12}>
         <MessagesField id={id} setMessage={setMessage} setNewMessage={setMessageResponseState} messages={messagesReponseState}/>
