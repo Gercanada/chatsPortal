@@ -228,7 +228,7 @@ export default function Navigator(props) {
                 id='panel1a-header'
               >
               {account?.name === 'Iphone chino'
-              ?<img src='/images/Vivetel.png' width='40px' alt='' />
+              ?<img src='/images/ViveTel.png' width='40px' alt='' />
               :account?.name === 'Vive Wha'
               ?<img src='/images/ViveCanada.png' width='40px' alt='' />
               :account?.name === 'Test Number'
