@@ -7,7 +7,7 @@ import {
   RadioGroup,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -27,8 +27,15 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const { t } = useTranslation();
+  const [fieldsValues, setFieldsValues] = useState({});
+
+  useEffect(() => {
+    setFieldsValues(data);
+  }, [data]);
 
   return (
+      <>
+      {data &&
     <Grid container item xs={12} md={12}>
       <InputLabel>
         {data?.name_}
@@ -36,6 +43,7 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
       </InputLabel>
       {data?.type !== 'radio' && data?.type !== 'password' ? (
         <>
+        {console.log("data aaaa",data)}
           <TextField
             {...register(`${data?.key}`, {
               required: `${t('field')} ${data.name_} ${t('is_required')}`,
@@ -43,8 +51,11 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
             autoComplete={false}
             sx={{ width: '100%' }}
             label={t(data.name_)}
-            type={data?.type}
-            name={data?.key}
+            type={'text'}
+            //defaultValue={data.value  }
+            defaultValue={data.value || '' }
+            //value={data?.value || ''}
+           // defaultValue={ 'hola'}
             variant='filled'
             onChange={onInputChange}
           />
@@ -69,14 +80,18 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
             InputProps={{
               endAdornment: <PasswordViewer setIsVisible={setIsVisible} />,
             }}
-            autoComplete='new-password' 
+            autoComplete='new-password'
             onChange={onInputChange}
-            error={!!errors[data.key]}
-            helperText={errors[data.key]?.message}
+            // error={!!errors[data?.key]}
+            //  helperText={errors[data?.key]?.message}
           />
         </>
       )}
+    
     </Grid>
+  }
+    </>
+   
   );
 };
 

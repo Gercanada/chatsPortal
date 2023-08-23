@@ -37,7 +37,7 @@ export const createUser = ( payload ) => {
 
       const res = await immcaseApi(config);
       if (res) {
-
+        console.log('re,ress',res)
         dispatch(setLoading(false));
         return res.status
       }
@@ -53,15 +53,17 @@ export const updateUser = ({ idUser, payload }) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-  //    const dataForPost = new FormData();
-  //    Object.entries(payload).forEach(([key, val]) => {
-  //      val && dataForPost.append(key, val);
-  //    });
-  
-      const dataForPost = payload;
+      console.log('payload',payload)
+      let dataForPost = {};
+    Object.entries(payload).forEach(([key, val]) => {
+      dataForPost = {
+        ...dataForPost,
+        [key]: val
+      };
+    });
       const config = {
         method: 'post',
-        url: `resource/users/${idUser}/update`,
+        url: `users/${idUser}/update`,
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -134,15 +136,16 @@ export const getZone = () => {
   };
 };
 
-export const getUser = () => {
+export const getUser = (id) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      const { data } = await immcaseApi.get('/user/account');
+      const { data } = await immcaseApi.get(`users/${id}`);
       await dispatch(setUser( data ));
       return data
     } catch (error) {
       console.error(error);
+      return error
     }finally{
       dispatch(setLoading(false));
     }

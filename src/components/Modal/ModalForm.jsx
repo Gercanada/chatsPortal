@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import StyledReactSelect from '../../dashboard/components/StyledReactSelect';
@@ -17,36 +17,32 @@ import CDatePicker from '../../dashboard/components/CDatePicker';
 import CButton from '../Button/CButton';
 import DInput from '../Input/DInput';
 
-// format for dataForm
-// export const details =[
-//   {name_:"Nombre",key:"name",allowEdit: false, type:'text',fetch_to: "resource/clients"},
-//   {name_:"Apellido",key:"last_name",allowEdit: false, type:'text',fetch_to: "resource/clients"},
-//   {name_:"Email",key:"email",allowEdit: false,type:"text",fetch_to: "resource/clients"},
-//   {name_:"Telefono movil",key:"mobile_phone",allowEdit: false,type:'number',fetch_to:"resource/clients"},
-// ];
-
 const ModalForm = ({
   open,
   onClose,
   dataForm,
   title,
+  //selectValues,
   selectValues,
   onSubmit,
   toScreen,
-  toFullAvaliable,
-  isPassword,
+  setIsEdit,
+  isEdit,
+  data,
 }) => {
   const {
     control,
+    formState: { errors },
+    setValue,
+    onInputChange,
+    watch,
     handleSubmit,
     register,
-    formState: { errors },
-    onInputChange,
   } = useForm({
     defaultValues: {},
   });
   const { t } = useTranslation();
-
+  const [fieldsValues, setFieldsValues] = useState([]);
   const style = {
     position: 'relative',
     top: '50%',
@@ -60,7 +56,13 @@ const ModalForm = ({
     overFlowY: 'visible',
   };
 
-  const handleClose = () => onClose(false);
+  useEffect(() => {
+    setFieldsValues(dataForm);
+  }, [dataForm]);
+
+  const handleClose = () =>{ onClose(false) 
+    setIsEdit(false)}
+    
   return (
     <Modal
       open={open}
@@ -80,100 +82,117 @@ const ModalForm = ({
               <Typography variant='h4'>{title}</Typography>
             </Grid>
           </Grid>
-          <Grid container sx={{ display: 'flex', justifyContent: isPassword ? 'center' : '' }}>
-            {dataForm?.map((item, index) =>
-              item?.type === 'date' ? (
-                <Grid
-                  item
-                  xs={12}
-                  md={5.8}
-                  sx={{ marginTop: '8px', marginLeft: '5px' }}
-                  key={index}
-                >
-                  <InputLabel>
-                    {item?.name_}
-                    <span className='text-danger'> * </span>
-                  </InputLabel>
-                  <Controller
-                    name={item?.key}
-                    control={control}
-                    render={({ field: fieldDatePicker }, ref) => (
-                      <CDatePicker {...fieldDatePicker} inputRef={ref} />
-                    )}
-                  />
-                </Grid>
-              ) : item.type === 'select' ? (
-                <Grid
-                  item
-                  xs={12}
-                  md={5.8}
-                  sx={{ marginTop: '8px', marginLeft: '5px' }}
-                  key={index}
-                >
-                  <InputLabel>
-                    {item.name_}
-                    <span className='text-danger'> * </span>
-                  </InputLabel>
-                  <Controller
-                    name={item.key}
-                    control={control}
-                    render={({ field: fieldSelect }) => (
-                      <StyledReactSelect
-                        {...fieldSelect}
-                        options={
-                          item.key === 'client_id'
-                            ? selectValues[0]
-                            : item.key === 'category_id'
-                            ? selectValues[1]
-                            : item.key === 'status_id'
-                            ? selectValues[2]
-                            : item.key === 'type_id'
-                            ? selectValues[0]
-                            : item.key === 'ticket_id'
-                            ? selectValues[1]
-                            : item.key === 'assigned_to'
-                            ? selectValues[2]
-                            : selectValues
-                        }
+          <Grid container sx={{ display: 'flex' }}>
+            {dataForm &&
+              dataForm?.map((item, index) => (
+                <React.Fragment key={index}>
+                  {item.type === 'date' ? (
+                    <Grid
+                      item
+                      xs={12}
+                      md={5.8}
+                      sx={{ marginTop: '8px', marginLeft: '5px' }}
+                      key={index}
+                    >
+                      <InputLabel>
+                        {t(item.key)}
+                        <span className='text-danger'> * </span>
+                      </InputLabel>
+                      <Controller
+                        name={item.key}
+                        control={control}
+                        render={({ field: fieldDatePicker }, ref) => (
+                          <CDatePicker {...fieldDatePicker} inputRef={ref} isRequired={true} />
+                        )}
                       />
-                    )}
-                  />
-                </Grid>
-              ) : item.type === 'avatar' ? (
-                <Grid
-                  item
-                  xs={12}
-                  md={5.8}
-                  sx={{ marginTop: '8px', marginLeft: '5px' }}
-                  key={index}
-                >
-                  <InputLabel>
-                    {item.name_}
-                    <span className='text-danger'> * </span>
-                  </InputLabel>
-                  <TextField
-                    type='file'
-                    variant='filled'
-                    fullWidth
-                    inputProps={{ accept: 'image/*' }}
-                    {...register('avatar')}
-                  />
-                </Grid>
-              ) : (
-                <Grid item xs={12} md={5.8} sx={{ margin: '5px' }} key={index}>
-                  <DInput
-                    errors={errors}
-                    onInputChange={onInputChange}
-                    control={control}
-                    register={register}
-                    data={item}
-                  />
-                </Grid>
-              ),
-            )}
+                    </Grid>
+                  ) : item.type === 'select' ? (
+                    selectValues && (
+                      <Grid
+                        item
+                        xs={12}
+                        md={5.8}
+                        sx={{ marginTop: '8px', marginLeft: '5px' }}
+                        key={index}
+                      >
+                        <InputLabel>
+                          {t(item.key)}
+                          <span className='text-danger'> * </span>
+                        </InputLabel>
+                        <Controller
+                          name={item.key}
+                          control={control}
+                          defaultValue={
+                            isEdit
+                              ? { value: item?.value?.id, label: item?.value?.value }
+                              : t('select')
+                          }
+                          render={({ field: fieldSelect }) => (
+                            <StyledReactSelect
+                              {...fieldSelect}
+                              options={selectValues
+                                ?.get(item.key)
+                                .map((optionSelect) => optionSelect)}
+                            />
+                          )}
+                        />
+                      </Grid>
+                    )
+                  ) : item.type === 'avatar' ? (
+                    <Grid
+                      item
+                      xs={12}
+                      md={5.8}
+                      sx={{ marginTop: '8px', marginLeft: '5px' }}
+                      key={index}
+                    >
+                      <InputLabel>
+                        {item.name_}
+                        <span className='text-danger'> * </span>
+                      </InputLabel>
+                      <TextField
+                        type='file'
+                        variant='filled'
+                        fullWidth
+                        inputProps={{ accept: 'image/*' }}
+                        {...register('avatar')}
+                      />
+                    </Grid>
+                  ) : (
+                    item.type === 'password' || item.type === 'confirm_password'?
+                    <Grid
+                      item
+                      xs={12}
+                      md={5.8}
+                      sx={{ marginTop: '8px', marginLeft: '5px' }}
+                      key={index}
+                    >
+                    <DInput data={item} register={register}/>
+                    </Grid>
+                    :
+                    <Grid
+                      item
+                      xs={12}
+                      md={5.8}
+                      sx={{ marginTop: '8px', marginLeft: '5px' }}
+                      key={index}
+                    >
+                      <TextField
+                        autoComplete={false}
+                        sx={{ width: '100%' }}
+                        label={t(item?.name_)}
+                        type={'text'}
+                        defaultValue={item?.value || ''}
+                        variant='filled'
+                        onChange={onInputChange}
+                      />
+                    </Grid>
+                  )}
+                </React.Fragment>
+              ))}
           </Grid>
           <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
-            {toFullAvaliable && (
+            {toScreen && (
               <CButton
                 title={t('change_password')}
                 type='button'

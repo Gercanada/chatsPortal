@@ -8,7 +8,7 @@ import GridTable from '../../../components/Tables/GridTable';
 import { Button, Card, Grid, Typography } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import ModalForm from '../../../components/Modal/ModalForm';
-import { createUser } from '../../../store/slices/users';
+import { createUser, getUser } from '../../../store/slices/users';
 import { toast } from 'react-toastify';
 
 const UsersPage = () => {
@@ -17,6 +17,12 @@ const UsersPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [userId, setUserId] = useState(false);
+  const [detailsForm, setDetailsForm] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const { userDetails } = useSelector((state) => state.users);
+  console.log('userDetails', userDetails?.data);
+
   const {
     control,
     formState: { errors },
@@ -29,41 +35,64 @@ const UsersPage = () => {
     defaultValues: {},
   });
 
-  const details = [
-    { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text' },
-    {
-      name_: 'Apellido',
-      key: 'last_name',
-      allowEdit: false,
-      type: 'text',
-    },
-    { name_: 'Email', key: 'email', allowEdit: false, type: 'email' },
-    { name_: 'username', key: 'username', allowEdit: false, type: 'text' },
-    { name_: t('password'), key: 'password', allowEdit: false, type: 'password'},
-    {
-      name_: t('confirm_password'),
-      key: 'confirmPassword',
-      allowEdit: false,
-      type: 'password',
-    },
-    {
-      name_: t('avatar'),
-      key: 'avatar',
-      allowEdit: false,
-      type: 'avatar',
-    },
-  ];
+  // const details = [
+  //   { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
+  //   { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
+  //   { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:userDetails?.data?.email },
+  //   { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:userDetails?.data?.username },
+  //   // { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:userDetails?.data?.password },
+  //   // { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:userDetails?.data?.password },
+  //   { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:userDetails?.data?.avatar },
+  // ];
+
+  useEffect(() => {
+    if(isEdit){
+      console.log("aqui toy")
+    const details = [
+      { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
+      { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
+      { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:userDetails?.data?.email },
+      { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:userDetails?.data?.username },
+      // { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:userDetails?.data?.password },
+      // { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:userDetails?.data?.password },
+      { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:userDetails?.data?.avatar },
+    ];
+    setDetailsForm(details)
+  }else{
+    console.log("aqui toy 2")
+    const details = [
+      { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text',value:'' },
+      { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:'' },
+      { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:'' },
+      { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:'' },
+      { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:'' },
+      { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:'' },
+      { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:'' },
+    ];
+    setDetailsForm(details)
+  }
+  }, [isEdit,userDetails])
+  
 
   const onSubmit = async (formDataParam) => {
     console.log('formDataParam', formDataParam);
-    if(formDataParam.password === formDataParam.confirmPassword){
-        delete formDataParam.confirmPassword
-        const resp = dispatch(createUser(formDataParam))
-        if(resp.status === 200 ) {
-            toast.success(t('saved'))
-        }else{
-            toast.error(t('error'))
-        }
+    if (formDataParam.password === formDataParam.confirmPassword) {
+      delete formDataParam.confirmPassword;
+      const resp = await dispatch(createUser(formDataParam));
+      if (resp === 200) {
+        toast.success(t('saved'));
+      } else {
+        toast.error(t('error'));
+      }
+    }
+  };
+
+  const handleOnClick =  async (id) => {
+    setUserId(id);
+    setIsEdit(true)
+    const resp = await dispatch(getUser(id));
+    if(resp){
+      setOpenModal(true)
     }
   };
 
@@ -72,10 +101,12 @@ const UsersPage = () => {
       <ModalForm
         open={openModal}
         onClose={setOpenModal}
-        dataForm={details}
+        dataForm={detailsForm && detailsForm}
         //  selectValues={selectCountries}
+        setIsEdit={setIsEdit}
         onSubmit={onSubmit}
         title={t('create_contact')}
+        isEdit={isEdit}
         // toScreen={toScreen}
       />
       <Card sx={{ marginTop: '10px', marginLeft: '5px', marginRight: '5px' }}>
@@ -87,7 +118,8 @@ const UsersPage = () => {
               size='large'
               color='iconverde'
               onClick={(event) => {
-                setOpenModal(true);
+                setIsEdit(false),
+                setOpenModal(true)
               }}
             >
               <NoteAddIcon color='iconw'></NoteAddIcon>
@@ -112,14 +144,23 @@ const UsersPage = () => {
                 field: 'username',
                 headerName: t('username'),
                 sortable: false,
-                // renderCell: (params) => (
-                //   <Link
-                //     style={{ color: isLightTheme === false ? 'white' : '' }}
-                //     to={`/contacts/${params.id}`}
-                //   >
-                //     {params.value}
-                //   </Link>
-                // ),
+                renderCell: (params) => (
+                  <Typography
+                  sx={{cursor:'pointer', textDecoration:'underline'}}
+                    variant='p'
+                    onClick={() => {
+                      handleOnClick(params.id);
+                    }}
+                  >
+                    {params.value}
+                  </Typography>
+                  // <Link
+                  //   style={{ color: isLightTheme === false ? 'white' : '' }}
+                  //   to={`/contacts/${params.id}`}
+                  // >
+                  //   {params.value}
+                  // </Link>
+                ),
                 flex: 1,
                 align: 'center',
               },
@@ -127,14 +168,6 @@ const UsersPage = () => {
                 field: 'name',
                 headerName: t('name'),
                 sortable: false,
-                // renderCell: (params) => (
-                //   <Link
-                //     style={{ color: isLightTheme === false ? 'white' : '' }}
-                //     to={`/contacts/${params.id}`}
-                //   >
-                //     {params.value}
-                //   </Link>
-                // ),
                 flex: 1,
                 align: 'center',
               },
@@ -143,14 +176,6 @@ const UsersPage = () => {
                 headerName: t('last_name'),
                 sortable: false,
                 flex: 1,
-                // renderCell: (params) => (
-                //   <Link
-                //     style={{ color: isLightTheme === false ? 'white' : '' }}
-                //     to={`/contacts/${params.id}`}
-                //   >
-                //     {params.value}
-                //   </Link>
-                // ),
                 align: 'center',
               },
               { field: 'email', headerName: t('email'), flex: 1, align: 'center', sortable: false },
