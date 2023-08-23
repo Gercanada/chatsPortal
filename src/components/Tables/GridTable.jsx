@@ -209,57 +209,105 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
     );
   }
   const getInfo = async () => {
+    const body = [];
     setIsLoading(true);
-    let response;
+
+    const commonKeys = [
+      'name',
+      'last_name',
+      'created_at',
+      'email',
+      'mobile_phone',
+      'updated_at',
+      'id',
+      'title',
+      'amount',
+      'start_date',
+      'amount_expected',
+      'amount_received',
+      'subject',
+      'payment_date',
+      'payment_no',
+      'description',
+      'name',
+      'agent',
+      'proposal_date',
+      'age',
+      'ticket_no',
+      'date_of_birth',
+      'overall_cost',
+      'status',
+      'first_name',
+      'last_name',
+      'commercial_name',
+      'username',
+      'active',
+      'price',
+      'avatar',
+      'all_items_count',
+      'completed_items_count',
+      'open_items_count',
+      'contact_full_name',
+      'commercial_name',
+      'contact_full_name',
+      'contact_email',
+      'website',
+      'position_title',
+
+    ];
+
+    const specificKeys = [
+      'candidate_id',
+      'assigned_to',
+      'client_id',
+      'status_id',
+      'category_id',
+      'role_id',
+      'type_id',
+      'response_id',
+      'school_registration_id',
+      'ticket_id',
+      'checklist_id',
+      'required_to',
+      'school_id',
+      'schoolprogram_id',
+      'student_id',
+      'employer_id'
+    ];
+
+    let response, data;
+
     if (prefix) {
-      response = await dispatch(getPagination(path));
+      response = await dispatch(getPagination(path, 100));
+      data = response?.data;
     } else {
       response = await dispatch(service(id));
+      data = response?.data;
     }
-    const data = response?.data || [];
-
-    console.log('data',data)
-
-    const body = data.map((item) => {
-      const newItem = {};
-      Object.entries(item).forEach(([key, value], index) => {
-        if (
-          [
-            'subject',
-            'checklist_no',
-            'applicant_full_name',
-            'checklist_type',
-            '%_completed',
-            'cf_1199',
-            'ticket_no',
-            'category',
-            'id',
-            'title',
-            'type',
-            'cf_1216',
-            'status',
-            'item_status',
-            'original_file_name',
-            'clitemsno',
-            'eforms_no',
-            'pdf_file_link',
-            'e_form_link',
-            'e_form_type',
-            'cf_helpdesk_id',
-            'cf_checklist_id',
-            'description',
-            'completed',
-            'On Hold by Client',
-          ].includes(key)
-        ) {
-          newItem[key] = value ? t(value) : '-';
-        } else if (['files'].includes(key)) {
-          newItem[key] = value?.files;
-        }
+    console.log("data",data)
+    if (data) {
+      Object.values(data).forEach((item) => {
+        const newItem = {};
+        Object.entries(item).forEach(([key, value], index) => {
+          if (commonKeys.includes(key)) {
+            if (key === 'created_at' || key === 'updated_at') {
+              newItem[key] = value;
+            } else {
+              newItem[key] = t(value);
+            }
+          } else if (specificKeys.includes(key)) {
+            if (key === 'school_id') {
+              newItem[key] = value?.value?.name;
+            } else{
+            newItem[key] = t(value?.value);
+            }
+          }
+        });
+        body.push(newItem);
+        setValor(body);
       });
-      return newItem;
-    });
-    setValor(body);
+    }
+
     setIsLoading(false);
   };
 

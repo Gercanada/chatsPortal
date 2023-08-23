@@ -13,18 +13,22 @@ import {
 import * as FormData from 'form-data';
 import { toast } from 'react-toastify';
 
-export const createUser = ({ payload }) => {
+export const createUser = ( payload ) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      const dataForPost = new FormData();
-      Object.entries(payload).forEach(([key, val]) => {
-        val && dataForPost.append(key, val);
-      });
+      console.log('payload',payload)
+      let dataForPost = {};
+    Object.entries(payload).forEach(([key, val]) => {
+      dataForPost = {
+        ...dataForPost,
+        [key]: val
+      };
+    });
 
       const config = {
         method: 'post',
-        url: 'resource/users',
+        url: 'users',
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -33,14 +37,12 @@ export const createUser = ({ payload }) => {
 
       const res = await immcaseApi(config);
       if (res) {
-        toast.success('Correcto!');
+
         dispatch(setLoading(false));
-        return true;
+        return res.status
       }
     } catch (error) {
-      const errors = error.response.data;
-      const valuesErrors = Object.values(errors);
-      valuesErrors.map((item) => toast.error(item.toString()));
+     return error
     }
     dispatch(setLoading(false));
   };

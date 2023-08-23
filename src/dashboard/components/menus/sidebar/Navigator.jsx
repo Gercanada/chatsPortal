@@ -24,7 +24,15 @@ import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Button, Grid, Typography } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Button,
+  Grid,
+  Typography,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { logout } from '../../../../store/slices/auth';
 import { clearLocalStorage } from '../../../../functions/localStorageUtil';
@@ -37,7 +45,11 @@ import NewFormModal from '../../../../components/Modal/NewFormModal';
 import { useState } from 'react';
 import PhoneModal from '../../../../components/Modal/PhoneModal';
 import { useEffect } from 'react';
-import { getChats, getPhoneAccounts, getSwitchAccount } from '../../../../store/slices/whatsApp/thunks';
+import {
+  getChats,
+  getPhoneAccounts,
+  getSwitchAccount,
+} from '../../../../store/slices/whatsApp/thunks';
 import AdjustIcon from '@mui/icons-material/Adjust';
 
 export const data = {
@@ -157,7 +169,7 @@ export default function Navigator(props) {
   const [numberPhone, setNumberPhone] = useState(0);
   const [message, setMessage] = useState('');
   const [idAccount, setIdAccount] = useState(0);
-  const { chats,loading,phoneAccounts } = useSelector((state) => state.whatsApp);
+  const { chats, loading, phoneAccounts } = useSelector((state) => state.whatsApp);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleLogout = () => {
@@ -176,10 +188,10 @@ export default function Navigator(props) {
   };
 
   const handleAccount = (id) => {
-    setIdAccount(id)
-    dispatch(getSwitchAccount(id))
+    setIdAccount(id);
+    dispatch(getSwitchAccount(id));
     dispatch(getChats());
-  }
+  };
 
   const categories = [
     {
@@ -201,13 +213,13 @@ export default function Navigator(props) {
   }, [idAccount]);
 
   useEffect(() => {
-    dispatch(getPhoneAccounts())
+    dispatch(getPhoneAccounts());
   }, []);
 
   const onSubmit = async (formDataParam) => {
     const formData = {};
     const numberPhoneValue = `${extensionNumber}${numberPhone}`;
-  }; 
+  };
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -216,51 +228,95 @@ export default function Navigator(props) {
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
         {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
-        <Typography variant='h1' component='h6' sx={{textAlign:'center', ml:10, mt:1}} display='flex'>
+        <Typography
+          variant='h1'
+          component='h6'
+          sx={{ textAlign: 'center', ml: 10, mt: 1 }}
+          display='flex'
+        >
           <img src='/images/vivechat.png' width='75px' alt='' />
         </Typography>
         <Typography>{t('conversations')}</Typography>
-        {phoneAccounts && phoneAccounts?.map((account, index)=>(
-          <Accordion expanded={expanded === index} onChange={handleChange(index)}  sx={{ boxShadow: '0', background: 'inherit' }} onClick={()=>{handleAccount(account?.id)}}>
-          <AccordionSummary
+        {phoneAccounts &&
+          phoneAccounts?.map((account, index) => (
+            <Accordion
+              expanded={expanded === index}
+              onChange={handleChange(index)}
+              sx={{ boxShadow: '0', background: 'inherit' }}
+              onClick={() => {
+                handleAccount(account?.id);
+              }}
+            >
+              <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls='panel1a-content'
                 id='panel1a-header'
               >
-              {account?.name === 'Iphone chino'
-              ?<img src='/images/ViveTel.png' width='40px' alt='' />
-              :account?.name === 'Vive Wha'
-              ?<img src='/images/ViveCanada.png' width='40px' alt='' />
-              :account?.name === 'Test Number'
-              ?<img src='/images/labores.png' width='40px' alt='' />
-              :''
-              }
-                <Typography sx={{m:1}}>{account.name}</Typography>
+                {account?.name === 'Iphone chino' ? (
+                  <img src='/images/ViveTel.png' width='40px' alt='' />
+                ) : account?.name === 'Vive Wha' ? (
+                  <img src='/images/ViveCanada.png' width='40px' alt='' />
+                ) : account?.name === 'Test Number' ? (
+                  <img src='/images/labores.png' width='40px' alt='' />
+                ) : (
+                  ''
+                )}
+                <Typography sx={{ m: 1 }}>{account.name}</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-              {chats &&
-                chats?.map((item, index) => (
-                  <Grid
-                    sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
-                    key={index}
-                  >
-                    <Button name={item.number} id={index} sx={{width:'100%', display:'flex', justifyContent:'space-around'}} onClick={()=>{ navigateTo(`/chat/${item.number}/${item.name}`) , localStorage.setItem('chat_account_type',account?.name);}} >
-                    <Grid sx={{display:'flex'}}>
-                    <Avatar alt='user_photo' src={''} />
-                      <Grid display={'flex'} sx={{flexDirection:'column'}}>
-                      <Typography>{item.name && `${item?.name}`}</Typography>
-                      <Typography>{`${item?.number} `}</Typography>
-                      </Grid>
-                      </Grid>
-                      {item?.unread > 0 ? <AdjustIcon/> : '' }
-                    </Button>
-                  </Grid>
-
-                ))}
+                {chats &&
+                  chats?.map((item, index) => (
+                    <Grid
+                      sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
+                      key={index}
+                    >
+                      <Button
+                        name={item.number}
+                        id={index}
+                        sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
+                        onClick={() => {
+                          navigateTo(`/chat/${item.number}/${item.name}`),
+                            localStorage.setItem('chat_account_type', account?.name);
+                        }}
+                      >
+                        <Grid sx={{ display: 'flex' }}>
+                          <Avatar alt='user_photo' src={''} />
+                          <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
+                            <Typography>{item.name && `${item?.name}`}</Typography>
+                            <Typography>{`${item?.number} `}</Typography>
+                          </Grid>
+                        </Grid>
+                        {item?.unread > 0 ? <AdjustIcon /> : ''}
+                      </Button>
+                    </Grid>
+                  ))}
               </AccordionDetails>
-          </Accordion>
-        ))}
-        
+            </Accordion>
+          ))}
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls='panel1a-content'
+            id='panel1a-header'
+          >
+            <Typography sx={{ m: 1 }}>{t('users')}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
+            <Grid
+              sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
+            >
+              <Button
+                name={'users'}
+                sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}
+                onClick={() => {
+                  navigateTo(`/users`);
+                }}
+              >
+                Users
+              </Button>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
       </List>
       <PhoneModal
         open={openModalForm}

@@ -7,12 +7,11 @@ export const startLogin = ({ user_name, password }) => {
   return async (dispatch) => {
     try {
       const { data } = await immcaseApi.post('/login', {
-        user_name,
+        'email':user_name,
         password,
       });
 
       const { user, token } = data;
-
       localStorage.setItem('x-token', token);
       localStorage.setItem('user', JSON.stringify(user));
 

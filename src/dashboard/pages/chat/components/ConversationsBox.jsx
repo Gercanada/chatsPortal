@@ -20,24 +20,24 @@ const ConversationsBox = ({ messages }) => {
     width: '100%',
     height: '75vh',
     background: `url(${backgroundImageUrl})`,
-    backgroundSize: 'cover',
+    backgroundSize: '100% 100%', // Ajusta la imagen al tamaño del contenedor
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     display: 'flex',
     justifyContent: 'end',
     overflow: 'auto',
   };
+
   const { loading } = useSelector((state) => state.whatsApp);
 
   useEffect(() => {
-    
     theme === 'Iphone chino'
-    ?setBackgroundImageUrl('/images/fondoChatVivetel.png')
-    :theme === 'Vive Wha'
-    ?setBackgroundImageUrl('/images/fondoChatVive.png')
-    :theme === 'Test Number'
-    ?setBackgroundImageUrl('/images/fondoChatLabo.png')
-    :''
+      ? setBackgroundImageUrl('/images/fondoChatVivetel.png')
+      : theme === 'Vive Wha'
+      ? setBackgroundImageUrl('/images/fondoChatVive.png')
+      : theme === 'Test Number'
+      ? setBackgroundImageUrl('/images/fondoChatLabo.png')
+      : '';
   }, [theme]);
 
   useEffect(() => {
@@ -50,21 +50,18 @@ const ConversationsBox = ({ messages }) => {
     const originalData = messages;
     if (originalData) {
       const sortValues = [...originalData].reverse();
-      console.log('sortValues', sortValues);
       setSortMessages(sortValues);
     }
     const messagesId = originalData?.map((item, index) => {
       return item?.id;
     });
     dispatch(setReadMessages(messagesId));
-    console.log('messahesidd', messagesId);
   };
 
   useEffect(() => {
     sortArray();
   }, [messages]);
 
-  console.log('messages', sortMessages);
   return (
     <Grid container style={gridStyle}>
       {loading && <Loader />}
@@ -83,24 +80,53 @@ const ConversationsBox = ({ messages }) => {
               }}
             >
               {item?.has_media === 0 ? (
-                <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
-                  {/* <Avatar alt='user_photo' src={''} /> */}
+                item?.reply_to ? (
+                  <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+                    {/* <Avatar alt='user_photo' src={''} /> */}
 
-                  <TextField
-                    value={item?.body}
-                    disabled
-                    multiline
-                    sx={{ m: 1, width: '97%' }}
-                    variant='filled'
-                  />
-
-                  <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ textAlign: 'end', m: 1, textDecoration:'underline' }}>
-                      <PopoverField values={item?.readers} title ={'readers'}/>
+                    <TextField
+                      value={item?.reply_to?.body}
+                      disabled
+                      multiline
+                      sx={{ m: 1, width: '97%' }}
+                      variant='filled'
+                    />
+                    <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
+                      {item?.body}
                     </Typography>
-                    <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
-                  </Grid>
-                </Card>
+                    <Grid
+                      sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography sx={{ textAlign: 'end', m: 1, textDecoration: 'underline' }}>
+                        <PopoverField values={item?.readers} title={'readers'} />
+                      </Typography>
+                      <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
+                    </Grid>
+                  </Card>
+                ) : (
+                  <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+                    {/* <Avatar alt='user_photo' src={''} /> */}
+                    <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
+                      {item?.body}
+                    </Typography>
+
+                    <Grid
+                      sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography sx={{ textAlign: 'end', m: 1, textDecoration: 'underline' }}>
+                        <PopoverField values={item?.readers} title={'readers'} />
+                      </Typography>
+                      <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
+                    </Grid>
+                  </Card>
+                )
+              ) : item?.type === 'audio' ? (
+                <audio controls>
+                  <source
+                    src={`https://chat.immcase.com/${item?.media_url}`}
+                    type='audio/ogg'
+                  />
+                </audio>
               ) : (
                 <Typography
                   variant='h1'
@@ -124,19 +150,15 @@ const ConversationsBox = ({ messages }) => {
                 justifyContent: 'end',
               }}
             >
-              <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%'}}>
+              <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
                 <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Typography sx={{ width: '100%', ml: 1 }}>{item?.creator?.name}</Typography>
                 </Grid>
                 <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
                   <Avatar sx={{ m: 1 }} alt='user_photo' src={''} />
-                  <TextField
-                    value={item?.body}
-                    disabled
-                    multiline
-                    sx={{ m: 1, width: '100%' }}
-                    variant='filled'
-                  />
+                  <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
+                    {item?.body}
+                  </Typography>
                 </Grid>
 
                 <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'end' }}>

@@ -52,7 +52,7 @@ export const DashboardPage = () => {
         <Grid container>
           <Grid item xs={12}>
       <Card sx={{textAlign:'center', width:'100%', height:'100%'}} >
-      <img src='/images/vivechat.png' width='40%' alt='' style={{marginTop:'10%'}} />
+      <img src='/images/vivechat.png' width='15%' alt='' style={{marginTop:'20%'}} />
       </Card>
           </Grid>
         </Grid>

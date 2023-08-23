@@ -40,9 +40,11 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
             {...register(`${data?.key}`, {
               required: `${t('field')} ${data.name_} ${t('is_required')}`,
             })}
+            autoComplete={false}
             sx={{ width: '100%' }}
-            type={data.type}
-            name={data.key}
+            label={t(data.name_)}
+            type={data?.type}
+            name={data?.key}
             variant='filled'
             onChange={onInputChange}
           />
@@ -61,12 +63,13 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
             sx={{ width: '100%' }}
             label={t(data.name_)}
             type={isVisible === true ? 'text' : 'password'}
-            name={data.key}
+            name={data?.key}
             control={control}
             variant='filled'
             InputProps={{
               endAdornment: <PasswordViewer setIsVisible={setIsVisible} />,
             }}
+            autoComplete='new-password' 
             onChange={onInputChange}
             error={!!errors[data.key]}
             helperText={errors[data.key]?.message}
