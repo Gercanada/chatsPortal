@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { immcaseApi } from '../../../api';
-import { setChats, setLoading, setOneChat, setPhoneAccounts } from './whatsAppSlice';
+import { setChats, setLoading, setOneChat, setPhoneAccounts, setUserFiles } from './whatsAppSlice';
 
 export const sendMessage = ( recipient,message) => {
     return async (dispatch) => {
@@ -88,8 +88,27 @@ export const sendMessage = ( recipient,message) => {
     };
   };
 
+  export const getUserFiles = (thread) => {
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      try {
+        const resp = await immcaseApi.get(`/whatsapp/messages/files?thread_id=${thread}`);
+        console.log('respssss',resp)
+        await dispatch(setUserFiles(resp.data.files))
+       
+        if (resp) {
+            dispatch(setLoading(false));
+            return resp.status;
+          }
+      } catch (error) {
+        console.error(error);
+        return error
+      }
+      dispatch(setLoading(false));
+    };
+  };
+
   export const getSwitchAccount = (id) => {
-    console.log("ididididididididid",id)
     return async (dispatch) => {
       dispatch(setLoading(true));
       try {

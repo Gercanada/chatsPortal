@@ -694,5 +694,8 @@
   "Port of entry - airport":"Port of entry - airport",
   "no_pending_eforms":"No pending eforms",
   "my_pending_documents":"My pending documents",
-  "conversations":"Conversations"
+  "conversations":"Conversations",
+  "users":"Users",
+  "edit_user":"Edit user",
+  "saved":"Saved"
 }

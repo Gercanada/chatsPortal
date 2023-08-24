@@ -14,7 +14,7 @@ export const DashboardRouter = () => {
         <Route path='/profile' element={<ProfilePage />} />
       </Route>
       <Route path='/chat'>
-        <Route path='/chat/:id/:prefix' element={<ChatView />} />
+        <Route path='/chat/:id/:thread/:prefix' element={<ChatView />} />
       </Route>
       <Route path='/users' element={<UsersPage />} />
       <Route path='/*' element={<DashboardPage />} />

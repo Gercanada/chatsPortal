@@ -48,7 +48,7 @@ export const createUser = ( payload ) => {
   };
 };
 
-export const updateUser = ({ idUser, payload }) => {
+export const updateUser = (idUser, payload ) => {
   //alert('HOLA');
   return async (dispatch) => {
     dispatch(setLoading(true));
@@ -72,9 +72,9 @@ export const updateUser = ({ idUser, payload }) => {
 
       const res = await immcaseApi(config);
       if (res) {
-        toast.success('Correcto!');
+       // toast.success('Correcto!');
         dispatch(setLoading(false));
-        return true;
+        return res.status;
       }
     } catch (error) {
       console.error(error);

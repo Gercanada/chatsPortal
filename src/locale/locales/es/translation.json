@@ -453,5 +453,8 @@
   "Port of entry - airport":"Puerto de entrada - aeropuerto",
   "no_pending_eforms":"Sin eforms activos",
   "my_pending_documents":"Mis documentos pendientes",
-  "conversations":"Conversaciones"
+  "conversations":"Conversaciones",
+  "users":"Usuarios",
+  "edit_user":"Editar usuario",
+  "saved":"Guardado"
 }

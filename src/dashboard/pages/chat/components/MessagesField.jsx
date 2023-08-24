@@ -79,7 +79,7 @@ const MessagesField = ({ setNewMessage,setMessage,id }) => {
       <Card sx={{ justifyContent: 'space-around', display: 'flex' }}>
         <IconButton aria-label='delete' size='large' disabled>
           <AttachFileIcon />
-        </IconButton>
+        </IconButton>       
         <TextField
           onChange={() => {
             handleOnchange(event);

@@ -8,7 +8,7 @@ import GridTable from '../../../components/Tables/GridTable';
 import { Button, Card, Grid, Typography } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import ModalForm from '../../../components/Modal/ModalForm';
-import { createUser, getUser } from '../../../store/slices/users';
+import { createUser, getUser, updateUser } from '../../../store/slices/users';
 import { toast } from 'react-toastify';
 
 const UsersPage = () => {
@@ -20,8 +20,8 @@ const UsersPage = () => {
   const [userId, setUserId] = useState(false);
   const [detailsForm, setDetailsForm] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [isReloadData, setIsReloadData] = useState(false);
   const { userDetails } = useSelector((state) => state.users);
-  console.log('userDetails', userDetails?.data);
 
   const {
     control,
@@ -35,19 +35,9 @@ const UsersPage = () => {
     defaultValues: {},
   });
 
-  // const details = [
-  //   { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
-  //   { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
-  //   { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:userDetails?.data?.email },
-  //   { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:userDetails?.data?.username },
-  //   // { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:userDetails?.data?.password },
-  //   // { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:userDetails?.data?.password },
-  //   { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:userDetails?.data?.avatar },
-  // ];
-
   useEffect(() => {
+    setIsReloadData(false)
     if(isEdit){
-      console.log("aqui toy")
     const details = [
       { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
       { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
@@ -59,7 +49,6 @@ const UsersPage = () => {
     ];
     setDetailsForm(details)
   }else{
-    console.log("aqui toy 2")
     const details = [
       { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text',value:'' },
       { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:'' },
@@ -75,15 +64,28 @@ const UsersPage = () => {
   
 
   const onSubmit = async (formDataParam) => {
-    console.log('formDataParam', formDataParam);
     if (formDataParam.password === formDataParam.confirmPassword) {
       delete formDataParam.confirmPassword;
-      const resp = await dispatch(createUser(formDataParam));
+      if(isEdit){
+        const resp = await dispatch(updateUser(userId,formDataParam));
+        if (resp === 200) {
+          toast.success(t('saved'));
+          setIsReloadData(true);
+          setOpenModal(false)
+        } else {
+          toast.error(t('error'));
+        }
+      }else{
+        const resp = await dispatch(createUser(formDataParam));
       if (resp === 200) {
         toast.success(t('saved'));
+        setIsReloadData(true);
+        setOpenModal(false)
       } else {
         toast.error(t('error'));
       }
+    }
+
     }
   };
 
@@ -105,8 +107,9 @@ const UsersPage = () => {
         //  selectValues={selectCountries}
         setIsEdit={setIsEdit}
         onSubmit={onSubmit}
-        title={t('create_contact')}
+        title={isEdit ?  t('edit_users') : t('create_users')}
         isEdit={isEdit}
+        setDetailsForm={setDetailsForm}
         // toScreen={toScreen}
       />
       <Card sx={{ marginTop: '10px', marginLeft: '5px', marginRight: '5px' }}>
@@ -124,7 +127,7 @@ const UsersPage = () => {
             >
               <NoteAddIcon color='iconw'></NoteAddIcon>
               <Typography sx={{ paddingLeft: '10px' }} color='white' variant='h2'>
-                {t('create_user')}
+                {t('create_users')}
               </Typography>
             </Button>
           </Grid>
@@ -138,7 +141,7 @@ const UsersPage = () => {
             title={t('users')}
             group='/users'
             prefix='users'
-            //isReloadData={isReloadData}
+            isReloadData={isReloadData}
             columns={[
               {
                 field: 'username',

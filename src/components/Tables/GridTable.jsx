@@ -284,7 +284,7 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
       response = await dispatch(service(id));
       data = response?.data;
     }
-    console.log("data",data)
+//    console.log("data",data)
     if (data) {
       Object.values(data).forEach((item) => {
         const newItem = {};
@@ -346,6 +346,7 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
         onPageSizeChange={(newPage) => setPageSizes(newPage)}
         experimentalFeatures={{ newEditingApi: true }}
         loading={isLoading}
+        checkboxSelection
         disableSelectionOnClick
         onSelectionModelChange={(ids) => {
           const selectedIDs = new Set(ids);

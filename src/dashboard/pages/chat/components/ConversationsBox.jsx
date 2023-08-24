@@ -98,7 +98,7 @@ const ConversationsBox = ({ messages }) => {
                       sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography sx={{ textAlign: 'end', m: 1, textDecoration: 'underline' }}>
-                        <PopoverField values={item?.readers} title={'readers'} />
+                        <PopoverField values={item?.readers} title={'readers'} type={'users'} />
                       </Typography>
                       <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
                     </Grid>
@@ -114,7 +114,7 @@ const ConversationsBox = ({ messages }) => {
                       sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography sx={{ textAlign: 'end', m: 1, textDecoration: 'underline' }}>
-                        <PopoverField values={item?.readers} title={'readers'} />
+                        <PopoverField values={item?.readers} title={'readers'} type={'users'} />
                       </Typography>
                       <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
                     </Grid>

@@ -440,5 +440,8 @@
   "items":"Documents",
   "my_pending_documents":"Mes documents en attente",
   "Submitted":"Soumis",
-  "conversations":"Conversations"
+  "conversations":"Conversations",
+  "users":"Utilisateurs",
+  "edit_user":"Modifier l'utilisateur",
+  "saved":"Enregistré"
 }

@@ -172,6 +172,8 @@ export default function Navigator(props) {
   const { chats, loading, phoneAccounts } = useSelector((state) => state.whatsApp);
   const [expanded, setExpanded] = React.useState(false);
 
+  console.log("chats",chats)
+
   const handleLogout = () => {
     dispatch(logout());
     clearLocalStorage();
@@ -275,7 +277,7 @@ export default function Navigator(props) {
                         id={index}
                         sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
                         onClick={() => {
-                          navigateTo(`/chat/${item.number}/${item.name}`),
+                          navigateTo(`/chat/${item.number}/${item.id}/${item.name}`),
                             localStorage.setItem('chat_account_type', account?.name);
                         }}
                       >

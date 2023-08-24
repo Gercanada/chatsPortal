@@ -39,7 +39,7 @@ const ModalForm = ({
     handleSubmit,
     register,
   } = useForm({
-    defaultValues: {},
+    defaultValues: {}
   });
   const { t } = useTranslation();
   const [fieldsValues, setFieldsValues] = useState([]);
@@ -56,13 +56,44 @@ const ModalForm = ({
     overFlowY: 'visible',
   };
 
+  const setDefaultValues = async () => {
+    try {
+      if (dataForm) {
+        Object.entries(dataForm).forEach(([key, value]) => {
+          if (key === 'status_id' && value) {
+            setValue(key, { value: value?.id, label: value?.value });
+          } else if (key === 'schools_id' && value) {
+            setValue(key, { value: value?.id, label: value?.value });
+          } else {
+            let setVal = null;
+            if (typeof value.value !== 'undefined' && value.value !== null) {
+              if (typeof value.value === 'object') {
+                // if (Object.keys(value).includes('ref')) {
+                //   setVal = value?.ref.split('/')[4];
+                // }
+              } else {
+                setVal = value;
+              }
+              setValue(setVal.key, setVal.value);
+            }
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setFieldsValues(dataForm);
-  }, [dataForm]);
+    setDefaultValues();
+  }, [dataForm, isEdit]);
 
-  const handleClose = () =>{ onClose(false) 
-    setIsEdit(false)}
-    
+  const handleClose = () => {
+    onClose(false);
+    setIsEdit(false);
+  };
+
   return (
     <Modal
       open={open}
@@ -158,8 +189,7 @@ const ModalForm = ({
                         {...register('avatar')}
                       />
                     </Grid>
-                  ) : (
-                    item.type === 'password' || item.type === 'confirm_password'?
+                  ) : item.type === 'password' || item.type === 'confirm_password' ? (
                     <Grid
                       item
                       xs={12}
@@ -167,9 +197,9 @@ const ModalForm = ({
                       sx={{ marginTop: '8px', marginLeft: '5px' }}
                       key={index}
                     >
-                    <DInput data={item} register={register}/>
+                      <DInput data={item} register={register} />
                     </Grid>
-                    :
+                  ) : (
                     <Grid
                       item
                       xs={12}
@@ -177,14 +207,22 @@ const ModalForm = ({
                       sx={{ marginTop: '8px', marginLeft: '5px' }}
                       key={index}
                     >
+                     <InputLabel>
+                          {t(item.key)}
+                          <span className='text-danger'> * </span>
+                        </InputLabel>
                       <TextField
-                        autoComplete={false}
+                        {...register(`${item?.key}`, {
+                          required: `${t('field')} ${item?.name_} ${t('is_required')}`,
+                        })}
                         sx={{ width: '100%' }}
                         label={t(item?.name_)}
+                        name={item?.key}
                         type={'text'}
-                        defaultValue={item?.value || ''}
+                        //  defaultValue={item?.value || ''}
+                        defaultValue={watch(item?.key)}
                         variant='filled'
-                        onChange={onInputChange}
+                        //  onChange={onInputChange}
                       />
                     </Grid>
                   )}
@@ -204,14 +242,14 @@ const ModalForm = ({
                 {t('go_to_full_screen')}
               </CButton>
             )}
-            <CButton
+            <Button
               type='submit'
               size='large'
               sx={{ margin: '10px', width: '30%' }}
               color='primary'
             >
               {t('save')}
-            </CButton>
+            </Button>
             <CButton
               type='button'
               size='large'

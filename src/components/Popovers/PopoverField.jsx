@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
-const PopoverField = ({ values = [], title,setContactId }) => {
+const PopoverField = ({ values = [], title, setContactId,type }) => {
   // console.log('values', values);
   const { isLightTheme } = useSelector((state) => state.ui);
   const { t } = useTranslation();
@@ -29,15 +29,14 @@ const PopoverField = ({ values = [], title,setContactId }) => {
     setOpen(false);
   };
 
-  const handleOnclick =(e)=>{
-    console.log('eeeee',e.target.id)
-    console.log('eeeee2322222',e)
-    const id = e.target.id
-    setContactId(id)
- //return <Link to={`/chat/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}/>
-    navigateTo('/chat')
-
-  }
+  const handleOnclick = (e) => {
+    console.log('eeeee', e.target.id);
+    console.log('eeeee2322222', e);
+    const id = e.target.id;
+    setContactId(id);
+    //return <Link to={`/chat/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}/>
+    navigateTo('/chat');
+  };
 
   return (
     <Grid>
@@ -47,21 +46,20 @@ const PopoverField = ({ values = [], title,setContactId }) => {
       <>
         <Popover
           open={openPopup}
-          anchorReference='anchorPosition'
-          anchorPosition={{ top: 200, left: 450 }}
+          anchorEl={anchorEl}
           anchorOrigin={{
             vertical: 'center',
-            horizontal: 'left',
+            horizontal: 'right',
           }}
           transformOrigin={{
             vertical: 'center',
-            horizontal: 'right',
+            horizontal: 'left',
           }}
           onClose={handlePopoverClose}
           PaperProps={{
             sx: {
-              width: '300px',
-              //height: '100%',
+              width: '230px',
+              height: '150px',
             },
           }}
         >
@@ -71,30 +69,35 @@ const PopoverField = ({ values = [], title,setContactId }) => {
             </Button>
           </Box>
           <Grid item sx={{ ml: 1, mr: 1 }}>
-            <Typography variant='h6'sx={{textAlign:'center'}}>{t(title)}</Typography>
+            <Typography variant='h6' sx={{ textAlign: 'center' }}>
+              {t(title)}
+            </Typography>
+            {type === 'users' ?
             <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
               {values &&
                 values?.map((item, index) => (
-               
-                  <Grid
-                    sx={{ display: 'flex', flexDirection: 'row', mb: 1 }}
-                    key={index}
-                  >
-                  {console.log("item",item)}
-                  <Typography>
-                    {item?.user?.name} {item?.user?.last_name}  {item?.at}
-                  </Typography>
-                    {/* <Button name={item.number} id={index} onClick={()=>{    navigateTo(`/chat/${item.number}/${item.name}`)}} >
-                    <Avatar alt='user_photo' src={''} />
-                    <Grid>
-                      <Typography>{item.name && `${item?.name}`}</Typography>
-                      <Typography>{`${item?.number}`}</Typography>
-                      </Grid>
-                    </Button> */}
-                  </Grid>
+                  <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
+                 
+                    <Typography>
+                      {item?.user?.name} {item?.user?.last_name} {item?.at}
+                    </Typography>
 
+                  </Grid>
                 ))}
             </Grid>
+            :type ==='files'?
+            <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
+              {values &&
+                values?.map((item, index) => (
+                  <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
+                    <Typography>
+                      {t('file')}:<a href={`${item}`} download>{item}</a>
+                    </Typography>
+
+                  </Grid>
+                ))}
+            </Grid>
+            :''}
           </Grid>
         </Popover>
       </>
