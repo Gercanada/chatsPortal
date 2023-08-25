@@ -6,6 +6,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { setReadMessages } from '../../../../store/slices/whatsApp/thunks';
 import PopoverField from '../../../../components/Popovers/PopoverField';
 import './chatsStyles.css';
+import { BorderBottom } from '@mui/icons-material';
 
 const ConversationsBox = ({ messages }) => {
   const newMessageRef = useRef(null);
@@ -222,14 +223,17 @@ const ConversationsBox = ({ messages }) => {
                   </Typography>
                 </Grid>
                 <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Typography
+                  <TextField
+                    className='textField'
+                    value={item?.body}
+                    multiline
+                    variant='standard'
                     disabled
-                    multiline='true'
-                    sx={{ m: 1, width: '97%' }}
-                    variant='filled'
-                  >
-                    {item?.body}
-                  </Typography>
+                    InputProps={{
+                      disableUnderline: true,
+                      readOnly: true,
+                    }}
+                  />
                 </Grid>
                 <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'end' }}>
                   {item?.reaction?.body && item?.reaction?.body}

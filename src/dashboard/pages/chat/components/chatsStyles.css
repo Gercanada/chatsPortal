@@ -23,3 +23,20 @@
 .box-container{
     background-size: 100% 100% !important
 }
+
+.textField{
+  border: none !important;
+    color: white !important;
+    width: 97%;
+    font-weight: 'normal';
+    border-bottom: none;
+    text-decoration-color: white;
+   /* background-color: aqua; */
+
+}
+
+.MuiInputBase-input.Mui-disabled {
+    opacity: 1;
+    -webkit-text-fill-color: white !important;
+  }
+  

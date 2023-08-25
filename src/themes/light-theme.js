@@ -49,6 +49,26 @@ export const lightTheme = createTheme({
       },
     },
 
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          border: 'none',
+          '& .MuiInputBase-root': {
+            borderBottom: 'none',
+          },
+          '& .MuiInput-underline:before': {
+            borderBottom: 'none',
+          },
+          '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+            borderBottom: 'none',
+          },
+          '& .MuiInput-underline:after': {
+            borderBottom: 'none',
+          },
+        },
+      }
+      },
+
     MuiAppBar: {
       defaultProps: {
         elevation: 0,
