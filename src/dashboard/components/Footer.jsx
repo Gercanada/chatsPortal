@@ -66,7 +66,7 @@ export const Footer = () => {
             </ul>
           </div> */}
           <div className='row' style={{ display: 'flex', justifyContent: 'center' }}>
-          chats Copyright © {date} {t('all_rights_reserved')}
+          ViveChat Copyright © {date} {t('all_rights_reserved')}
           </div>
         </div>
       </footer>

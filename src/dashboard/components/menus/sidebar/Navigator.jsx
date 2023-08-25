@@ -1,28 +1,6 @@
 import * as React from 'react';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Box from '@mui/material/Box';
-import ChatIcon from '@mui/icons-material/Chat';
-import PersonIcon from '@mui/icons-material/Person';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import ForumIcon from '@mui/icons-material/Forum';
-import HomeIcon from '@mui/icons-material/Home';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import LogoutIcon from '@mui/icons-material/Logout';
-import PeopleIcon from '@mui/icons-material/People';
-import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
-import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
-import PublicIcon from '@mui/icons-material/Public';
-import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
-import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
-import TimerIcon from '@mui/icons-material/Timer';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -46,177 +24,61 @@ import { useState } from 'react';
 import PhoneModal from '../../../../components/Modal/PhoneModal';
 import { useEffect } from 'react';
 import {
+  getCategoriesColors,
   getChats,
   getPhoneAccounts,
   getSwitchAccount,
+  updateCategoryColor,
 } from '../../../../store/slices/whatsApp/thunks';
 import AdjustIcon from '@mui/icons-material/Adjust';
-
-export const data = {
-  data: [
-    {
-      id: 2,
-      avatar: null,
-      username: 'heriberto',
-      name: 'Heriberto',
-      last_name: 'Hernandez',
-      email: 'heriberto.h@gercanada.com',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-    {
-      id: 8,
-      avatar: null,
-      username: 'pablo_s',
-      name: 'Pablo',
-      last_name: 'Sainz',
-      email: 'pablo.s@immcase.com',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-    {
-      id: 9,
-      avatar: null,
-      username: 'amy_m',
-      name: 'Amy',
-      last_name: 'Martinez',
-      email: 'amy.m@gercanada.com',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-    {
-      id: 10,
-      avatar: null,
-      username: 'cecilia_v',
-      name: 'Cecilia',
-      last_name: 'Verduzco',
-      email: 'cecilia.v@laborem.ca',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-    {
-      id: 12,
-      avatar: null,
-      username: 'josue_r',
-      name: 'Josue',
-      last_name: 'Rocha',
-      email: 'josue.r@gercanada.com',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-    {
-      id: 13,
-      avatar: '/documents/users/26072023_143800.png',
-      username: 'lizeth_r',
-      name: 'Lizeth Anahi',
-      last_name: 'Ramirez Rodriguez',
-      email: 'lizeth.r@gercanada.com',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-    {
-      id: 14,
-      avatar: null,
-      username: 'mayja_m',
-      name: 'Mayja',
-      last_name: 'Madrid',
-      email: 'mayja.m@gercanada.com',
-      active: 1,
-      role_id: {
-        id: 2,
-        value: 'Agent',
-      },
-    },
-  ],
-};
-
-const itemCategory = {
-  boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
-  py: 1.5,
-  px: 3,
-};
+import Circle from '../../../../components/forms/Circle';
+import ColorMenu from '../../../../components/menus/ColorMenu';
+import { toast } from 'react-toastify';
+import { Loader } from '../../../../components/Loader';
 
 export default function Navigator(props) {
   const { ...other } = props;
   const dispatch = useDispatch();
-  const [contactId, setContactId] = React.useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isLightTheme } = useSelector((state) => state.ui);
-
-  const [openModal, setOpenModal] = useState(false);
-  const [selectsQuickCreate, setSelectsQuickCreate] = useState(new Map());
   const [openModalForm, setOpenModalForm] = useState(false);
+  const [isInto, setIsInto] = useState(false);
   const [extensionNumber, setExtensionNumber] = useState(0);
   const [numberPhone, setNumberPhone] = useState(0);
   const [message, setMessage] = useState('');
   const [idAccount, setIdAccount] = useState(0);
-  const { chats, loading, phoneAccounts } = useSelector((state) => state.whatsApp);
+  const { chats, loading, phoneAccounts, categoriesColors } = useSelector(
+    (state) => state.whatsApp,
+  );
   const [expanded, setExpanded] = React.useState(false);
 
-  console.log("chats",chats)
-
-  const handleLogout = () => {
-    dispatch(logout());
-    clearLocalStorage();
-  };
   const navigateTo = (url) => {
     navigate(url);
   };
 
-  const handleOpenModal = () => {
-    setOpenModalForm(true);
+  const handleAccount = (id, event) => {
+    console.log('event.', event.target);
+    console.log('eventaaaaaaaaaaaaaaa.', event);
+    if (event?.target?.nodeName === 'DIV' ||event?.target?.nodeName === 'svg' || event?.target?.nodeName === 'P' || event?.target?.nodeName === 'IMG') {
+      console.log('aqui toy');
+      setIsInto(true)
+      setIdAccount(id);
+      dispatch(getSwitchAccount(id));
+      dispatch(getChats());
+    } else {
+      console.log('nachos');
+    }
   };
-  const handleCloseModal = () => {
-    setOpenModalForm(false);
+
+  const handleSetChatCategory = async (id, categoryId) => {
+    const resp = await dispatch(updateCategoryColor(id, categoryId));
+    if (resp === 200) {
+      toast.success(t('saved'));
+    } else {
+      toast.error(t('error'));
+    }
   };
-
-  const handleAccount = (id) => {
-    setIdAccount(id);
-    dispatch(getSwitchAccount(id));
-    dispatch(getChats());
-  };
-
-  const categories = [
-    {
-      id: t('conversations'),
-      children: [
-        {
-          id: 'chats',
-          icon: <ForumIcon />,
-          url: '/cases',
-          openModal: handleCloseModal,
-        },
-        //  { id: 'new_conversation', icon: <AddCommentIcon />, url: '/checklist',openModal:handleOpenModal },
-      ],
-    },
-  ];
-
-  useEffect(() => {
-    dispatch(getChats());
-  }, [idAccount]);
-
-  useEffect(() => {
-    dispatch(getPhoneAccounts());
-  }, []);
 
   const onSubmit = async (formDataParam) => {
     const formData = {};
@@ -226,10 +88,18 @@ export default function Navigator(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
+  useEffect(() => {
+    dispatch(getChats());
+    dispatch(getCategoriesColors());
+  }, [idAccount,isInto]);
+
+  useEffect(() => {
+    dispatch(getPhoneAccounts());
+  }, []);
+
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
-        {/* <ListItem sx={{ ...itemCategory, fontSize: 22, color: '#fff', pt: 1, pb: 1 }}> */}
         <Typography
           variant='h1'
           component='h6'
@@ -242,11 +112,13 @@ export default function Navigator(props) {
         {phoneAccounts &&
           phoneAccounts?.map((account, index) => (
             <Accordion
+              key={index}
               expanded={expanded === index}
+              name={'organization'}
               onChange={handleChange(index)}
               sx={{ boxShadow: '0', background: 'inherit' }}
-              onClick={() => {
-                handleAccount(account?.id);
+              onClick={(event) => {
+                handleAccount(account?.id, event);
               }}
             >
               <AccordionSummary
@@ -268,28 +140,38 @@ export default function Navigator(props) {
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
                 {chats &&
                   chats?.map((item, index) => (
-                    <Grid
-                      sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
-                      key={index}
-                    >
-                      <Button
-                        name={item.number}
-                        id={index}
-                        sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
-                        onClick={() => {
-                          navigateTo(`/chat/${item.number}/${item.id}/${item.name}`),
-                            localStorage.setItem('chat_account_type', account?.name);
-                        }}
-                      >
-                        <Grid sx={{ display: 'flex' }}>
-                          <Avatar alt='user_photo' src={''} />
-                          <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
-                            <Typography>{item.name && `${item?.name}`}</Typography>
-                            <Typography>{`${item?.number} `}</Typography>
-                          </Grid>
-                        </Grid>
-                        {item?.unread > 0 ? <AdjustIcon /> : ''}
-                      </Button>
+                    <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
+                      {loading ? (
+                        <Loader />
+                      ) : (
+                        <>
+                          <Circle
+                            id={item?.id}
+                            selected={item?.category?.color !== 'gray'}
+                            values={categoriesColors}
+                            onClick={handleSetChatCategory}
+                            color={item?.category?.color}
+                          />
+                          <Button
+                            name={item.number}
+                            id={index}
+                            sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              navigateTo(`/chat/${item.number}/${item.id}/${item.name}`),
+                                localStorage.setItem('chat_account_type', account?.name);
+                            }}
+                          >
+                            <Grid sx={{ display: 'flex' }}>
+                              <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
+                                <Typography>{item.name && `${item?.name}`}</Typography>
+                                <Typography>{`${item?.number} `}</Typography>
+                              </Grid>
+                            </Grid>
+                            {item?.unread > 0 ? <AdjustIcon /> : ''}
+                          </Button>
+                        </>
+                      )}
                     </Grid>
                   ))}
               </AccordionDetails>
@@ -304,9 +186,7 @@ export default function Navigator(props) {
             <Typography sx={{ m: 1 }}>{t('users')}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
-            <Grid
-              sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}
-            >
+            <Grid sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}>
               <Button
                 name={'users'}
                 sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}

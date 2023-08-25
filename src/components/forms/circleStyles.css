@@ -1,0 +1,12 @@
+.circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: gray;
+    cursor: pointer;
+  }
+  
+  .selected {
+    background-color: blue;
+  }
+  

@@ -117,7 +117,7 @@ const userNameStorage =  localStorage.getItem('user_name') || '';
 
   return (
     <React.Fragment>
-      <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 1em 0 #979797' }}>
+      <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 0.5em 0 #979797' }}>
         <Toolbar>
           <Grid container spacing={1} alignItems='center'>
             {/* <Link component={RouterLink} to='/'>

@@ -5,7 +5,8 @@ const initialState = {
   chats:[], 
   onechat:[],
   phoneAccounts:[],
-  userFiles:[]
+  userFiles:[],
+  categoriesColors:[]
 };
 
 export const whatsAppSlice = createSlice({
@@ -27,9 +28,12 @@ export const whatsAppSlice = createSlice({
      },
      setUserFiles:(state, {payload}) => {
       state.userFiles = payload;
-   }
+   },
+   setCategoriesColors:(state, {payload}) => {
+    state.categoriesColors = payload;
+ },
   }
 });
 
-export const {setLoading, setChats,setOneChat,setPhoneAccounts, setUserFiles } =
+export const {setLoading, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors } =
 whatsAppSlice.actions;

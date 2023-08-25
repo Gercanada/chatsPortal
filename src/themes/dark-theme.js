@@ -79,7 +79,18 @@ export const darkTheme = createTheme({
         },
       },
     },
-
+    // MuiPaper:{
+    //   defaultProps: {
+    //     elevation: 0,
+    //   },
+    //   styleOverrides: {
+    //     root: {
+    //       boxShadow: '0px 5px 5px rgba(0,0,0,0.05)',
+    //       borderRadius: '0px',
+    //       background: '#202c33',
+    //     },
+    //   },
+    // },
     MuiCard: {
       defaultProps: {
         elevation: 0,
@@ -88,7 +99,7 @@ export const darkTheme = createTheme({
         root: {
           boxShadow: '0px 5px 5px rgba(0,0,0,0.05)',
           borderRadius: '0px',
-          background: '#4d4d4d',
+          background: '#202c33',
         },
       },
     },

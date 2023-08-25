@@ -19,3 +19,7 @@
     margin-left: 10px;
     
 }
+
+.box-container{
+    background-size: 100% 100% !important
+}

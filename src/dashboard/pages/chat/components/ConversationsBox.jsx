@@ -1,17 +1,19 @@
-import { Avatar, Card, Grid, TextField, Typography } from '@mui/material';
+import { Avatar, Card, Grid, Paper, TextField, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../../../../components/Loader';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { setReadMessages } from '../../../../store/slices/whatsApp/thunks';
 import PopoverField from '../../../../components/Popovers/PopoverField';
+import './chatsStyles.css'
 
 const ConversationsBox = ({ messages }) => {
   const newMessageRef = useRef(null);
   const [sortMessages, setSortMessages] = useState([]);
   const dispatch = useDispatch();
   const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
-  const theme = localStorage.getItem('chat_account_type');
+  const themeAccount = localStorage.getItem('chat_account_type');
+  const isLightTheme = localStorage.getItem('isLightTheme');
 
   //const backgroundImageUrl = '/images/que-ver-en-vancouver.jpg';
   //const backgroundImageUrl = '/public/images/immcaselogo.png';
@@ -20,25 +22,42 @@ const ConversationsBox = ({ messages }) => {
     width: '100%',
     height: '75vh',
     background: `url(${backgroundImageUrl})`,
-    backgroundSize: '100% 100%', // Ajusta la imagen al tamaño del contenedor
+    // Ajusta la imagen al 100% del alto y tamaño máximo del ancho
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     display: 'flex',
     justifyContent: 'end',
     overflow: 'auto',
   };
+  
+  
+  
+  const bubbleStyle = {
+    padding: '8px 16px',
+    marginBottom: '8px',
+    maxWidth: '70%',
+    backgroundColor:'#005c4b',
+    borderRadius: '10px',
+  };
+  const bubbleStyleResponse = {
+    padding: '8px 16px',
+    marginBottom: '8px',
+    maxWidth: '70%',
+  //  backgroundColor:'white',
+    borderRadius: '10px',
+  };
 
   const { loading } = useSelector((state) => state.whatsApp);
 
   useEffect(() => {
-    theme === 'Iphone chino'
+    themeAccount === 'Iphone chino'
       ? setBackgroundImageUrl('/images/fondoChatVivetel.png')
-      : theme === 'Vive Wha'
-      ? setBackgroundImageUrl('/images/fondoChatVive.png')
-      : theme === 'Test Number'
-      ? setBackgroundImageUrl('/images/fondoChatLabo.png')
+      : themeAccount === 'Vive Wha' && isLightTheme === 'yes'
+      ? setBackgroundImageUrl('/images/F1.png')
+      : themeAccount === 'Vive Wha' && isLightTheme === 'no'
+      ? setBackgroundImageUrl('/images/fondoDarkViveCanada.png')
       : '';
-  }, [theme]);
+  }, [themeAccount,isLightTheme]);
 
   useEffect(() => {
     if (newMessageRef.current) {
@@ -63,8 +82,8 @@ const ConversationsBox = ({ messages }) => {
   }, [messages]);
 
   return (
-    <Grid container style={gridStyle}>
-      {loading && <Loader />}
+    <Grid container style={gridStyle} className='box-container' sx={{ backgroundSize: '100% 100%',}}>
+      {/* {loading && <Loader />} */}
       <Grid item xs={12}>
         {sortMessages?.map((item, index) =>
           item?.Contact === item?.from ? (
@@ -104,7 +123,7 @@ const ConversationsBox = ({ messages }) => {
                     </Grid>
                   </Card>
                 ) : (
-                  <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+                  <Paper elevation={0} style={bubbleStyleResponse}  sx={{ display: 'flex', flexDirection: 'column', width: '45%'}}>
                     {/* <Avatar alt='user_photo' src={''} /> */}
                     <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
                       {item?.body}
@@ -118,14 +137,11 @@ const ConversationsBox = ({ messages }) => {
                       </Typography>
                       <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
                     </Grid>
-                  </Card>
+                    </Paper>
                 )
               ) : item?.type === 'audio' ? (
                 <audio controls>
-                  <source
-                    src={`https://chat.immcase.com/${item?.media_url}`}
-                    type='audio/ogg'
-                  />
+                  <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
                 </audio>
               ) : (
                 <Typography
@@ -150,17 +166,16 @@ const ConversationsBox = ({ messages }) => {
                 justifyContent: 'end',
               }}
             >
-              <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+              {/* <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%', backgroundColor:'#005c4b',color:'white' }}>
                 <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Typography sx={{ width: '100%', ml: 1 }}>{item?.creator?.name}</Typography>
                 </Grid>
                 <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <Avatar sx={{ m: 1 }} alt='user_photo' src={''} />
+
                   <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
                     {item?.body}
                   </Typography>
                 </Grid>
-
                 <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'end' }}>
                   {item?.reaction?.body && item?.reaction?.body}
                   <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
@@ -169,7 +184,25 @@ const ConversationsBox = ({ messages }) => {
                     color={item?.status === 'read' ? 'primary' : 'black'}
                   />
                 </Grid>
-              </Card>
+              </Card> */}
+              <Paper elevation={0} style={bubbleStyle}  sx={{ display: 'flex', flexDirection: 'column', width: '45%', backgroundColor:'#005c4b',color:'white' }}>
+                <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Typography sx={{ width: '100%', ml: 1,color:'#40a3c3' }}>{item?.creator?.name}</Typography>
+                </Grid>
+                <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
+                  <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
+                    {item?.body}
+                  </Typography>
+                </Grid>
+                <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'end' }}>
+                  {item?.reaction?.body && item?.reaction?.body}
+                  <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
+                  <DoneAllIcon
+                    sx={{ textAlign: 'end', mr: 1 }}
+                    color={item?.status === 'read' ? 'primary' : 'black'}
+                  />
+                </Grid>
+              </Paper>
             </Grid>
           ),
         )}

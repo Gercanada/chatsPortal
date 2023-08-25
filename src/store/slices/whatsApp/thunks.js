@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import { immcaseApi } from '../../../api';
-import { setChats, setLoading, setOneChat, setPhoneAccounts, setUserFiles } from './whatsAppSlice';
+import { setCategoriesColors, setChats, setLoading, setOneChat, setPhoneAccounts, setUserFiles } from './whatsAppSlice';
 
 export const sendMessage = ( recipient,message) => {
     return async (dispatch) => {
@@ -87,6 +87,24 @@ export const sendMessage = ( recipient,message) => {
       dispatch(setLoading(false));
     };
   };
+  export const getCategoriesColors= () => {
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      try {
+        const resp = await immcaseApi.get(`/whatsapp/threads/categories`);
+        await dispatch(setCategoriesColors(resp.data.data))
+       
+        if (resp) {
+            dispatch(setLoading(false));
+            return resp.status;
+          }
+      } catch (error) {
+        console.error(error);
+        return error
+      }
+      dispatch(setLoading(false));
+    };
+  };
 
   export const getUserFiles = (thread) => {
     return async (dispatch) => {
@@ -151,3 +169,33 @@ export const sendMessage = ( recipient,message) => {
       dispatch(setLoading(false));
     };
   };
+
+  export const updateCategoryColor = (idUser, categoryId) => {
+    //alert('HOLA');
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      try {
+        let dataForPost = {
+          id:idUser,
+          category_id:categoryId};
+        const config = {
+          method: 'put',
+          url: `/whatsapp/threads/${idUser}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: dataForPost,
+        };
+  
+        const res = await immcaseApi(config);
+        if (res) {
+          dispatch(setLoading(false));
+          return res.status;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      dispatch(setLoading(false));
+    };
+  };
+  
