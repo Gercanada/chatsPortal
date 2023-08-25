@@ -42,21 +42,28 @@ function Header(props) {
   const navigate = useNavigate();
 
 const userNameStorage =  localStorage.getItem('user_name') || '';
+const user =  localStorage.getItem('user') || '';
+const userStorage = JSON.parse(user);
+
+
 
   const { isLightTheme, loading } = useSelector((state) => state.ui);
   const { userDetails } = useSelector((state) => state.users);
 
-  const [firstName, setFirstName] = useState(userDetails?.contact?.first_name);
-  const [lastName, setLastName] = useState(userDetails?.contact?.last_name);
-  const [userName, setUserName] = useState(userDetails?.contact?.username);
+  const [firstName, setFirstName] = useState(userDetails?.data?.first_name);
+  const [lastName, setLastName] = useState(userDetails?.data?.last_name);
+  const [userName, setUserName] = useState(userDetails?.data?.username);
   const [responseUser, setResponseUser] = useState(userDetails);
   const [theme, setTheme] = useState();
-  const [language, setLanguage] = useState(userDetails?.contact?.default_language);
+  const [language, setLanguage] = useState(userDetails?.data?.default_language);
 
-  const [avatar, setAvatar] = useState(userDetails?.contact?.avatar);
+  const [avatar, setAvatar] = useState(userDetails?.data?.avatar);
   const navigateTo = (url) => {
     navigate(url);
   };
+
+
+  console.log("userDetails",userDetails);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenUserMenu = (event) => {
@@ -84,15 +91,15 @@ const userNameStorage =  localStorage.getItem('user_name') || '';
 
   const getShowData = () => {
     if (userDetails) {
-      // alert(userDetails?.contact?.avatar);
+      // alert(userDetails?.data?.avatar);
       setResponseUser(userDetails);
-      setFirstName(userDetails?.contact?.first_name);
-      setLastName(userDetails?.contact?.last_name);
-      setUserName(userDetails?.contact?.username);
-      setLanguage(userDetails?.contact?.default_language);
-      setTheme(userDetails?.contact?.default_theme);
+      setFirstName(userDetails?.data?.first_name);
+      setLastName(userDetails?.data?.last_name);
+      setUserName(userDetails?.data?.username);
+      setLanguage(userDetails?.data?.default_language);
+      setTheme(userDetails?.data?.default_theme);
 
-      setAvatar(userDetails?.contact?.avatar);
+      setAvatar(userDetails?.data?.avatar);
     }
   };
   const defaultTools = async () => {
@@ -107,14 +114,14 @@ const userNameStorage =  localStorage.getItem('user_name') || '';
   };
 
   useEffect(() => {
-    dispatch(getUser());
+    dispatch(getUser(userStorage?.id));
     defaultTools();
   }, []);
 
   React.useEffect(() => {
     getShowData();
   }, [userDetails, theme]);
-
+console.log("avatar",avatar)
   return (
     <React.Fragment>
       <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 0.5em 0 #979797' }}>
@@ -150,7 +157,7 @@ const userNameStorage =  localStorage.getItem('user_name') || '';
             <Grid item>
               <Tooltip title='Open settings'>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='user_photo' src={avatar || ''} />
+                  <Avatar alt='user_photo' src={`https://chat.immcase.com/storage${userDetails?.data?.avatar}` || ''} />
                 </IconButton>
               </Tooltip>
               <Menu

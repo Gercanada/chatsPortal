@@ -697,5 +697,8 @@
   "conversations":"Conversations",
   "users":"Users",
   "edit_user":"Edit user",
-  "saved":"Saved"
+  "saved":"Saved",
+  "no_files":"No files",
+  "file":"Files",
+  "readers":"Readers"
 }

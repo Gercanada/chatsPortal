@@ -456,5 +456,8 @@
   "conversations":"Conversaciones",
   "users":"Usuarios",
   "edit_user":"Editar usuario",
-  "saved":"Guardado"
+  "saved":"Guardado",
+  "no_files":"Sin archivos",
+  "file":"Archivos",
+  "readers":"Lectores"
 }

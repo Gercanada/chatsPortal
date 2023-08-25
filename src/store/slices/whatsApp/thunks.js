@@ -36,7 +36,6 @@ export const sendMessage = ( recipient,message) => {
       dispatch(setLoading(true));
       try {
         const resp = await immcaseApi.get('/whatsapp/threads');
-        console.log('aqui toy chatsereeeeeee-----------------',resp?.data?.data)
         await dispatch(setChats(resp?.data?.data));
         if (resp) {
             dispatch(setLoading(false));
@@ -111,7 +110,6 @@ export const sendMessage = ( recipient,message) => {
       dispatch(setLoading(true));
       try {
         const resp = await immcaseApi.get(`/whatsapp/messages/files?thread_id=${thread}`);
-        console.log('respssss',resp)
         await dispatch(setUserFiles(resp.data.files))
        
         if (resp) {

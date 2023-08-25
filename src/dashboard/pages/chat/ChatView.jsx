@@ -49,7 +49,7 @@ const sortArray = () => {
         <ConversationsBox messages={onechat?.data && onechat?.data}/>
       </Grid>
       <Grid item xs={12}>
-        <MessagesField id={id} setMessage={setMessage} setNewMessage={setMessageResponseState} messages={messagesReponseState}/>
+        <MessagesField  setMessage={setMessage} setNewMessage={setMessageResponseState} messages={messagesReponseState}/>
       </Grid>
     </Grid>
     </DashboardLayout>

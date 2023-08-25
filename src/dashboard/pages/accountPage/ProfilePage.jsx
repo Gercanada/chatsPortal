@@ -123,7 +123,6 @@ export const ProfilePage = () => {
   }, [details]);
 
   const onSubmit = async (data) => {
-    console.log({ avatar });
     const res = await dispatch(
       updateAvatar({
         value: avatar,

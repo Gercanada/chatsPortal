@@ -443,5 +443,8 @@
   "conversations":"Conversations",
   "users":"Utilisateurs",
   "edit_user":"Modifier l'utilisateur",
-  "saved":"Enregistré"
+  "saved":"Enregistré",
+  "no_files":"Aucun fichier",
+  "file":"Des dossiers",
+  "readers":"Lecteurs"
 }

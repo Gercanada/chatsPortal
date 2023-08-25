@@ -284,7 +284,6 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
       response = await dispatch(service(id));
       data = response?.data;
     }
-//    console.log("data",data)
     if (data) {
       Object.values(data).forEach((item) => {
         const newItem = {};

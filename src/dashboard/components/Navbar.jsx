@@ -72,6 +72,8 @@ export const Navbar = () => {
     onToggleTheme();
   };
 
+  console.log("userDetails",userDetails)
+
   const getShowData = () => {
     if (userDetails) {
       setResponseUser(userDetails)

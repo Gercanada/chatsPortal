@@ -13,9 +13,7 @@ const ConversationNavbar = ({user}) => {
 
 useEffect(() => {
   dispatch(getUserFiles(thread));
-}, [])
-
-console.log('userFiles',userFiles)
+}, [id])
 
   return (
     <Grid  sx={{position:'sticky'}}>
@@ -24,9 +22,9 @@ console.log('userFiles',userFiles)
     <Typography sx={{m:1}}>
     {prefix !== 'null' ? prefix : id}
     </Typography>
-    <Typography sx={{m:1}}>
+    {/* <Grid sx={{m:1}}>
     <PopoverField values={userFiles && userFiles} title={'files'} type={'files'} />
-    </Typography>
+    </Grid> */}
     </Card>
   </Grid>
   )

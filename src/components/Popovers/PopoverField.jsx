@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 
-const PopoverField = ({ values = [], title, setContactId, type, icon,onClick,id }) => {
-  // console.log('values', values);
+const PopoverField = ({ values = [], title, setContactId, type, icon, onClick, id }) => {
   const { isLightTheme } = useSelector((state) => state.ui);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -32,8 +31,8 @@ const PopoverField = ({ values = [], title, setContactId, type, icon,onClick,id 
 
   return (
     <Grid>
-      <Typography onClick={(e) => handlePopoverOpen(e)} sx={{ cursor: 'pointer' }}>
-        <Typography variant='p' sx={{ textAlign: 'center' }}>
+      <Typography variant='p' onClick={(e) => handlePopoverOpen(e)} sx={{ cursor: 'pointer', textDecoration:'underline' }}>
+        <Typography  sx={{ textAlign: 'center' }}>
           {title && icon ? icon : t(title)}
         </Typography>
       </Typography>
@@ -79,31 +78,38 @@ const PopoverField = ({ values = [], title, setContactId, type, icon,onClick,id 
               </Grid>
             ) : type === 'files' ? (
               <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
-                {values &&
+                {values.length > 0 ? (
                   values?.map((item, index) => (
                     <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
                       <Typography>
                         {t('file')}:
-                        <a href={`${item}`} download>
+                        <a href={`https://chat.immcase.com${item}`} target="_blank" download>
                           {item}
                         </a>
                       </Typography>
                     </Grid>
-                  ))}
+                  ))
+                ) : (
+                  <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1, justifyContent:'center' }}>
+                  <Typography>
+                    {t('no_files')}
+                  </Typography>
+                  </Grid>
+                )}
               </Grid>
             ) : type === 'color' ? (
               <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
                 {values &&
                   values?.map((item, index) => (
-                    <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index} >
+                    <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
                       <Grid
                         className={'circle'}
                         sx={{ backgroundColor: item?.color, textAlign: 'center', m: 1 }}
-                        onClick={()=>{onClick(id,item.id),setOpen(false)}}
+                        onClick={() => {
+                          onClick(id, item.id), setOpen(false);
+                        }}
                       />
-                      <Typography sx={{mt:2}}>
-                        {item?.name}
-                      </Typography>
+                      <Typography sx={{ mt: 2 }}>{item?.name}</Typography>
                     </Grid>
                   ))}
               </Grid>

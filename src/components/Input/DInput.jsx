@@ -43,7 +43,6 @@ const DInput = ({ data, register, errors, control, onInputChange }) => {
       </InputLabel>
       {data?.type !== 'radio' && data?.type !== 'password' ? (
         <>
-        {console.log("data aaaa",data)}
           <TextField
             {...register(`${data?.key}`, {
               required: `${t('field')} ${data.name_} ${t('is_required')}`,

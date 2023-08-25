@@ -19,7 +19,6 @@ const NewFormModal = ({
   isEdit,
   data,
 }) => {
-  console.log("datukiiii",data)
   const {
     control,
     formState: { errors },

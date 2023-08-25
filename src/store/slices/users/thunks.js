@@ -17,7 +17,6 @@ export const createUser = ( payload ) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      console.log('payload',payload)
       let dataForPost = {};
     Object.entries(payload).forEach(([key, val]) => {
       dataForPost = {
@@ -37,7 +36,7 @@ export const createUser = ( payload ) => {
 
       const res = await immcaseApi(config);
       if (res) {
-        console.log('re,ress',res)
+  
         dispatch(setLoading(false));
         return res.status
       }
@@ -53,7 +52,6 @@ export const updateUser = (idUser, payload ) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      console.log('payload',payload)
       let dataForPost = {};
     Object.entries(payload).forEach(([key, val]) => {
       dataForPost = {
@@ -140,7 +138,8 @@ export const getUser = (id) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      const { data } = await immcaseApi.get(`users/${id}`);
+      const { data } = await immcaseApi.get(`/users/${id}`);
+      console.log("datadatadatadata",data)
       await dispatch(setUser( data ));
       return data
     } catch (error) {
