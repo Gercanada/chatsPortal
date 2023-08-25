@@ -22,9 +22,8 @@ const ConversationsBox = ({ messages }) => {
     width: '100%',
     height: '75vh',
     background: `url(${backgroundImageUrl})`,
-    // Ajusta la imagen al 100% del alto y tamaño máximo del ancho
     backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
+   backgroundRepeat: 'no-repeat',
     display: 'flex',
     justifyContent: 'end',
     overflow: 'auto',
@@ -51,11 +50,11 @@ const ConversationsBox = ({ messages }) => {
 
   useEffect(() => {
     themeAccount === 'Iphone chino'
-      ? setBackgroundImageUrl('/images/fondoChatVivetel.png')
+      ? setBackgroundImageUrl('/images/GerCanada.svg')
       : themeAccount === 'Vive Wha' && isLightTheme === 'yes'
-      ? setBackgroundImageUrl('/images/F1.png')
+      ? setBackgroundImageUrl('/images/fondoLightViveCanada.svg')
       : themeAccount === 'Vive Wha' && isLightTheme === 'no'
-      ? setBackgroundImageUrl('/images/fondoDarkViveCanada.png')
+      ? setBackgroundImageUrl('/images/fondoDarkViveCanada.svg')
       : '';
   }, [themeAccount,isLightTheme]);
 

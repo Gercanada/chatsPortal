@@ -43,6 +43,7 @@ export default function Navigator(props) {
   const navigate = useNavigate();
   const { isLightTheme } = useSelector((state) => state.ui);
   const [openModalForm, setOpenModalForm] = useState(false);
+  const [changedColor, setChangedColor] = useState(false);
   const [isInto, setIsInto] = useState(false);
   const [extensionNumber, setExtensionNumber] = useState(0);
   const [numberPhone, setNumberPhone] = useState(0);
@@ -58,16 +59,11 @@ export default function Navigator(props) {
   };
 
   const handleAccount = (id, event) => {
-    console.log('event.', event.target);
-    console.log('eventaaaaaaaaaaaaaaa.', event);
-    if (event?.target?.nodeName === 'DIV' ||event?.target?.nodeName === 'svg' || event?.target?.nodeName === 'P' || event?.target?.nodeName === 'IMG') {
-      console.log('aqui toy');
+    if (event?.target?.nodeName === 'DIV' || event?.target?.nodeName === 'P' || event?.target?.nodeName === 'IMG') {
       setIsInto(true)
       setIdAccount(id);
       dispatch(getSwitchAccount(id));
       dispatch(getChats());
-    } else {
-      console.log('nachos');
     }
   };
 
@@ -75,6 +71,7 @@ export default function Navigator(props) {
     const resp = await dispatch(updateCategoryColor(id, categoryId));
     if (resp === 200) {
       toast.success(t('saved'));
+    setChangedColor(!changedColor)
     } else {
       toast.error(t('error'));
     }
@@ -91,7 +88,7 @@ export default function Navigator(props) {
   useEffect(() => {
     dispatch(getChats());
     dispatch(getCategoriesColors());
-  }, [idAccount,isInto]);
+  }, [idAccount,isInto,changedColor]);
 
   useEffect(() => {
     dispatch(getPhoneAccounts());
@@ -141,9 +138,9 @@ export default function Navigator(props) {
                 {chats &&
                   chats?.map((item, index) => (
                     <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
-                      {loading ? (
-                        <Loader />
-                      ) : (
+                      {loading &&
+                        <Loader />}
+                   
                         <>
                           <Circle
                             id={item?.id}
@@ -171,7 +168,7 @@ export default function Navigator(props) {
                             {item?.unread > 0 ? <AdjustIcon /> : ''}
                           </Button>
                         </>
-                      )}
+                      
                     </Grid>
                   ))}
               </AccordionDetails>
