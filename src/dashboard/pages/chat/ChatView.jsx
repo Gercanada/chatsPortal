@@ -23,6 +23,18 @@ useEffect(() => {
   sortArray();
 }, [id,onechat?.data?.length])
 
+// useEffect(() => {
+//   const interval = setInterval(() => {
+//     dispatch(getUserChat(id));
+//     sortArray();
+//   }, 15000); // 15000 milisegundos = 15 segundos
+
+//   return () => {
+//     clearInterval(interval); 
+//   };
+// }, [id, onechat?.data?.length, dispatch]); //
+
+
 const handleSendMessage = async() => {
  const resp = await dispatch(sendMessage(id,message))
  if(resp===200){

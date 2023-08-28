@@ -59,6 +59,7 @@ export default function Navigator(props) {
   };
 
   const handleAccount = (id, event) => {
+    console.log("event",event)
     if (event?.target?.nodeName === 'DIV' || event?.target?.nodeName === 'P' || event?.target?.nodeName === 'IMG') {
       setIsInto(true)
       setIdAccount(id);
@@ -93,6 +94,8 @@ export default function Navigator(props) {
   useEffect(() => {
     dispatch(getPhoneAccounts());
   }, []);
+
+  console.log('aqqui')
 
   return (
     <Drawer variant='permanent' {...other}>
