@@ -123,16 +123,18 @@ export default function Navigator(props) {
                 aria-controls='panel1a-content'
                 id='panel1a-header'
               >
-                {account?.name === 'Iphone chino' ? (
+                {account?.name === 'Vivetel Networks Ltd' ? (
                   <img src='/images/ViveTel.png' width='40px' alt='' />
-                ) : account?.name === 'Vive Wha' ? (
+                ) : account?.name === 'ViveCanada Edu Services LTD' ? (
                   <img src='/images/ViveCanada.png' width='40px' alt='' />
                 ) : account?.name === 'Test Number' ? (
                   <img src='/images/labores.png' width='40px' alt='' />
                 ) : (
                   ''
                 )}
-                <Typography sx={{ m: 1 }}>{account.name}</Typography>
+                <Typography sx={{ m: 1 }}>
+                  {account?.name === 'ViveCanada Edu Services LTD' ? 'ViveCanada':account.name}
+                  </Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
                 {chats &&
@@ -140,7 +142,6 @@ export default function Navigator(props) {
                     <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
                       {loading &&
                         <Loader />}
-                   
                         <>
                           <Circle
                             id={item?.id}

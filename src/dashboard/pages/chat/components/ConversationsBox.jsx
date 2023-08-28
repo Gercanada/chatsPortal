@@ -54,10 +54,14 @@ const ConversationsBox = ({ messages }) => {
       ? (setBackgroundImageUrl('/images/gerclaro.svg'), setBackgroundColor('#CCE2FF'))
       : themeAccount === 'Iphone chino' && isLightTheme === 'no'
       ? (setBackgroundImageUrl('/images/gerdark.svg'), setBackgroundColor('#151719'))
-      : themeAccount === 'Vive Wha' && isLightTheme === 'yes'
+      : themeAccount === 'ViveCanada Edu Services LTD' && isLightTheme === 'yes'
       ? (setBackgroundImageUrl('/images/prueba_vive.svg'), setBackgroundColor('#ffd1b3'))
-      : themeAccount === 'Vive Wha' && isLightTheme === 'no'
+      : themeAccount === 'ViveCanada Edu Services LTD' && isLightTheme === 'no'
       ? (setBackgroundImageUrl('/images/fondoDarkViveCanada.svg'), setBackgroundColor('#151719'))
+      : themeAccount === 'Vivetel Networks Ltd' && isLightTheme === 'yes'
+      ? (setBackgroundImageUrl('/images/telclaro.svg'), setBackgroundColor('#EAD9FF'))
+      : themeAccount === 'Vivetel Networks Ltd' && isLightTheme === 'no'
+      ? (setBackgroundImageUrl('/images/vivetel.svg'), setBackgroundColor('#151719'))
       : '';
   }, [themeAccount, isLightTheme]);
 
