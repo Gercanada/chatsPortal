@@ -446,5 +446,6 @@
   "saved":"Enregistré",
   "no_files":"Aucun fichier",
   "file":"Des dossiers",
-  "readers":"Lecteurs"
+  "readers":"Lecteurs",
+  "loading_chats": "Charger les chats..."
 }

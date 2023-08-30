@@ -34,6 +34,15 @@
    /* background-color: aqua; */
 
 }
+.textField2{
+    border: none !important;
+      color: black !important;
+      width: 97%;
+      font-weight: 'normal';
+      border-bottom: none;
+      text-decoration-color: black;
+      cursor: pointer !important;
+  }
 
 .MuiInputBase-input.Mui-disabled {
     opacity: 1;

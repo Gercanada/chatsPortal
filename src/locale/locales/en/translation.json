@@ -700,5 +700,7 @@
   "saved":"Saved",
   "no_files":"No files",
   "file":"Files",
-  "readers":"Readers"
+  "readers":"Readers",
+  "loading_chats":"Loading chats..."
+  
 }

@@ -63,11 +63,9 @@ const userStorage = JSON.parse(user);
   };
 
 
-  console.log("userDetails",userDetails);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenUserMenu = (event) => {
-    // console.log('evem',event)
     setAnchorElUser(event.currentTarget);
   };
 
@@ -121,7 +119,7 @@ const userStorage = JSON.parse(user);
   React.useEffect(() => {
     getShowData();
   }, [userDetails, theme]);
-console.log("avatar",avatar)
+
   return (
     <React.Fragment>
       <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 0.5em 0 #979797' }}>

@@ -4,7 +4,7 @@ import { setCategoriesColors, setChats, setLoading, setOneChat, setPhoneAccounts
 
 export const sendMessage = ( recipient,message) => {
     return async (dispatch) => {
-      dispatch(setLoading(true));
+     // dispatch(setLoading(true));
       try {
         const dataForPost = {
             'recipient':recipient,
@@ -21,13 +21,13 @@ export const sendMessage = ( recipient,message) => {
   
         const res = await immcaseApi(config);
         if (res) {  
-          dispatch(setLoading(false));
+        //  dispatch(setLoading(false));
           return res?.status;
         }
       } catch (error) {
        return error
       }
-      dispatch(setLoading(false));
+     // dispatch(setLoading(false));
     };
   };
 
@@ -51,20 +51,20 @@ export const sendMessage = ( recipient,message) => {
 
   export const getUserChat = (phone) => {
     return async (dispatch) => {
-      dispatch(setLoading(true));
+      //dispatch(setLoading(true));
       try {
         const resp = await immcaseApi.get(`/whatsapp/messages?contact=${phone}`);
         await dispatch(setOneChat(resp.data.data))
        
         if (resp) {
-            dispatch(setLoading(false));
+           // dispatch(setLoading(false));
             return resp.status;
           }
       } catch (error) {
         console.error(error);
         return error
       }
-      dispatch(setLoading(false));
+     // dispatch(setLoading(false));
     };
   };
 
@@ -144,7 +144,7 @@ export const sendMessage = ( recipient,message) => {
 
   export const setReadMessages = (ids) => {
     return async (dispatch) => {
-      dispatch(setLoading(true));
+     // dispatch(setLoading(true));
       try {
    const data = {'messages':ids}
         const config = {
@@ -158,13 +158,13 @@ export const sendMessage = ( recipient,message) => {
   
         const res = await immcaseApi(config);
         if (res) {  
-          dispatch(setLoading(false));
+        //  dispatch(setLoading(false));
           return res?.status;
         }
       } catch (error) {
        return error
       }
-      dispatch(setLoading(false));
+     // dispatch(setLoading(false));
     };
   };
 
@@ -194,6 +194,25 @@ export const sendMessage = ( recipient,message) => {
         console.error(error);
       }
       dispatch(setLoading(false));
+    };
+  };
+
+  export const getMoreMessages = (id, page) => {
+    console.log('aquiid, pageid, pageid, pageid, page',id, page)
+    return async (dispatch) => {
+      //dispatch(setLoading(true));
+      try {
+        const resp = await immcaseApi.get(`/whatsapp/messages?page=${page}&thread_id=${id}`);
+        await dispatch(setOneChat(resp.data.data))
+        if (resp) {
+            //dispatch(setLoading(false));
+            return resp.status;
+          }
+      } catch (error) {
+        console.error(error);
+        return error
+      }
+      //dispatch(setLoading(false));
     };
   };
   

@@ -459,5 +459,6 @@
   "saved":"Guardado",
   "no_files":"Sin archivos",
   "file":"Archivos",
-  "readers":"Lectores"
+  "readers":"Lectores",
+  "loading_chats":"Cargando chats..."
 }

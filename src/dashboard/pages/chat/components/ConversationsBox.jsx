@@ -3,22 +3,34 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '../../../../components/Loader';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
-import { setReadMessages } from '../../../../store/slices/whatsApp/thunks';
+import { getMoreMessages, setReadMessages } from '../../../../store/slices/whatsApp/thunks';
 import PopoverField from '../../../../components/Popovers/PopoverField';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import './chatsStyles.css';
 import { BorderBottom } from '@mui/icons-material';
+import { useParams } from 'react-router-dom';
+
+export const styles = {
+  root: {
+    background: 'black',
+  },
+  input: {
+    color: 'white',
+  },
+};
 
 const ConversationsBox = ({ messages }) => {
+  const classes = styles;
+  const { thread } = useParams();
   const newMessageRef = useRef(null);
   const [sortMessages, setSortMessages] = useState([]);
   const dispatch = useDispatch();
   const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
   const [backgroundColor, setBackgroundColor] = useState('');
   const themeAccount = localStorage.getItem('chat_account_type');
   const isLightTheme = localStorage.getItem('isLightTheme');
 
-  //const backgroundImageUrl = '/images/que-ver-en-vancouver.jpg';
-  //const backgroundImageUrl = '/public/images/immcaselogo.png';
   const gridStyle = {
     position: 'relative',
     width: '100%',
@@ -28,7 +40,6 @@ const ConversationsBox = ({ messages }) => {
     backgroundRepeat: 'no-repeat',
     backgroundColor: `${backgroundColor}`,
     display: 'flex',
-    justifyContent: 'end',
     overflow: 'auto',
   };
 
@@ -43,11 +54,8 @@ const ConversationsBox = ({ messages }) => {
     padding: '8px 16px',
     marginBottom: '8px',
     maxWidth: '70%',
-    //  backgroundColor:'white',
     borderRadius: '10px',
   };
-
-  const { loading } = useSelector((state) => state.whatsApp);
 
   useEffect(() => {
     themeAccount === 'Iphone chino' && isLightTheme === 'yes'
@@ -83,6 +91,18 @@ const ConversationsBox = ({ messages }) => {
     dispatch(setReadMessages(messagesId));
   };
 
+  //   const styles = theme => ({
+  //     multilineColor:{
+  //         color:'red'
+  //     }
+  // });
+
+  const handleShowMoreMessages = () => {
+    const pageNumberCounter = pageNumber + 1;
+    setPageNumber(pageNumberCounter);
+    dispatch(getMoreMessages(thread, pageNumberCounter));
+  };
+
   useEffect(() => {
     sortArray();
   }, [messages]);
@@ -94,8 +114,25 @@ const ConversationsBox = ({ messages }) => {
       className='box-container'
       sx={{ backgroundSize: '100% 100%' }}
     >
-      {/* {loading && <Loader />} */}
       <Grid item xs={12}>
+        {/* <Grid
+          onClick={handleShowMoreMessages}
+          sx={{
+            width: '35px',
+            height: '35px',
+            borderRadius: '50%',
+            backgroundColor: 'gray',
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            textAlign: 'center',
+            margin: 'auto',
+            color: 'white',
+          }}
+        >
+          <ArrowUpwardIcon sx={{ margin: 'auto' }} />
+        </Grid> */}
         {sortMessages?.map((item, index) =>
           item?.Contact === item?.from ? (
             <Grid
@@ -121,14 +158,16 @@ const ConversationsBox = ({ messages }) => {
                       sx={{ m: 1, width: '97%' }}
                       variant='filled'
                     />
-                    <Typography
-                      disabled
-                      multiline='true'
-                      sx={{ m: 1, width: '97%' }}
-                      variant='filled'
-                    >
-                      {item?.body}
-                    </Typography>
+                    <TextField
+                      className='textField2'
+                      value={item?.body}
+                      multiline
+                      variant='standard'
+                      InputProps={{
+                        disableUnderline: true,
+                        readOnly: true,
+                      }}
+                    />
                     <Grid
                       sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
                     >
@@ -145,14 +184,16 @@ const ConversationsBox = ({ messages }) => {
                     sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
                   >
                     {/* <Avatar alt='user_photo' src={''} /> */}
-                    <Typography
-                      disabled
-                      multiline='true'
-                      sx={{ m: 1, width: '97%' }}
-                      variant='filled'
-                    >
-                      {item?.body}
-                    </Typography>
+                    <TextField
+                      className='textField2'
+                      value={item?.body}
+                      multiline
+                      variant='standard'
+                      InputProps={{
+                        disableUnderline: true,
+                        readOnly: true,
+                      }}
+                    />
 
                     <Grid
                       sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}

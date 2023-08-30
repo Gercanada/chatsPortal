@@ -48,6 +48,7 @@ export default function Navigator(props) {
   const [extensionNumber, setExtensionNumber] = useState(0);
   const [numberPhone, setNumberPhone] = useState(0);
   const [message, setMessage] = useState('');
+  const [hiddenChat, setHiddenChat] = useState(false);
   const [idAccount, setIdAccount] = useState(0);
   const { chats, loading, phoneAccounts, categoriesColors } = useSelector(
     (state) => state.whatsApp,
@@ -59,9 +60,16 @@ export default function Navigator(props) {
   };
 
   const handleAccount = (id, event) => {
-    console.log("event",event)
-    if (event?.target?.nodeName === 'DIV' || event?.target?.nodeName === 'P' || event?.target?.nodeName === 'IMG') {
-      setIsInto(true)
+    console.log('event event',event);
+    if (
+      event?.target?.nodeName === 'DIV' ||
+      event?.target?.nodeName === 'P' ||
+      event?.target?.nodeName === 'IMG' ||
+      event?.target?.nodeName === 'path' ||
+      event?.target?.dataset.testid === 'ExpandMoreIcon'
+    ) {
+      console.log('cambipo chat');
+      setIsInto(true);
       setIdAccount(id);
       dispatch(getSwitchAccount(id));
       dispatch(getChats());
@@ -72,7 +80,7 @@ export default function Navigator(props) {
     const resp = await dispatch(updateCategoryColor(id, categoryId));
     if (resp === 200) {
       toast.success(t('saved'));
-    setChangedColor(!changedColor)
+      setChangedColor(!changedColor);
     } else {
       toast.error(t('error'));
     }
@@ -89,16 +97,15 @@ export default function Navigator(props) {
   useEffect(() => {
     dispatch(getChats());
     dispatch(getCategoriesColors());
-  }, [idAccount,isInto,changedColor]);
+  }, [idAccount, isInto, changedColor]);
 
   useEffect(() => {
     dispatch(getPhoneAccounts());
   }, []);
 
-  console.log('aqqui')
-
   return (
     <Drawer variant='permanent' {...other}>
+
       <List disablePadding>
         <Typography
           variant='h1'
@@ -136,43 +143,48 @@ export default function Navigator(props) {
                   ''
                 )}
                 <Typography sx={{ m: 1 }}>
-                  {account?.name === 'ViveCanada Edu Services LTD' ? 'ViveCanada':account.name}
-                  </Typography>
+                  {account?.name === 'ViveCanada Edu Services LTD' ? 'ViveCanada' : account.name}
+                </Typography>
               </AccordionSummary>
-              <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
+              <AccordionDetails
+                sx={{
+                  paddingBottom: '8px',
+                  px: 0,
+                  overflow: 'auto',
+                  maxHeight: '500px',
+                }}
+              >
                 {chats &&
                   chats?.map((item, index) => (
                     <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
-                      {loading &&
-                        <Loader />}
-                        <>
-                          <Circle
-                            id={item?.id}
-                            selected={item?.category?.color !== 'gray'}
-                            values={categoriesColors}
-                            onClick={handleSetChatCategory}
-                            color={item?.category?.color}
-                          />
-                          <Button
-                            name={item.number}
-                            id={index}
-                            sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              navigateTo(`/chat/${item.number}/${item.id}/${item.name}`),
-                                localStorage.setItem('chat_account_type', account?.name);
-                            }}
-                          >
-                            <Grid sx={{ display: 'flex' }}>
-                              <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
-                                <Typography>{item.name && `${item?.name}`}</Typography>
-                                <Typography>{`${item?.number} `}</Typography>
-                              </Grid>
-                            </Grid>
-                            {item?.unread > 0 ? <AdjustIcon /> : ''}
-                          </Button>
-                        </>
                       
+                      <>
+                        <Circle
+                          id={item?.id}
+                          selected={item?.category?.color !== 'gray'}
+                          values={categoriesColors}
+                          onClick={handleSetChatCategory}
+                          color={item?.category?.color}
+                        />
+                        <Button
+                          name={item.number}
+                          id={index}
+                          sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            navigateTo(`/chat/${item.number}/${item.id}/${item.name}`),
+                              localStorage.setItem('chat_account_type', account?.name);
+                          }}
+                        >
+                          <Grid sx={{ display: 'flex' }}>
+                            <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
+                              <Typography>{item.name && `${item?.name}`}</Typography>
+                              <Typography>{`${item?.number} `}</Typography>
+                            </Grid>
+                          </Grid>
+                          {item?.unread > 0 ? <AdjustIcon /> : ''}
+                        </Button>
+                      </>
                     </Grid>
                   ))}
               </AccordionDetails>
