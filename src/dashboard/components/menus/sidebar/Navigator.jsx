@@ -155,7 +155,7 @@ export default function Navigator(props) {
                 }}
               >
                 {chats &&
-                  chats?.map((item, index) => (
+                  chats?.data?.map((item, index) => (
                     <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
                       
                       <>
