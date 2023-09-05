@@ -9,6 +9,8 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import './chatsStyles.css';
 import { BorderBottom } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
+import ImageModal from '../../../../components/Modal/ImageModal';
+import { useTranslation } from 'react-i18next';
 
 export const styles = {
   root: {
@@ -23,6 +25,7 @@ const ConversationsBox = ({ messages }) => {
   const classes = styles;
   const { thread } = useParams();
   const newMessageRef = useRef(null);
+  const { t } = useTranslation();
   const [sortMessages, setSortMessages] = useState([]);
   const dispatch = useDispatch();
   const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
@@ -30,6 +33,10 @@ const ConversationsBox = ({ messages }) => {
   const [backgroundColor, setBackgroundColor] = useState('');
   const themeAccount = localStorage.getItem('chat_account_type');
   const isLightTheme = localStorage.getItem('isLightTheme');
+  const [openModal, setOpenModal] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState('');
+  
+  console.log('1111111111111111', openModal);
 
   const gridStyle = {
     position: 'relative',
@@ -114,6 +121,14 @@ const ConversationsBox = ({ messages }) => {
       className='box-container'
       sx={{ backgroundSize: '100% 100%' }}
     >
+
+<ImageModal
+                          open={openModal}
+                          mediaUrl
+                          imageUrl={mediaUrl}
+                          onClose={setOpenModal}
+                          title={t('Image')}
+                        />
       <Grid item xs={12}>
         {/* <Grid
           onClick={handleShowMoreMessages}
@@ -148,15 +163,22 @@ const ConversationsBox = ({ messages }) => {
             >
               {item?.has_media === 0 ? (
                 item?.reply_to ? (
-                  <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}>
+                  <Paper
+                    elevation={0}
+                    style={bubbleStyleResponse}
+                    sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
+                  >
                     {/* <Avatar alt='user_photo' src={''} /> */}
 
                     <TextField
                       value={item?.reply_to?.body}
-                      disabled
-                      multiline='true'
-                      sx={{ m: 1, width: '97%' }}
+                      className='textField2'
+                      multiline
                       variant='filled'
+                      InputProps={{
+                        disableUnderline: true,
+                        readOnly: true,
+                      }}
                     />
                     <TextField
                       className='textField2'
@@ -176,7 +198,7 @@ const ConversationsBox = ({ messages }) => {
                       {/* </Typography> */}
                       <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
                     </Grid>
-                  </Card>
+                  </Paper>
                 ) : (
                   <Paper
                     elevation={0}
@@ -210,14 +232,50 @@ const ConversationsBox = ({ messages }) => {
                   <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
                 </audio>
               ) : (
-                <Typography
-                  variant='h1'
-                  component='h6'
-                  sx={{ textAlign: 'center', ml: 10 }}
-                  display='flex'
-                >
-                  <img src={`https://chat.immcase.com/${item?.media_url}`} width='100px' alt='' />
-                </Typography>
+                <>
+                  {item?.media_url.split('/')[4] === 'images' ? (
+                    <>
+                      <Typography
+                        onClick={() => {
+                          setOpenModal(true);
+                          setMediaUrl(item?.media_url)
+                        }}
+                        variant='h1'
+                        component='h6'
+                        sx={{
+                          textAlign: 'center',
+                          ml: 10,
+                          border: '2px white solid',
+                          cursor: 'pointer',
+                        }}
+                        display='flex'
+                      >
+
+                        <img
+                          src={`https://chat.immcase.com/${item?.media_url}`}
+                          width='100px'
+                          alt=''
+                        />
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography
+                      variant='h1'
+                      component='h6'
+                      sx={{
+                        textAlign: 'center',
+                        ml: 10,
+                      }}
+                      display='flex'
+                    >
+                      <img
+                        src={`https://chat.immcase.com/${item?.media_url}`}
+                        width='100px'
+                        alt=''
+                      />
+                    </Typography>
+                  )}
+                </>
               )}
             </Grid>
           ) : (
@@ -232,25 +290,6 @@ const ConversationsBox = ({ messages }) => {
                 justifyContent: 'end',
               }}
             >
-              {/* <Card sx={{ display: 'flex', flexDirection: 'column', width: '45%', backgroundColor:'#005c4b',color:'white' }}>
-                <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography sx={{ width: '100%', ml: 1 }}>{item?.creator?.name}</Typography>
-                </Grid>
-                <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
-
-                  <Typography disabled multiline sx={{ m: 1, width: '97%' }} variant='filled'>
-                    {item?.body}
-                  </Typography>
-                </Grid>
-                <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'end' }}>
-                  {item?.reaction?.body && item?.reaction?.body}
-                  <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
-                  <DoneAllIcon
-                    sx={{ textAlign: 'end', mr: 1 }}
-                    color={item?.status === 'read' ? 'primary' : 'black'}
-                  />
-                </Grid>
-              </Card> */}
               <Paper
                 elevation={0}
                 style={bubbleStyle}

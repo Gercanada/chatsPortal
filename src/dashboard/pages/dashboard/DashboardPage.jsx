@@ -38,13 +38,20 @@ export const DashboardPage = () => {
     setResponseUser(resp?.data.pending_items);
   };
 
-  let allMessages = [];
+  const playSound = () => {
+     const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
+    audioElement.play();
+  };
+   const allMessages = [];
+
   useEffect(() => {
-    console.log('aqui ssssss');
+    console.log('aqui sss4444444444444444sss');
+ 
     //Pusher.logToConsole = true;
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
     const channel = pusher.subscribe('chat');
     channel.bind('message', function (data) {
+      playSound();
       allMessages.push(data);
       const jsonObject = JSON.parse(data.message);
       console.log('aqui oaou', jsonObject);
@@ -57,6 +64,7 @@ export const DashboardPage = () => {
       })
     });
   }, []);
+
   // useEffect(() => {
   //   Pusher.logToConsole = true;
   //   const pusher = new Pusher('a6f0142583a796bae3a3', { cluster: 'us2' });
