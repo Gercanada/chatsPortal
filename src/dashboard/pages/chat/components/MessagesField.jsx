@@ -13,7 +13,7 @@ import PopoverField from '../../../../components/Popovers/PopoverField';
 
 //const socket =io("/")
 
-const MessagesField = ({ setNewMessage, setMessage }) => {
+const MessagesField = ({ setHasChange }) => {
   const [valueMessage, setValueMessage] = useState('');
   const { id, thread, prefix } = useParams();
   const [hasMessage, setHasMessage] = useState(true);
@@ -34,12 +34,13 @@ const MessagesField = ({ setNewMessage, setMessage }) => {
     } else {
       setHasMessage(false);
       setValueMessage(textValue);
-      setMessage(textValue);
+
     }
   };
 
   const handleSendMessage = async () => {
     setValueMessage('');
+    setHasChange(true)
     const resp = await dispatch(sendMessage(id, valueMessage));
     if (resp === 200) {
       dispatch(getUserChat(id));
@@ -47,40 +48,7 @@ const MessagesField = ({ setNewMessage, setMessage }) => {
     }
   };
 
-  const handleOnSubmit = (event) => {
-    event.preventDefault();
-    const newMessage = valueMessage;
-    setMessage(newMessage);
-    // const newMessage = {
-    //   id: Math.random(),
-    //   message_type: 'request',
-    //   message: valueMessage, // Usa el valor de valueMessage en lugar de 'valueMessage'
-    //   avatar: null,
-    //   username: 'josue_r',
-    //   name: 'Josue',
-    //   last_name: 'Rocha',
-    //   email: 'josue.r@gercanada.com',
-    // };
 
-    // setNewMessage((prevState) => ({
-    //   ...prevState,
-    //   data: [...prevState.data, newMessage],
-    // }));
-    // // socket.emit('message',newMessage)
-    //
-    setValueMessage('');
-  };
-  // useEffect(()=>{
-  //   socket.on('message',messages=>{
-  //     setNewMessage((prevState) => ({
-  //       ...prevState,
-  //       data: [...prevState.data, messages],
-  //     }));
-  //   })
-  //   return () =>{
-  //     socket.off('messagge')
-  //   }
-  // },[])
 
   return (
     <Grid>

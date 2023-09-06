@@ -50,11 +50,8 @@ const ImageModal = ({
   const setDefaultValues = async () => {};
 
   const handleClose = () => {
-    console.log('Botón de cierre clicado'); // Agrega este console.log
-    console.log('openopenopen',open)
     onClose(false);
   };
-  console.log('openopenopen',open)
   return (
     <Modal
       open={open}

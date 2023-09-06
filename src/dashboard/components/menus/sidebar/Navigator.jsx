@@ -147,8 +147,6 @@ export default function Navigator(props) {
     loadChats();
   }, [idAccount, isInto, changeAccount]);
 
-  console.log("hasMoreChats",hasMoreChats)
-
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>

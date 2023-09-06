@@ -6,7 +6,6 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Loader } from '../../../components/Loader';
 import { getUser } from '../../../store/slices/users';
 import { DetailField } from '../../components/DetailField';
-import ImageUpload from '../../components/ImageUpload';
 import { useForm } from 'react-hook-form';
 import CheckIcon from '@mui/icons-material/Check';
 import { updateAvatar, updateProfile } from '../../../store/slices/detailFieldHelper';

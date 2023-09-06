@@ -1,16 +1,13 @@
-import { Avatar, Card, Grid, Paper, TextField, Typography } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import { Grid, Paper, TextField, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Loader } from '../../../../components/Loader';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
-import { getMoreMessages, setReadMessages } from '../../../../store/slices/whatsApp/thunks';
 import PopoverField from '../../../../components/Popovers/PopoverField';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import './chatsStyles.css';
-import { BorderBottom } from '@mui/icons-material';
-import { useParams } from 'react-router-dom';
 import ImageModal from '../../../../components/Modal/ImageModal';
 import { useTranslation } from 'react-i18next';
+import BoxMessage from './BoxMessage';
 
 export const styles = {
   root: {
@@ -21,22 +18,88 @@ export const styles = {
   },
 };
 
-const ConversationsBox = ({ messages }) => {
-  const classes = styles;
-  const { thread } = useParams();
+const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats }) => {
   const newMessageRef = useRef(null);
   const { t } = useTranslation();
-  const [sortMessages, setSortMessages] = useState([]);
   const dispatch = useDispatch();
-  const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [backgroundColor, setBackgroundColor] = useState('');
+  // const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
+  // const [backgroundColor, setBackgroundColor] = useState('');
   const themeAccount = localStorage.getItem('chat_account_type');
   const isLightTheme = localStorage.getItem('isLightTheme');
   const [openModal, setOpenModal] = useState(false);
   const [mediaUrl, setMediaUrl] = useState('');
-  
-  console.log('1111111111111111', openModal);
+  const lastMessageRef = useRef(null);
+  const ultimoMensajeRef = useRef(null);
+
+  const memoizedLoadMoreChats = useCallback(() => {
+    loadMoreChats();
+  }, [loadMoreChats]);
+
+  const handleIntersection = (entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting) {
+      // Load more messages here
+      memoizedLoadMoreChats();
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null, // Use the viewport as the root
+      threshold: 0.1, // Trigger when 10% of the element is visible
+    });
+
+    if (lastMessageRef.current) {
+      observer.observe(lastMessageRef.current);
+    }
+
+    // Clean up the observer when the component unmounts
+    return () => {
+      if (lastMessageRef.current) {
+        observer.unobserve(lastMessageRef.current);
+      }
+    };
+  }, [lastMessageRef, memoizedLoadMoreChats]);
+
+  const bubbleStyle = {
+    padding: '8px 16px',
+    marginBottom: '8px',
+    maxWidth: '70%',
+    backgroundColor: '#005c4b',
+    borderRadius: '10px',
+  };
+
+  // Memoize messages prop
+  const memoizedMessages = useMemo(() => messages || [], [messages]);
+
+  // Memoize background image and color
+  const { backgroundImageUrl, backgroundColor } = useMemo(() => {
+    let backgroundImageUrl = '';
+    let backgroundColor = '';
+
+    switch (themeAccount) {
+      case 'Iphone chino':
+        backgroundImageUrl =
+          isLightTheme === 'yes' ? '/images/gerclaro.svg' : '/images/gerdark.svg';
+        backgroundColor = isLightTheme === 'yes' ? '#CCE2FF' : '#151719';
+        break;
+      case 'ViveCanada Edu Services LTD':
+        backgroundImageUrl =
+          isLightTheme === 'yes' ? '/images/prueba_vive.svg' : '/images/fondoDarkViveCanada.svg';
+        backgroundColor = isLightTheme === 'yes' ? '#ffd1b3' : '#151719';
+        break;
+      case 'Vivetel Networks Ltd':
+        backgroundImageUrl =
+          isLightTheme === 'yes' ? '/images/telclaro.svg' : '/images/vivetel.svg';
+        backgroundColor = isLightTheme === 'yes' ? '#EAD9FF' : '#151719';
+        break;
+      default:
+        backgroundImageUrl = '';
+        backgroundColor = '';
+    }
+
+    return { backgroundImageUrl, backgroundColor };
+  }, [themeAccount, isLightTheme]);
 
   const gridStyle = {
     position: 'relative',
@@ -50,13 +113,6 @@ const ConversationsBox = ({ messages }) => {
     overflow: 'auto',
   };
 
-  const bubbleStyle = {
-    padding: '8px 16px',
-    marginBottom: '8px',
-    maxWidth: '70%',
-    backgroundColor: '#005c4b',
-    borderRadius: '10px',
-  };
   const bubbleStyleResponse = {
     padding: '8px 16px',
     marginBottom: '8px',
@@ -64,55 +120,11 @@ const ConversationsBox = ({ messages }) => {
     borderRadius: '10px',
   };
 
-  useEffect(() => {
-    themeAccount === 'Iphone chino' && isLightTheme === 'yes'
-      ? (setBackgroundImageUrl('/images/gerclaro.svg'), setBackgroundColor('#CCE2FF'))
-      : themeAccount === 'Iphone chino' && isLightTheme === 'no'
-      ? (setBackgroundImageUrl('/images/gerdark.svg'), setBackgroundColor('#151719'))
-      : themeAccount === 'ViveCanada Edu Services LTD' && isLightTheme === 'yes'
-      ? (setBackgroundImageUrl('/images/prueba_vive.svg'), setBackgroundColor('#ffd1b3'))
-      : themeAccount === 'ViveCanada Edu Services LTD' && isLightTheme === 'no'
-      ? (setBackgroundImageUrl('/images/fondoDarkViveCanada.svg'), setBackgroundColor('#151719'))
-      : themeAccount === 'Vivetel Networks Ltd' && isLightTheme === 'yes'
-      ? (setBackgroundImageUrl('/images/telclaro.svg'), setBackgroundColor('#EAD9FF'))
-      : themeAccount === 'Vivetel Networks Ltd' && isLightTheme === 'no'
-      ? (setBackgroundImageUrl('/images/vivetel.svg'), setBackgroundColor('#151719'))
-      : '';
-  }, [themeAccount, isLightTheme]);
-
-  useEffect(() => {
-    if (newMessageRef.current) {
-      newMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
-
-  const sortArray = () => {
-    const originalData = messages;
-    if (originalData) {
-      const sortValues = [...originalData].reverse();
-      setSortMessages(sortValues);
-    }
-    const messagesId = originalData?.map((item, index) => {
-      return item?.id;
-    });
-    dispatch(setReadMessages(messagesId));
-  };
-
-  //   const styles = theme => ({
-  //     multilineColor:{
-  //         color:'red'
-  //     }
-  // });
-
-  const handleShowMoreMessages = () => {
-    const pageNumberCounter = pageNumber + 1;
-    setPageNumber(pageNumberCounter);
-    dispatch(getMoreMessages(thread, pageNumberCounter));
-  };
-
-  useEffect(() => {
-    sortArray();
-  }, [messages]);
+  // useEffect(() => {
+  //   if (newMessageRef.current) {
+  //     newMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+  //   }
+  // }, []);
 
   return (
     <Grid
@@ -121,38 +133,40 @@ const ConversationsBox = ({ messages }) => {
       className='box-container'
       sx={{ backgroundSize: '100% 100%' }}
     >
-
-<ImageModal
-                          open={openModal}
-                          mediaUrl
-                          imageUrl={mediaUrl}
-                          onClose={setOpenModal}
-                          title={t('Image')}
-                        />
+      <ImageModal
+        open={openModal}
+        mediaUrl
+        imageUrl={mediaUrl}
+        onClose={setOpenModal}
+        title={t('Image')}
+      />
       <Grid item xs={12}>
-        {/* <Grid
-          onClick={handleShowMoreMessages}
-          sx={{
-            width: '35px',
-            height: '35px',
-            borderRadius: '50%',
-            backgroundColor: 'gray',
-            cursor: 'pointer',
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            textAlign: 'center',
-            margin: 'auto',
-            color: 'white',
-          }}
-        >
-          <ArrowUpwardIcon sx={{ margin: 'auto' }} />
-        </Grid> */}
-        {sortMessages?.map((item, index) =>
+        {pageNumber < hasMoreChats && (
+          <Grid
+            onClick={memoizedLoadMoreChats}
+            sx={{
+              width: '35px',
+              height: '35px',
+              borderRadius: '50%',
+              backgroundColor: 'gray',
+              cursor: 'pointer',
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              textAlign: 'center',
+              margin: 'auto',
+              color: 'white',
+            }}
+          >
+            <ArrowUpwardIcon sx={{ margin: 'auto' }} />
+          </Grid>
+        )}
+        {memoizedMessages?.map((item, index) =>
           item?.Contact === item?.from ? (
             <Grid
               key={index}
-              ref={index === sortMessages.length - 1 ? newMessageRef : null}
+              ref={index === memoizedMessages.length - 1 ? ultimoMensajeRef : null}
+              // ? newMessageRef : null}
               sx={{
                 m: 1,
                 width: '98%',
@@ -163,69 +177,49 @@ const ConversationsBox = ({ messages }) => {
             >
               {item?.has_media === 0 ? (
                 item?.reply_to ? (
-                  <Paper
-                    elevation={0}
-                    style={bubbleStyleResponse}
-                    sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
-                  >
-                    {/* <Avatar alt='user_photo' src={''} /> */}
-
-                    <TextField
-                      value={item?.reply_to?.body}
-                      className='textField2'
-                      multiline
-                      variant='filled'
-                      InputProps={{
-                        disableUnderline: true,
-                        readOnly: true,
-                      }}
+                  <>
+                    <BoxMessage
+                      isResponse={true}
+                      type={'text'}
+                      messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
                     />
-                    <TextField
-                      className='textField2'
-                      value={item?.body}
-                      multiline
-                      variant='standard'
-                      InputProps={{
-                        disableUnderline: true,
-                        readOnly: true,
-                      }}
-                    />
-                    <Grid
-                      sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
+                    {/* <Paper
+                      elevation={0}
+                      style={bubbleStyleResponse}
+                      sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
                     >
-                      {/* <Typography sx={{ textAlign: 'end', m: 1, textDecoration: 'underline' }}> */}
-                      <PopoverField values={item?.readers} title={'readers'} type={'users'} />
-                      {/* </Typography> */}
-                      <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
-                    </Grid>
-                  </Paper>
+                      <TextField
+                        value={item?.reply_to?.body}
+                        className='textField2'
+                        multiline
+                        variant='filled'
+                        InputProps={{
+                          disableUnderline: true,
+                          readOnly: true,
+                        }} />
+                      <TextField
+                        className='textField2'
+                        value={item?.body}
+                        multiline
+                        variant='standard'
+                        InputProps={{
+                          disableUnderline: true,
+                          readOnly: true,
+                        }} />
+                      <Grid
+                        sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
+                      >
+                        <PopoverField values={item?.readers} title={'readers'} type={'users'} />
+                        <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
+                      </Grid>
+                    </Paper> */}
+                  </>
                 ) : (
-                  <Paper
-                    elevation={0}
-                    style={bubbleStyleResponse}
-                    sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
-                  >
-                    {/* <Avatar alt='user_photo' src={''} /> */}
-                    <TextField
-                      className='textField2'
-                      value={item?.body}
-                      multiline
-                      variant='standard'
-                      InputProps={{
-                        disableUnderline: true,
-                        readOnly: true,
-                      }}
+                  <BoxMessage
+                      isResponse={true}
+                      type={'text'}
+                      messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
                     />
-
-                    <Grid
-                      sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      {/* <Typography sx={{ textAlign: 'end', m: 1, textDecoration: 'underline' }}> */}
-                      <PopoverField values={item?.readers} title={'readers'} type={'users'} />
-                      {/* </Typography> */}
-                      <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
-                    </Grid>
-                  </Paper>
                 )
               ) : item?.type === 'audio' ? (
                 <audio controls>
@@ -238,7 +232,7 @@ const ConversationsBox = ({ messages }) => {
                       <Typography
                         onClick={() => {
                           setOpenModal(true);
-                          setMediaUrl(item?.media_url)
+                          setMediaUrl(item?.media_url);
                         }}
                         variant='h1'
                         component='h6'
@@ -250,7 +244,6 @@ const ConversationsBox = ({ messages }) => {
                         }}
                         display='flex'
                       >
-
                         <img
                           src={`https://chat.immcase.com/${item?.media_url}`}
                           width='100px'
@@ -281,7 +274,7 @@ const ConversationsBox = ({ messages }) => {
           ) : (
             <Grid
               key={index}
-              ref={index === messages.length - 1 ? newMessageRef : null}
+              ref={index === memoizedMessages.length - 1 ? ultimoMensajeRef : null}
               sx={{
                 m: 1,
                 width: '98%',
@@ -290,7 +283,12 @@ const ConversationsBox = ({ messages }) => {
                 justifyContent: 'end',
               }}
             >
-              <Paper
+               <BoxMessage
+                      isResponse={false}
+                      type={'text'}
+                      messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers, reaction:item?.reaction?.body,read:item?.status  }}
+                    />
+              {/* <Paper
                 elevation={0}
                 style={bubbleStyle}
                 sx={{
@@ -327,7 +325,7 @@ const ConversationsBox = ({ messages }) => {
                     color={item?.status === 'read' ? 'primary' : 'black'}
                   />
                 </Grid>
-              </Paper>
+              </Paper> */}
             </Grid>
           ),
         )}

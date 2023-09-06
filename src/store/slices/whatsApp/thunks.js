@@ -61,11 +61,10 @@ export const getUserChat = (phone) => {
     //dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/messages?contact=${phone}`);
-      await dispatch(setOneChat(resp.data.data));
-
+      await dispatch(setOneChat(resp.data.data.data));
       if (resp) {
         // dispatch(setLoading(false));
-        return resp.status;
+        return resp.data.data.data;
       }
     } catch (error) {
       console.error(error);
@@ -206,16 +205,14 @@ export const updateCategoryColor = (idUser, categoryId) => {
 };
 
 export const getMoreMessages = (id, page) => {
-  console.log('aquiid, pageid, pageid, pageid, page', id, page);
   return async (dispatch) => {
     //dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/messages?page=${page}&thread_id=${id}`);
-      console.log('rasputiiiin', resp);
       await dispatch(setOneChat(resp.data.data));
       if (resp) {
         //dispatch(setLoading(false));
-        return resp.status;
+        return resp.data.data.data;
       }
     } catch (error) {
       console.error(error);
@@ -229,7 +226,6 @@ export const getMoreChats = (page) => {
     dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/threads?page=${page}`);
-      console.log('rasputiiiin', resp);
       await dispatch(setChats(resp?.data?.data));
       if (resp) {
         //dispatch(setLoading(false));
