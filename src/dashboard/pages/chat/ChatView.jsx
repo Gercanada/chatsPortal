@@ -32,14 +32,14 @@ const ChatView = () => {
   const loadChats = async () => {
     const resp = await dispatch(getUserChat(id));
     if (resp) {
-      console.log("response",resp)
-      const reversedArray = sortArray(resp)
+      console.log("response",resp?.data?.data?.data)
+      const reversedArray = sortArray(resp?.data?.data?.data)
       setSortMessages(reversedArray);
-     // setHasMoreChats(resp);
+      setHasMoreChats(resp?.data?.data?.last_page);
     }
   };
   useEffect(() => {
-    //loadChats();
+    loadChats();
   }, [id,hasChange]);
 
   const sortArray = (arrayResponse) => {
@@ -53,11 +53,11 @@ const ChatView = () => {
     const pageNumberCounter = pageNumber + 1;
     setPageNumber1(pageNumberCounter);
     const response = await dispatch(getMoreMessages(thread, pageNumberCounter));
-    if (response && response) {
+    if (response && response?.data) {
       console.log("response",response)
-      const reversedArray = sortArray(response)
+      const reversedArray = sortArray(response?.data?.data?.data)
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
-      //setHasMoreChats(response?.data?.data?.last_page);
+      setHasMoreChats(response?.data?.data?.last_page);
     } else {
       toast.error(t('error'));
     }
@@ -79,8 +79,7 @@ const ChatView = () => {
           <ConversationsBox
             loadMoreChats={loadMoreChats}
             pageNumber={pageNumber}
-           // messages={sortMessages}
-           messages={onechat && onechat}
+            messages={sortMessages}
             hasMoreChats={hasMoreChats}
           />
         </Grid>

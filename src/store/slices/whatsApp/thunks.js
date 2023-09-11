@@ -61,10 +61,10 @@ export const getUserChat = (phone) => {
     //dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/messages?contact=${phone}`);
-      await dispatch(setOneChat(resp.data.data.data.reverse()));
+      await dispatch(setOneChat(resp.data.data.data));
       if (resp) {
         // dispatch(setLoading(false));
-        return resp.data.data.data;
+        return resp
       }
     } catch (error) {
       console.error(error);
@@ -209,10 +209,11 @@ export const getMoreMessages = (id, page) => {
     //dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/messages?page=${page}&thread_id=${id}`);
+      
       await dispatch(setOneChat(resp.data.data));
       if (resp) {
         //dispatch(setLoading(false));
-        return resp.data.data.data;
+        return resp
       }
     } catch (error) {
       console.error(error);

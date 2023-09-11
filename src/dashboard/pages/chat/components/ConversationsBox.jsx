@@ -1,5 +1,5 @@
 import { Grid, Paper, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import PopoverField from '../../../../components/Popovers/PopoverField';
@@ -22,6 +22,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const newMessageRef = useRef(null);
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const gridRef = useRef(null);
   // const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
   // const [backgroundColor, setBackgroundColor] = useState('');
   const themeAccount = localStorage.getItem('chat_account_type');
@@ -32,7 +33,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const ultimoMensajeRef = useRef(null);
 
   const memoizedLoadMoreChats = useCallback(() => {
-    //  loadMoreChats();
+    loadMoreChats();
   }, [loadMoreChats]);
 
   const handleIntersection = (entries) => {
@@ -42,6 +43,12 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
       memoizedLoadMoreChats();
     }
   };
+  useLayoutEffect(() => {
+    if (newMessageRef.current && gridRef.current) {
+      // Ajustar el scroll al elemento newMessageRef solo si el gridRef existe
+      gridRef.current.scrollTop = newMessageRef.current.offsetTop;
+    }
+  }, [messages]); 
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
@@ -120,11 +127,21 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
     borderRadius: '10px',
   };
 
-  // useEffect(() => {
-  //   if (newMessageRef.current) {
-  //     newMessageRef.current.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (newMessageRef.current) {
+      newMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  const handleNewMessage = () => {
+    if (newMessageRef.current) {
+      newMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+  useEffect(() => {
+    handleNewMessage(); // Llama a la función para ajustar el scroll cuando cambian los mensajes
+  }, [messages]); 
 
   return (
     <Grid
@@ -132,6 +149,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
       style={gridStyle}
       className='box-container'
       sx={{ backgroundSize: '100% 100%' }}
+      ref={gridRef}
     >
       <ImageModal
         open={openModal}
@@ -141,31 +159,31 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
         title={t('Image')}
       />
       <Grid item xs={12}>
-        {pageNumber < hasMoreChats && (
-          <Grid
-            onClick={memoizedLoadMoreChats}
-            sx={{
-              width: '35px',
-              height: '35px',
-              borderRadius: '50%',
-              backgroundColor: 'gray',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'center',
-              flexDirection: 'column',
-              textAlign: 'center',
-              margin: 'auto',
-              color: 'white',
-            }}
-          >
-            <ArrowUpwardIcon sx={{ margin: 'auto' }} />
-          </Grid>
-        )}
+        {/* {pageNumber <= hasMoreChats && ( */}
+        <Grid
+          onClick={memoizedLoadMoreChats}
+          sx={{
+            width: '35px',
+            height: '35px',
+            borderRadius: '50%',
+            backgroundColor: 'gray',
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            textAlign: 'center',
+            margin: 'auto',
+            color: 'white',
+          }}
+        >
+          <ArrowUpwardIcon sx={{ margin: 'auto' }} />
+        </Grid>
+        {/* )} */}
         {memoizedMessages?.map((item, index) =>
           item?.Contact === item?.from ? (
             <Grid
               key={index}
-              ref={index === memoizedMessages.length - 1 ? ultimoMensajeRef : null}
+             ref={ index === memoizedMessages.length - 1 && pageNumber === 1 ? newMessageRef : null}
               // ? newMessageRef : null}
               sx={{
                 m: 1,
@@ -183,6 +201,36 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       type={'text'}
                       messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
                     />
+                    <Paper
+                      elevation={0}
+                      style={bubbleStyleResponse}
+                      sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
+                    >
+                      <TextField
+                        value={item?.reply_to?.body}
+                        className='textField2'
+                        multiline
+                        variant='filled'
+                        InputProps={{
+                          disableUnderline: true,
+                          readOnly: true,
+                        }} />
+                      <TextField
+                        className='textField2'
+                        value={item?.body}
+                        multiline
+                        variant='standard'
+                        InputProps={{
+                          disableUnderline: true,
+                          readOnly: true,
+                        }} />
+                      <Grid
+                        sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
+                      >
+                        <PopoverField values={item?.readers} title={'readers'} type={'users'} />
+                        <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
+                      </Grid>
+                    </Paper>
                   </>
                 ) : (
                   <BoxMessage
@@ -197,7 +245,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 </audio>
               ) : (
                 <>
-                  {/* {item?.media_url.split('/')[4] === 'images' ? (
+                  {item?.media_url.split('/')[4] === 'images' ? (
                     <>
                       <Typography
                         onClick={() => {
@@ -237,14 +285,14 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         alt=''
                       />
                     </Typography>
-                  )} */}
+                  )}
                 </>
               )}
             </Grid>
           ) : (
             <Grid
               key={index}
-              ref={index === memoizedMessages.length - 1 ? ultimoMensajeRef : null}
+              ref={index === memoizedMessages.length - 1  && pageNumber === 1  ? newMessageRef : null}
               sx={{
                 m: 1,
                 width: '98%',
@@ -262,7 +310,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   readers: item?.readers,
                   reaction: item?.reaction?.body,
                   read: item?.status,
-                  creator:item?.creator.name
+                  creator: item?.creator?.name,
                 }}
               />
             </Grid>
