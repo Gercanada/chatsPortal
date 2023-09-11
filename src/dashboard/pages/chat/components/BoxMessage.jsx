@@ -5,8 +5,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import './chatsStyles.css';
 
 const BoxMessage = ({ isResponse, type, messageContainer }) => {
-  const { value, at, readers,reaction,read } = messageContainer;
-
+  const { value, at, readers, reaction, read, creator } = messageContainer;
 
   const bubbleStyleRequest = {
     padding: '8px 16px',
@@ -25,14 +24,19 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
     <>
       <Paper
         elevation={0}
-        style={isResponse ? bubbleStyleResponse : bubbleStyleRequest }
+        style={isResponse ? bubbleStyleResponse : bubbleStyleRequest}
         sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
       >
+        {isResponse === false && (
+          <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography sx={{ width: '100%', color: '#40a3c3' }}>{creator}</Typography>
+          </Grid>
+        )}
         <TextField
-          className={isResponse ? 'textField2' : 'textField' }
+          className={isResponse ? 'textField2' : 'textField'}
           value={value}
           multiline
-          disabled={isResponse ? false : true }
+          disabled={isResponse ? false : true}
           variant='standard'
           InputProps={{
             disableUnderline: true,
@@ -40,18 +44,34 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
           }}
         />
 
-        <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}>
-         {isResponse ? <PopoverField values={readers} title={'readers'} type={'users'} /> :
+        <Grid
+          sx={
+            isResponse
+              ? { textAlign: 'end', display: 'flex', justifyContent: 'space-between' }
+              : { textAlign: 'end', display: 'flex', justifyContent: 'end' }
+          }
+        >
+          {isResponse ? (
+            <PopoverField values={readers} title={'readers'} type={'users'} />
+          ) : (
             reaction
-         }
-          <Typography sx={{ textAlign: 'end', mr: 1 }}>{at}</Typography>
-    { isResponse === false && <DoneAllIcon
-            sx={{ textAlign: 'end', mr: 1 }}
-            color={read === 'read' ? 'primary' : 'black'}
-            />}
+          )}
+          <Typography
+            sx={
+              isResponse ? { textAlign: 'end', mr: 1 } : { textAlign: 'end', mr: 1, color: 'white' }
+            }
+          >
+            {at}
+          </Typography>
+          {isResponse === false && (
+            <DoneAllIcon
+              sx={{ textAlign: 'end', mr: 1 }}
+              color={read === 'read' ? 'primary' : 'info'}
+            />
+          )}
         </Grid>
       </Paper>
-    </> 
+    </>
   );
 };
 

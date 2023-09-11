@@ -39,7 +39,7 @@ const ChatView = () => {
     }
   };
   useEffect(() => {
-    loadChats();
+    //loadChats();
   }, [id,hasChange]);
 
   const sortArray = (arrayResponse) => {
@@ -79,7 +79,8 @@ const ChatView = () => {
           <ConversationsBox
             loadMoreChats={loadMoreChats}
             pageNumber={pageNumber}
-            messages={sortMessages}
+           // messages={sortMessages}
+           messages={onechat && onechat}
             hasMoreChats={hasMoreChats}
           />
         </Grid>

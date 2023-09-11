@@ -32,7 +32,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const ultimoMensajeRef = useRef(null);
 
   const memoizedLoadMoreChats = useCallback(() => {
-    loadMoreChats();
+    //  loadMoreChats();
   }, [loadMoreChats]);
 
   const handleIntersection = (entries) => {
@@ -183,43 +183,13 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       type={'text'}
                       messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
                     />
-                    {/* <Paper
-                      elevation={0}
-                      style={bubbleStyleResponse}
-                      sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
-                    >
-                      <TextField
-                        value={item?.reply_to?.body}
-                        className='textField2'
-                        multiline
-                        variant='filled'
-                        InputProps={{
-                          disableUnderline: true,
-                          readOnly: true,
-                        }} />
-                      <TextField
-                        className='textField2'
-                        value={item?.body}
-                        multiline
-                        variant='standard'
-                        InputProps={{
-                          disableUnderline: true,
-                          readOnly: true,
-                        }} />
-                      <Grid
-                        sx={{ textAlign: 'end', display: 'flex', justifyContent: 'space-between' }}
-                      >
-                        <PopoverField values={item?.readers} title={'readers'} type={'users'} />
-                        <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
-                      </Grid>
-                    </Paper> */}
                   </>
                 ) : (
                   <BoxMessage
-                      isResponse={true}
-                      type={'text'}
-                      messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
-                    />
+                    isResponse={true}
+                    type={'text'}
+                    messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
+                  />
                 )
               ) : item?.type === 'audio' ? (
                 <audio controls>
@@ -227,7 +197,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 </audio>
               ) : (
                 <>
-                  {item?.media_url.split('/')[4] === 'images' ? (
+                  {/* {item?.media_url.split('/')[4] === 'images' ? (
                     <>
                       <Typography
                         onClick={() => {
@@ -267,7 +237,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         alt=''
                       />
                     </Typography>
-                  )}
+                  )} */}
                 </>
               )}
             </Grid>
@@ -283,49 +253,18 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 justifyContent: 'end',
               }}
             >
-               <BoxMessage
-                      isResponse={false}
-                      type={'text'}
-                      messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers, reaction:item?.reaction?.body,read:item?.status  }}
-                    />
-              {/* <Paper
-                elevation={0}
-                style={bubbleStyle}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '45%',
-                  backgroundColor: '#005c4b',
-                  color: 'white',
+              <BoxMessage
+                isResponse={false}
+                type={'text'}
+                messageContainer={{
+                  value: item?.body,
+                  at: item?.at,
+                  readers: item?.readers,
+                  reaction: item?.reaction?.body,
+                  read: item?.status,
+                  creator:item?.creator.name
                 }}
-              >
-                <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Typography sx={{ width: '100%', ml: 1, color: '#40a3c3' }}>
-                    {item?.creator?.name}
-                  </Typography>
-                </Grid>
-                <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <TextField
-                    className='textField'
-                    value={item?.body}
-                    multiline
-                    variant='standard'
-                    disabled
-                    InputProps={{
-                      disableUnderline: true,
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid sx={{ textAlign: 'end', display: 'flex', justifyContent: 'end' }}>
-                  {item?.reaction?.body && item?.reaction?.body}
-                  <Typography sx={{ textAlign: 'end', mr: 1 }}>{item?.at}</Typography>
-                  <DoneAllIcon
-                    sx={{ textAlign: 'end', mr: 1 }}
-                    color={item?.status === 'read' ? 'primary' : 'black'}
-                  />
-                </Grid>
-              </Paper> */}
+              />
             </Grid>
           ),
         )}

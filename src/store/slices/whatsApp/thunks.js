@@ -61,7 +61,7 @@ export const getUserChat = (phone) => {
     //dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/messages?contact=${phone}`);
-      await dispatch(setOneChat(resp.data.data.data));
+      await dispatch(setOneChat(resp.data.data.data.reverse()));
       if (resp) {
         // dispatch(setLoading(false));
         return resp.data.data.data;
