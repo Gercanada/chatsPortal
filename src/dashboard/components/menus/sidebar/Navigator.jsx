@@ -175,8 +175,8 @@ export default function Navigator(props) {
               onChange={handleChange(index)}
               sx={{ boxShadow: '0', background: 'inherit' }}
               onClick={(event) => {
-                handleAccount(account?.id, event),
-                handleTheme(account?.name)
+                handleAccount(account?.id, event)
+               
               }}
             >
               <AccordionSummary
@@ -223,6 +223,7 @@ export default function Navigator(props) {
                           onClick={(event) => {
                             event.stopPropagation();
                             navigateTo(`/chat/${item.number}/${item.id}/${item.name}`)
+                            handleTheme(account?.name)
                             localStorage.setItem('chat_account_type', account?.name);
                           }}
                         >

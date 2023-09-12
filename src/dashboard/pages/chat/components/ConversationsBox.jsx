@@ -116,14 +116,14 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
             break;
           case 'ViveCanada Edu Services LTD':
             backgroundImageUrl =
-              isLightTheme === 'yes' ? '/images/prueba_vive.svg' : '/images/fondoDarkViveCanada.svg';
+              isLightTheme === 'yes' ? '/images/VIVELIGHT.svg' : '/images/VIVEDARK.svg';
             backgroundColor = isLightTheme === 'yes' ? '#ffd1b3' : '#151719';
             setBackgroundColor(backgroundColor)
             setBackgroundImageUrl(backgroundImageUrl)
             break;
           case 'Vivetel Networks Ltd':
             backgroundImageUrl =
-              isLightTheme === 'yes' ? '/images/TELLIGHT.svg' : '/images/vivetel.svg';
+              isLightTheme === 'yes' ? '/images/TELLIGHT.svg' : '/images/TELDARK.svg';
             backgroundColor = isLightTheme === 'yes' ? '#EAD9FF' : '#151719';
             setBackgroundColor(backgroundColor)
             setBackgroundImageUrl(backgroundImageUrl)
@@ -132,7 +132,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
             backgroundImageUrl = '';
             backgroundColor = '';
         }
-  }, [backgroundTheme]); 
+  }, [backgroundTheme,isLightTheme]); 
 
   return (
     <Grid
