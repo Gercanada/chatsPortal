@@ -5,6 +5,7 @@ import { ProfileDetails } from '../pages/accountPage/ProfileDetails';
 import { ProfilePage } from '../pages/accountPage/ProfilePage';
 import ChatView from '../pages/chat/ChatView';
 import UsersPage from '../pages/users/UsersPage';
+import ContactsPage from '../pages/contacts/ContactsPage';
 
 export const DashboardRouter = () => {
   return (
@@ -17,6 +18,7 @@ export const DashboardRouter = () => {
         <Route path='/chat/:id/:thread/:prefix' element={<ChatView />} />
       </Route>
       <Route path='/users' element={<UsersPage />} />
+      <Route path='/contacts' element={<ContactsPage />} />
       <Route path='/*' element={<DashboardPage />} />
     </Routes>
   );

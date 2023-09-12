@@ -460,5 +460,6 @@
   "no_files":"Sin archivos",
   "file":"Archivos",
   "readers":"Lectores",
-  "loading_chats":"Cargando chats..."
+  "loading_chats":"Cargando chats...",
+  "contacts":"Contactos"
 }

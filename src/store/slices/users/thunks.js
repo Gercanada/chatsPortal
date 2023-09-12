@@ -139,7 +139,7 @@ export const getUser = (id) => {
     dispatch(setLoading(true));
     try {
       const { data } = await immcaseApi.get(`/users/${id}`);
-      console.log("datadatadatadata",data)
+      // console.log("datadatadatadata",data)
       await dispatch(setUser( data ));
       return data
     } catch (error) {

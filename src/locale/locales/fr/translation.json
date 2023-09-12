@@ -447,5 +447,6 @@
   "no_files":"Aucun fichier",
   "file":"Des dossiers",
   "readers":"Lecteurs",
-  "loading_chats": "Charger les chats..."
+  "loading_chats": "Charger les chats...",
+  "contacts":"Contacts"
 }

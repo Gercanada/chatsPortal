@@ -269,7 +269,29 @@ export default function Navigator(props) {
                   navigateTo(`/users`);
                 }}
               >
-                Users
+               {t('users')}
+              </Button>
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls='panel1a-content'
+            id='panel1a-header'
+          >
+            <Typography sx={{ m: 1 }}>{t('contacts')}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
+            <Grid sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}>
+              <Button
+                name={'contacts'}
+                sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}
+                onClick={() => {
+                  navigateTo(`/contacts`);
+                }}
+              >
+                {t('contacts')}
               </Button>
             </Grid>
           </AccordionDetails>

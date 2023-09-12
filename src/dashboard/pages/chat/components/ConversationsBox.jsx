@@ -196,11 +196,11 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
               {item?.has_media === 0 ? (
                 item?.reply_to ? (
                   <>
-                    <BoxMessage
+                    {/* <BoxMessage
                       isResponse={true}
                       type={'text'}
                       messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
-                    />
+                    /> */}
                     <Paper
                       elevation={0}
                       style={bubbleStyleResponse}

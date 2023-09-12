@@ -32,7 +32,6 @@ const ChatView = () => {
   const loadChats = async () => {
     const resp = await dispatch(getUserChat(id));
     if (resp) {
-      console.log("response",resp?.data?.data?.data)
       const reversedArray = sortArray(resp?.data?.data?.data)
       setSortMessages(reversedArray);
       setHasMoreChats(resp?.data?.data?.last_page);
@@ -54,7 +53,6 @@ const ChatView = () => {
     setPageNumber1(pageNumberCounter);
     const response = await dispatch(getMoreMessages(thread, pageNumberCounter));
     if (response && response?.data) {
-      console.log("response",response)
       const reversedArray = sortArray(response?.data?.data?.data)
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
       setHasMoreChats(response?.data?.data?.last_page);
@@ -62,7 +60,6 @@ const ChatView = () => {
       toast.error(t('error'));
     }
   };
-  console.log("hasChangehasChange",hasChange)
 
   useEffect(() => {
     dispatch(getUserChat(id));
