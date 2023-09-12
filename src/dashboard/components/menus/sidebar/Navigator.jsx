@@ -283,7 +283,7 @@ export default function Navigator(props) {
             </Grid>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        {/* <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls='panel1a-content'
@@ -304,7 +304,7 @@ export default function Navigator(props) {
               </Button>
             </Grid>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
       </List>
       {/* <PhoneModal
         open={openModalForm}
