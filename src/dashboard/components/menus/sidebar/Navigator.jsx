@@ -32,6 +32,7 @@ import ColorMenu from '../../../../components/menus/ColorMenu';
 import { toast } from 'react-toastify';
 import { Loader } from '../../../../components/Loader';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { setBackgroundThemeBox } from '../../../../store/slices/ui/thunks';
 
 export default function Navigator(props) {
   const { ...other } = props;
@@ -57,7 +58,7 @@ export default function Navigator(props) {
     navigate(url);
   };
 
-  const handleAccount = (id, event) => {
+  const handleAccount = (id, event,theme) => {
     if (
       event?.target?.nodeName === 'DIV' ||
       event?.target?.nodeName === 'P' ||
@@ -71,6 +72,7 @@ export default function Navigator(props) {
       dispatch(getChats());
       setPageNumber(1);
       setHasMoreChats(1)
+     // dispatch(setBackgroundThemeBox(theme))
     }
   };
 
@@ -143,6 +145,11 @@ export default function Navigator(props) {
     }
   };
 
+  const handleTheme = (theme) => {
+    console.log('theme',theme)
+    dispatch(setBackgroundThemeBox(theme))
+  };
+
   useEffect(() => {
     loadChats();
   }, [idAccount, isInto, changeAccount]);
@@ -168,7 +175,8 @@ export default function Navigator(props) {
               onChange={handleChange(index)}
               sx={{ boxShadow: '0', background: 'inherit' }}
               onClick={(event) => {
-                handleAccount(account?.id, event);
+                handleAccount(account?.id, event),
+                handleTheme(account?.name)
               }}
             >
               <AccordionSummary
@@ -214,8 +222,8 @@ export default function Navigator(props) {
                           sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
                           onClick={(event) => {
                             event.stopPropagation();
-                            navigateTo(`/chat/${item.number}/${item.id}/${item.name}`),
-                              localStorage.setItem('chat_account_type', account?.name);
+                            navigateTo(`/chat/${item.number}/${item.id}/${item.name}`)
+                            localStorage.setItem('chat_account_type', account?.name);
                           }}
                         >
                           <Grid sx={{ display: 'flex' }}>

@@ -44,26 +44,26 @@ export const DashboardPage = () => {
   };
    const allMessages = [];
 
-  useEffect(() => {
-    console.log('aqui sss4444444444444444sss');
+  // useEffect(() => {
+  //   console.log('aqui sss4444444444444444sss');
  
-    //Pusher.logToConsole = true;
-    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
-    const channel = pusher.subscribe('chat');
-    channel.bind('message', function (data) {
-      playSound();
-      allMessages.push(data);
-      const jsonObject = JSON.parse(data.message);
-      console.log('aqui oaou', jsonObject);
-      jsonObject.thread.contact;
-      jsonObject.body;
-      setNotificationBody(jsonObject.body);
-      setNotificationContact(jsonObject.thread.contact);
-      toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
-        autoClose: false
-      })
-    });
-  }, []);
+  //   //Pusher.logToConsole = true;
+  //   const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+  //   const channel = pusher.subscribe('chat');
+  //   channel.bind('message', function (data) {
+  //     playSound();
+  //     allMessages.push(data);
+  //     const jsonObject = JSON.parse(data.message);
+  //     console.log('aqui oaou', jsonObject);
+  //     jsonObject.thread.contact;
+  //     jsonObject.body;
+  //     setNotificationBody(jsonObject.body);
+  //     setNotificationContact(jsonObject.thread.contact);
+  //     toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
+  //       autoClose: false
+  //     })
+  //   });
+  // }, []);
 
   // useEffect(() => {
   //   Pusher.logToConsole = true;

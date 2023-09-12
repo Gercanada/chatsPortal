@@ -23,7 +23,7 @@ export const DashboardLayout = ({ children }) => {
       >
         {children}
       </main> */}
-      <Footer  />
+      {/* <Footer  /> */}
     </>
   );
 };

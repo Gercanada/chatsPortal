@@ -12,9 +12,14 @@ const getInitialLightTheme = () => {
   }
 };
 
+const getInitialThemeBox = () => {
+      return localStorage.getItem('chat_account_type')
+};
+
 const initialState = {
   loading: false,
   menuOpen: false,
+  backgroundTheme :  getInitialThemeBox(),
   isLightTheme: getInitialLightTheme(),
 };
 
@@ -24,6 +29,9 @@ export const uiSlice = createSlice({
   reducers: {
     setLoading: (state, action) => {
       state.loading = action.payload;
+    },
+    setBackgroundTheme: (state, action) => {
+      state.backgroundTheme = action.payload;
     },
     toggleMenu: (state) => {
       state.menuOpen = !state.menuOpen;
@@ -43,5 +51,5 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { setLoading, toggleMenu, toggleTheme, activeLightTheme, activeDarkTheme } =
+export const { setLoading, toggleMenu, toggleTheme, activeLightTheme, activeDarkTheme, setBackgroundTheme } =
   uiSlice.actions;

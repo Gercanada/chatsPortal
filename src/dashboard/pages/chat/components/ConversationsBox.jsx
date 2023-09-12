@@ -23,14 +23,13 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const gridRef = useRef(null);
-  // const [backgroundImageUrl, setBackgroundImageUrl] = useState([]);
-  // const [backgroundColor, setBackgroundColor] = useState('');
-  const themeAccount = localStorage.getItem('chat_account_type');
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState('');
+  const [backgroundColor, setBackgroundColor] = useState('');
   const isLightTheme = localStorage.getItem('isLightTheme');
+  const { backgroundTheme } = useSelector((state) => state.ui)
   const [openModal, setOpenModal] = useState(false);
   const [mediaUrl, setMediaUrl] = useState('');
   const lastMessageRef = useRef(null);
-  const ultimoMensajeRef = useRef(null);
 
   const memoizedLoadMoreChats = useCallback(() => {
     loadMoreChats();
@@ -39,13 +38,11 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const handleIntersection = (entries) => {
     const entry = entries[0];
     if (entry.isIntersecting) {
-      // Load more messages here
       memoizedLoadMoreChats();
     }
   };
   useLayoutEffect(() => {
     if (newMessageRef.current && gridRef.current) {
-      // Ajustar el scroll al elemento newMessageRef solo si el gridRef existe
       gridRef.current.scrollTop = newMessageRef.current.offsetTop;
     }
   }, [messages]); 
@@ -68,45 +65,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
     };
   }, [lastMessageRef, memoizedLoadMoreChats]);
 
-  const bubbleStyle = {
-    padding: '8px 16px',
-    marginBottom: '8px',
-    maxWidth: '70%',
-    backgroundColor: '#005c4b',
-    borderRadius: '10px',
-  };
-
-  // Memoize messages prop
   const memoizedMessages = useMemo(() => messages || [], [messages]);
-
-  // Memoize background image and color
-  const { backgroundImageUrl, backgroundColor } = useMemo(() => {
-    let backgroundImageUrl = '';
-    let backgroundColor = '';
-
-    switch (themeAccount) {
-      case 'Iphone chino':
-        backgroundImageUrl =
-          isLightTheme === 'yes' ? '/images/gerclaro.svg' : '/images/gerdark.svg';
-        backgroundColor = isLightTheme === 'yes' ? '#CCE2FF' : '#151719';
-        break;
-      case 'ViveCanada Edu Services LTD':
-        backgroundImageUrl =
-          isLightTheme === 'yes' ? '/images/prueba_vive.svg' : '/images/fondoDarkViveCanada.svg';
-        backgroundColor = isLightTheme === 'yes' ? '#ffd1b3' : '#151719';
-        break;
-      case 'Vivetel Networks Ltd':
-        backgroundImageUrl =
-          isLightTheme === 'yes' ? '/images/telclaro.svg' : '/images/vivetel.svg';
-        backgroundColor = isLightTheme === 'yes' ? '#EAD9FF' : '#151719';
-        break;
-      default:
-        backgroundImageUrl = '';
-        backgroundColor = '';
-    }
-
-    return { backgroundImageUrl, backgroundColor };
-  }, [themeAccount, isLightTheme]);
 
   const gridStyle = {
     position: 'relative',
@@ -140,8 +99,40 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   };
   
   useEffect(() => {
-    handleNewMessage(); // Llama a la función para ajustar el scroll cuando cambian los mensajes
+    handleNewMessage();
   }, [messages]); 
+
+  useEffect(() => {
+    let backgroundImageUrl = '';
+    let backgroundColor = '';
+    console.log('backgroundTheme',backgroundTheme);
+    switch (backgroundTheme) {
+          case 'Iphone chino':
+            backgroundImageUrl =
+              isLightTheme === 'yes' ? '/images/gerclaro.svg' : '/images/gerdark.svg';
+            backgroundColor = isLightTheme === 'yes' ? '#CCE2FF' : '#151719';
+            setBackgroundColor(backgroundColor)
+            setBackgroundImageUrl(backgroundImageUrl)
+            break;
+          case 'ViveCanada Edu Services LTD':
+            backgroundImageUrl =
+              isLightTheme === 'yes' ? '/images/prueba_vive.svg' : '/images/fondoDarkViveCanada.svg';
+            backgroundColor = isLightTheme === 'yes' ? '#ffd1b3' : '#151719';
+            setBackgroundColor(backgroundColor)
+            setBackgroundImageUrl(backgroundImageUrl)
+            break;
+          case 'Vivetel Networks Ltd':
+            backgroundImageUrl =
+              isLightTheme === 'yes' ? '/images/TELLIGHT.svg' : '/images/vivetel.svg';
+            backgroundColor = isLightTheme === 'yes' ? '#EAD9FF' : '#151719';
+            setBackgroundColor(backgroundColor)
+            setBackgroundImageUrl(backgroundImageUrl)
+            break;
+          default:
+            backgroundImageUrl = '';
+            backgroundColor = '';
+        }
+  }, [backgroundTheme]); 
 
   return (
     <Grid
@@ -159,7 +150,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
         title={t('Image')}
       />
       <Grid item xs={12}>
-        {/* {pageNumber <= hasMoreChats && ( */}
+        {pageNumber < hasMoreChats && (
         <Grid
           onClick={memoizedLoadMoreChats}
           sx={{
@@ -178,12 +169,12 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
         >
           <ArrowUpwardIcon sx={{ margin: 'auto' }} />
         </Grid>
-        {/* )} */}
+        )}
         {memoizedMessages?.map((item, index) =>
           item?.Contact === item?.from ? (
             <Grid
               key={index}
-             ref={ index === memoizedMessages.length - 1 && pageNumber === 1 ? newMessageRef : null}
+             ref={ index === memoizedMessages.length - 1 && pageNumber === 0 ? newMessageRef : null}
               // ? newMessageRef : null}
               sx={{
                 m: 1,
@@ -292,7 +283,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
           ) : (
             <Grid
               key={index}
-              ref={index === memoizedMessages.length - 1  && pageNumber === 1  ? newMessageRef : null}
+              ref={index === memoizedMessages.length - 1  && pageNumber === 0  ? newMessageRef : null}
               sx={{
                 m: 1,
                 width: '98%',

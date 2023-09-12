@@ -49,9 +49,15 @@ const ChatView = () => {
   }
 
   const loadMoreChats = async () => {
-    const pageNumberCounter = pageNumber + 1;
-    setPageNumber1(pageNumberCounter);
-    const response = await dispatch(getMoreMessages(thread, pageNumberCounter));
+    let page = 0
+    if(pageNumber === 0){
+      page = pageNumber + 2;
+    }else{
+      page = pageNumber + 1;
+    }
+   // const pageNumberCounter = pageNumber + 1;
+    setPageNumber1(page);
+    const response = await dispatch(getMoreMessages(thread, page));
     if (response && response?.data) {
       const reversedArray = sortArray(response?.data?.data?.data)
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);

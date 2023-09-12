@@ -39,7 +39,7 @@ const ImageModal = ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '100%',
+    width: '50%',
     bgcolor: 'background.paper',
     border: '1px solid #000',
     boxShadow: 24,
@@ -52,6 +52,22 @@ const ImageModal = ({
   const handleClose = () => {
     onClose(false);
   };
+
+  const handleDownloadImage = () => {
+    // Construct the full image URL
+    const imageUrlFull = `https://chat.immcase.com/${imageUrl}`;
+
+    // Create an anchor element for download
+    const downloadLink = document.createElement('a');
+    downloadLink.href = imageUrlFull;
+    downloadLink.download = 'image.jpg'; // You can customize the file name here
+    downloadLink.target = '_blank';
+
+    // Programmatically click the download link
+    downloadLink.click();
+  };
+  
+  
   return (
     <Modal
       open={open}
@@ -78,7 +94,7 @@ const ImageModal = ({
                 {t('go_to_full_screen')}
               </CButton>
             )}
-            <Button type='submit' size='large' className={'buttons'} color='primary'>
+            <Button  onClick={handleDownloadImage} size='large' className={'buttons'} color='primary'>
               {t('download')}
             </Button>
             <Button
