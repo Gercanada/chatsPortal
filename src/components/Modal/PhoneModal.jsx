@@ -17,18 +17,13 @@ import StyledReactSelect from '../../dashboard/components/StyledReactSelect';
 import CDatePicker from '../../dashboard/components/CDatePicker';
 import CButton from '../Button/CButton';
 import DInput from '../Input/DInput';
+import { sendMessage } from '../../store/slices/whatsApp/thunks';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import './modalStyle.css';
 
-const PhoneModal = ({
-  open,
-  onClose,
-  number,
-  title,
-  onSubmit,
-  setNumberPhone,
-  setExtensionNumber,
-  data,
-  setMessage,
-}) => {
+const PhoneModal = ({ open, onClose, title, number }) => {
+  const dispatch = useDispatch();
   const {
     control,
     formState: { errors },
@@ -46,7 +41,7 @@ const PhoneModal = ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '60%',
+    width: '90%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -55,22 +50,24 @@ const PhoneModal = ({
   };
 
   const [isDisabled, setIsDisabled] = useState(true);
+  const [numberPhone, setNumberPhone] = useState('');
+  const [extensionNumber, setExtensionNumber] = useState('');
+  const [messageBody, setMessageBody] = useState('');
 
   const handleExtensionNumber = (event) => {
     const value = event.target.value;
     if (/^\d*$/.test(value) && value.length <= 3) {
-      setIsDisabled(false);
-      //  setExtensionNumber(value);
-    } else {
-      setIsDisabled(true);
+      setExtensionNumber(value);
     }
   };
 
   const handleNumberPhone = (event) => {
     const value = event.target.value;
-    if (/^\d*$/.test(value) && value.length >= 8) {
+    console.log('value phone', value);
+    if (/^\d*$/.test(value) && value.length === 10) {
+      console.log('aqui phone');
       setIsDisabled(false);
-      // setNumberPhone(value);
+      setNumberPhone(value);
     } else {
       setIsDisabled(true);
     }
@@ -78,11 +75,31 @@ const PhoneModal = ({
 
   const handleMessage = (event) => {
     const value = event.target.value;
-    setMessage(value);
+    setMessageBody(value);
   };
-  console.log('number', number);
 
-  const handleClose = () => onClose(false);
+  const handleOnClick = async () => {
+    const formData = {
+      recipient: number ? number + numberPhone : extensionNumber + numberPhone,
+      body: messageBody,
+    };
+    console.log('form', formData);
+    const resp = await dispatch(sendMessage(formData.recipient, formData.body));
+    if (resp === 200) {
+      toast.success(t('sent'));
+      handleClose();
+    } else {
+      toast.error(t('error'));
+    }
+  };
+
+  const handleClose = () => {
+    setNumberPhone('');
+    setMessageBody('');
+    setExtensionNumber('');
+    onClose(false);
+  };
+
   return (
     <Modal
       open={open}
@@ -91,72 +108,83 @@ const PhoneModal = ({
       aria-describedby='modal-modal-description'
       sx={{ overFlowY: 'visible' }}
     >
-      <Box sx={style}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container>
-            <Grid
-              item
-              xs={12}
-              sx={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}
-            >
-              <Typography variant='h4'>{title}</Typography>
-            </Grid>
+      <Grid className={'modal-container'}>
+        <Grid container>
+          <Grid
+            item
+            xs={12}
+            sx={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}
+          >
+            <Typography variant='h4'>{title}</Typography>
           </Grid>
-          <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-            {/* <Typography sx={{ m: 1 }}>+</Typography>
-            {/* <TextField
-              onChange={handleExtensionNumber}
-              sx={{ width: '80px', m: 1 }}
-              type={'phone'}
-              inputProps={{ maxLength: 3 }}
-            /> */} 
-            <TextField
-              onChange={handleNumberPhone}
-              sx={{ m: 1 }}
-              control={control}
-              name={'recipient'}
-              defaultValue={number}
-              type={'phone'}
-              inputProps={{ maxLength: 10 }}
-            />
-          </Grid>
-          <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-            <Typography sx={{ m: 1 }}>{t('message')}</Typography>
-            <TextareaAutosize
+        </Grid>
+        <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          <Typography sx={{ m: 1, pt: 2.5 }}>+</Typography>
+          <TextField
+            sx={{ width: '80px', m: 1 }}
+            placeholder={'Ext...'}
+            type={'phone'}
+            name={'extension'}
+            defaultValue={extensionNumber}
+            inputProps={{ maxLength: 3 }}
+            onChange={(e) => {
+              setValue('extension', e.target.value);
+              handleExtensionNumber(e);
+            }}
+          />
+          <TextField
+            onChange={(e) => {
+              setValue('recipient', e.target.value);
+              handleNumberPhone(e);
+            }}
+            placeholder={t('phone')}
+            sx={{ m: 1 }}
+            name={'recipient'}
+            defaultValue={number ? number : numberPhone}
+            type={'phone'}
+            inputProps={{ maxLength: 10 }}
+          />
+        </Grid>
+        <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+          {/* <Typography sx={{ m: 1 }}>{t('message')}</Typography> */}
+          <TextareaAutosize
             minRows={3}
-            control={control}
-              onChange={() => {
-                handleMessage;
-              }}
-              sx={{m:2}}
-              name='body'
-              placeholder='Type message…'
-              color='primary'
-            />
-          </Grid>
-          <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
-            <Button
-              type='submit'
-              size='large'
-              sx={{ margin: '10px', width: '30%' }}
-              color='primary'
-              disabled={isDisabled}
-            >
-              {t('send')}
-            </Button>
-
-            <Button
-              type='button'
-              size='large'
-              sx={{ margin: '10px', width: '30%' }}
-              color='primary'
-              onClick={handleClose}
-            >
-              {t('cancel')}
-            </Button>
-          </Grid>
-        </form>
-      </Box>
+            onChange={(e) => {
+              setValue('body', e.target.value);
+              handleMessage(e);
+            }}
+            sx={{ m: 2 }}
+            name='body'
+            placeholder={t('type_message')}
+            color='primary'
+          />
+        </Grid>
+        <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
+          <Button
+            type='submit'
+            onClick={handleOnClick}
+            size='large'
+            sx={{ margin: '10px', width: '30%' }}
+            color='primary'
+            disabled={number ? false : isDisabled}
+          >
+            {t('send')}
+          </Button>
+          <Button
+            type='button'
+            size='large'
+            sx={{ margin: '10px', width: '30%' }}
+            color='primary'
+            onClick={() => {
+              handleClose(), setNumberPhone('');
+              setMessageBody('');
+              setExtensionNumber('');
+            }}
+          >
+            {t('cancel')}
+          </Button>
+        </Grid>
+      </Grid>
     </Modal>
   );
 };

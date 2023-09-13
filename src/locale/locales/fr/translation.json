@@ -448,5 +448,9 @@
   "file":"Des dossiers",
   "readers":"Lecteurs",
   "loading_chats": "Charger les chats...",
-  "contacts":"Contacts"
+  "contacts":"Contacts",
+   "add_chat": "Nouveau message",
+   "new_chat": "Nouveau message",
+   "type_message": "Tapez le message...",
+   "phone": "Téléphone"
 }

@@ -110,7 +110,9 @@ export const Navbar = () => {
 
   return (
     <AppBar sx={{ boxShadow: '0 0 1em 0 #979797' }}>
+    
       <Toolbar>
+
         <Button onClick={onToggleMenu}>
           <i className='bx bx-menu' style={{ fontSize: 30 }}></i>
         </Button>

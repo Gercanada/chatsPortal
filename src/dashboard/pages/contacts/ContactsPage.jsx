@@ -239,12 +239,13 @@ const ContactsPage = () => {
               },
               {
                 field: 'number',
-                headerName: t('number'),
+                headerName: t('phone'),
                 sortable: false,
                 flex: 1,
                 align: 'center',
                 renderCell: (params) => (
                   <>
+                  <WhatsAppIcon fontSize={'small'}/>
                   <Typography
                     sx={{ cursor: 'pointer', textDecoration: 'underline' }}
                     variant='p'
@@ -253,7 +254,7 @@ const ContactsPage = () => {
                     }}
                   >
                     {params.value}
-                    <WhatsAppIcon fontSize={'small'}/>
+                    
                   </Typography>
               
                   </>

@@ -34,18 +34,16 @@ const lightColor = 'rgba(255, 255, 255, 0.7)';
 function Header(props) {
   const { onDrawerToggle } = props;
 
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const onToggleMenu = () => dispatch(toggleMenu());
   const onToggleTheme = () => dispatch(toggleTheme());
   const navigate = useNavigate();
 
-const userNameStorage =  localStorage.getItem('user_name') || '';
-const user =  localStorage.getItem('user') || '';
-const userStorage = JSON.parse(user);
-
-
+  const userNameStorage = localStorage.getItem('user_name') || '';
+  const user = localStorage.getItem('user') || '';
+  const userStorage = JSON.parse(user);
+  const account = localStorage.getItem('chat_account_type') || '';
 
   const { isLightTheme, loading } = useSelector((state) => state.ui);
   const { userDetails } = useSelector((state) => state.users);
@@ -61,8 +59,6 @@ const userStorage = JSON.parse(user);
   const navigateTo = (url) => {
     navigate(url);
   };
-
-
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const handleOpenUserMenu = (event) => {
@@ -124,7 +120,8 @@ const userStorage = JSON.parse(user);
     <React.Fragment>
       <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 0.5em 0 #979797' }}>
         <Toolbar>
-          <Grid container spacing={1} alignItems='center'>
+          <Grid container  alignItems='center'>
+
             {/* <Link component={RouterLink} to='/'>
           <Typography variant='h6' component='h6' display='flex'>
             <img src='/images/LOGOPORTAL.png' width='200px' alt='' />
@@ -135,7 +132,23 @@ const userStorage = JSON.parse(user);
                 <MenuIcon />
               </IconButton>
             </Grid>
-            <Grid item xs />
+            <Grid item xs>
+            <Typography variant="p" sx={{ color: 'black' }}>
+              {account === 'Vivetel Networks Ltd' ? (
+                <img src='/images/ViveTel.png' width='35px' alt='' />
+              ) : account === 'ViveCanada Edu Services LTD' ? (
+                <img src='/images/ViveCanada.png' width='35px' alt='' />
+              ) : account === 'Test Number' ? (
+                <img src='/images/labores.png' width='35px' alt='' />
+              ) : (
+                ''
+              )}
+              {account === 'ViveCanada Edu Services LTD' ? 'ViveCanada' :
+              account === 'Vivetel Networks Ltd' ? 'ViveTel':'' }
+            </Typography>
+            </Grid>
+            <Grid item />
+
             <Grid item>
               <FormGroup>
                 <FormControlLabel
@@ -151,11 +164,13 @@ const userStorage = JSON.parse(user);
             </Grid>
 
             <LanguageSelect user={responseUser} />
-
             <Grid item>
               <Tooltip title='Open settings'>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='user_photo' src={`https://chat.immcase.com/storage${userDetails?.data?.avatar}` || ''} />
+                  <Avatar
+                    alt='user_photo'
+                    src={`https://chat.immcase.com/storage${userDetails?.data?.avatar}` || ''}
+                  />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -212,7 +227,6 @@ const userStorage = JSON.parse(user);
           </Grid>
         </Toolbar>
       </AppBar>
-
     </React.Fragment>
   );
 }

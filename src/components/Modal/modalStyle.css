@@ -1,0 +1,43 @@
+.modal-container{
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background-color: white;
+    border: 2px solid #000;
+    box-shadow: 24;
+    padding: 10px;
+    overflow-y: visible;
+}
+
+@media (max-width:1200px) {
+    .modal-container{
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        background-color: white;
+        border: 2px solid #000;
+        box-shadow: 24;
+        padding: 10px;
+        overflow-y: visible;
+    }
+}
+@media (max-width:720px) {
+    .modal-container{
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        background-color: white;
+        border: 2px solid #000;
+        box-shadow: 24;
+        padding: 10px;
+        overflow-y: visible;
+    }
+    
+    
+}

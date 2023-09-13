@@ -20,7 +20,7 @@ export default function ImageUpload({
 
   const handleImageChange = (e) => {
     setLoading(true);
-    e.preventDefault();
+    //e.preventDefault();
     const file = e.target.files[0];
     if (file) {
       if (compresseFile) {

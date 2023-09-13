@@ -91,7 +91,7 @@ const ModalForm = ({
 
   const handleClose = () => {
     onClose(false);
-    setIsEdit(false);
+    if(setIsEdit)setIsEdit(false);
   };
 
   return (

@@ -702,6 +702,10 @@
   "file":"Files",
   "readers":"Readers",
   "loading_chats":"Loading chats...",
-  "contacts":"Contacts"
+  "contacts":"Contacts",
+  "add_chat":"New message",
+  "new_chat":"New message",
+  "type_message":"Type message...",
+  "phone":"Phone"
   
 }

@@ -59,7 +59,7 @@ export const ModalForm = () => {
   };
 
   const onSubmit = async (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     setFormSubmitted(true);
     closeFormModal();
     setFormSubmitted(false);

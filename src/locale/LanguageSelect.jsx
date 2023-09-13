@@ -23,7 +23,9 @@ const LanguageSelect = (/* { user } */) => {
   }, [menuAnchor, selected]);
 
   return (
-    <div className='d-flex justify-content-end align-items-center language-select-root'>
+    <div className='d-flex justify-content-end align-items-center language-select-root' 
+    style={{m:0}}
+    >
       <Button onClick={({ currentTarget }) => setMenuAnchor(currentTarget)}>
         {languageMap[selected].label}
         <ArrowDropDown fontSize='small' />

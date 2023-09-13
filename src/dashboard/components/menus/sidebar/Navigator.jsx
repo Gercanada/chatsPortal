@@ -24,6 +24,7 @@ import {
   getMoreMessages,
   getPhoneAccounts,
   getSwitchAccount,
+  sendMessage,
   updateCategoryColor,
 } from '../../../../store/slices/whatsApp/thunks';
 import AdjustIcon from '@mui/icons-material/Adjust';
@@ -33,32 +34,34 @@ import { toast } from 'react-toastify';
 import { Loader } from '../../../../components/Loader';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { setBackgroundThemeBox } from '../../../../store/slices/ui/thunks';
-
+import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 export default function Navigator(props) {
   const { ...other } = props;
-  const dispatch = useDispatch();
   const { id, thread } = useParams();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLightTheme } = useSelector((state) => state.ui);
   const [changedColor, setChangedColor] = useState(false);
   const [isInto, setIsInto] = useState(false);
   const [changeAccount, setChangeAccount] = useState(false);
+  const [numberPhone, setNumberPhone] = useState('');
+  const [extensionNumber, setExtensionNumber] = useState('');
+  const [messageBody, setMessageBody] = useState('');
+  const [chatsAccount, setChatsAccount] = useState([]);
+  const [expanded, setExpanded] = React.useState(false);
+  const [openModalContact, setOpenModalContact] = useState(false);
   const [idAccount, setIdAccount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMoreChats, setHasMoreChats] = useState(1);
   const { chats, loading, phoneAccounts, categoriesColors } = useSelector(
     (state) => state.whatsApp,
   );
-  const [chatsAccount, setChatsAccount] = useState([]);
-  const [expanded, setExpanded] = React.useState(false);
-  const [accumulatedChats, setAccumulatedChats] = useState([]);
-
+  const { isLightTheme } = useSelector((state) => state.ui);
   const navigateTo = (url) => {
     navigate(url);
   };
 
-  const handleAccount = (id, event,theme) => {
+  const handleAccount = (id, event, theme) => {
     if (
       event?.target?.nodeName === 'DIV' ||
       event?.target?.nodeName === 'P' ||
@@ -71,8 +74,7 @@ export default function Navigator(props) {
       dispatch(getSwitchAccount(id));
       dispatch(getChats());
       setPageNumber(1);
-      setHasMoreChats(1)
-     // dispatch(setBackgroundThemeBox(theme))
+      setHasMoreChats(1);
     }
   };
 
@@ -84,11 +86,6 @@ export default function Navigator(props) {
     } else {
       toast.error(t('error'));
     }
-  };
-
-  const onSubmit = async (formDataParam) => {
-    // const formData = {};
-    // const numberPhoneValue = `${extensionNumber}${numberPhone}`;
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -120,17 +117,11 @@ export default function Navigator(props) {
     dispatch(getPhoneAccounts());
   }, []);
 
-  const handleShowMoreMessages = () => {
-    const pageNumberCounter = pageNumber + 1;
-    setPageNumber(pageNumberCounter);
-    dispatch(getMoreMessages(thread, pageNumberCounter));
-  };
-
   const loadChats = async () => {
     const resp = await dispatch(getChats());
     if (resp) {
       setChatsAccount(resp?.data?.data?.data);
-      setHasMoreChats(resp?.data?.data?.last_page)
+      setHasMoreChats(resp?.data?.data?.last_page);
     }
   };
   const loadMoreChats = async () => {
@@ -139,15 +130,14 @@ export default function Navigator(props) {
     const response = await dispatch(getMoreChats(pageNumberCounter));
     if (response && response.data) {
       setChatsAccount((prevChats) => [...prevChats, ...response?.data?.data?.data]);
-      setHasMoreChats(response?.data?.data?.last_page)
+      setHasMoreChats(response?.data?.data?.last_page);
     } else {
       toast.error(t('error'));
     }
   };
 
   const handleTheme = (theme) => {
-    console.log('theme',theme)
-    dispatch(setBackgroundThemeBox(theme))
+    dispatch(setBackgroundThemeBox(theme));
   };
 
   useEffect(() => {
@@ -157,6 +147,7 @@ export default function Navigator(props) {
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
+        <PhoneModal open={openModalContact} onClose={setOpenModalContact} title={t(`add_chat`)} />
         <Typography
           variant='h1'
           component='h6'
@@ -175,8 +166,7 @@ export default function Navigator(props) {
               onChange={handleChange(index)}
               sx={{ boxShadow: '0', background: 'inherit' }}
               onClick={(event) => {
-                handleAccount(account?.id, event)
-               
+                handleAccount(account?.id, event);
               }}
             >
               <AccordionSummary
@@ -205,6 +195,31 @@ export default function Navigator(props) {
                   maxHeight: '500px',
                 }}
               >
+                <Grid
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    mb: 1,
+                    justifyContent: 'space-around',
+                  }}
+                  key={index}
+                >
+                  <Button
+                    name={'newChat'}
+                    id={index}
+                    sx={{ width: '100%', display: 'flex' }}
+                    onClick={() => {
+                      setOpenModalContact(true);
+                    }}
+                  >
+                    <Grid
+                      sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}
+                    >
+                      <AddCommentOutlinedIcon sx={{ mr: 3 }} fontSize='small' />
+                      <Typography>{t('new_chat')}</Typography>
+                    </Grid>
+                  </Button>
+                </Grid>
                 {chatsAccount &&
                   chatsAccount?.map((item, index) => (
                     <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
@@ -222,8 +237,8 @@ export default function Navigator(props) {
                           sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
                           onClick={(event) => {
                             event.stopPropagation();
-                            navigateTo(`/chat/${item.number}/${item.id}/${item.name}`)
-                            handleTheme(account?.name)
+                            navigateTo(`/chat/${item.number}/${item.id}/${item.name}`);
+                            handleTheme(account?.name);
                             localStorage.setItem('chat_account_type', account?.name);
                           }}
                         >
@@ -239,26 +254,26 @@ export default function Navigator(props) {
                     </Grid>
                   ))}
               </AccordionDetails>
-              {pageNumber < hasMoreChats &&
-              <Grid
-                onClick={loadMoreChats}
-                sx={{
-                  width: '35px',
-                  height: '35px',
-                  borderRadius: '50%',
-                  backgroundColor: 'gray',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  textAlign: 'center',
-                  margin: 'auto',
-                  color: 'white',
-                }}
-              >
-                <ArrowDownwardIcon sx={{ margin: 'auto' }} />
-              </Grid>
-              }
+              {pageNumber < hasMoreChats && (
+                <Grid
+                  onClick={loadMoreChats}
+                  sx={{
+                    width: '35px',
+                    height: '35px',
+                    borderRadius: '50%',
+                    backgroundColor: 'gray',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    margin: 'auto',
+                    color: 'white',
+                  }}
+                >
+                  <ArrowDownwardIcon sx={{ margin: 'auto' }} />
+                </Grid>
+              )}
             </Accordion>
           ))}
         <Accordion>
@@ -278,7 +293,7 @@ export default function Navigator(props) {
                   navigateTo(`/users`);
                 }}
               >
-               {t('users')}
+                {t('users')}
               </Button>
             </Grid>
           </AccordionDetails>
@@ -306,15 +321,6 @@ export default function Navigator(props) {
           </AccordionDetails>
         </Accordion>
       </List>
-      {/* <PhoneModal
-        open={openModalForm}
-        onClose={setOpenModalForm}
-        onSubmit={onSubmit}
-        title={t(`add_chat`)}
-        setExtensionNumber={setExtensionNumber}
-        setNumberPhone={setNumberPhone}
-        setMessage={setMessage}
-      /> */}
     </Drawer>
   );
 }

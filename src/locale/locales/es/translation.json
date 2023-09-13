@@ -461,5 +461,9 @@
   "file":"Archivos",
   "readers":"Lectores",
   "loading_chats":"Cargando chats...",
-  "contacts":"Contactos"
+  "contacts": "Contactos",
+   "add_chat":"Mensaje nuevo",
+   "new_chat": "Nuevo mensaje",
+   "type_message":"Escriba mensaje...",
+   "phone": "Teléfono"
 }
