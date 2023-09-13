@@ -26,9 +26,6 @@ export const contactsSlice = createSlice({
     setContacts: (state, { payload }) => {
       state.contacts = payload;
     },
-    setUsersList: (state, { payload }) => {
-      state.usersList = payload;
-    },
     setLoading: (state, { payload }) => {
       state.loading = payload;
     },
@@ -38,42 +35,7 @@ export const contactsSlice = createSlice({
     setContactForDetails: (state, { payload }) => {
       state.contactForDetails = payload;
     },
-    setCountries: (state, { payload }) => {
-      state.countries = payload;
-    },
-    setCustomerCares: (state, { payload }) => {
-      state.customer_cares = payload;
-    },
-    setContactTypes: (state, { payload }) => {
-      state.contactTypes = payload;
-    },
-    setLeadSources: (state, { payload }) => {
-      state.leadSources = payload;
-    },
-    setOfficeCountryCodes: (state, { payload }) => {
-      state.officePhoneCountryCodes = payload;
-    },
-    setHomeCountryCodes: (state, { payload }) => {
-      state.homePhoneCountryCodes = payload;
-    },
-    setOtherCountryCodes: (state, { payload }) => {
-      state.otherPhoneCountryCodes = payload;
-    },
-    setEmergencyCountryCodes: (state, { payload }) => {
-      state.emergencyPhoneCountryCodes = payload;
-    },
-    setEmergencyRelationType: (state, { payload }) => {
-      state.emergencyRelationTypes = payload;
-    },
-    setContactQuotes: (state, { payload }) => {
-      state.contactQuotes = payload;
-    },
-    setContactsInvoices: (state, {payload}) => {
-      state.contactsInvoices = payload;
-    },
-    setContactProfilesDetails:(state,{payload}) =>{
-      state.contactProfilesDetails = payload;
-    }
+   
   },
 });
 

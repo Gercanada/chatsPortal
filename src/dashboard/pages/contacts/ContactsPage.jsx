@@ -11,6 +11,10 @@ import ModalForm from '../../../components/Modal/ModalForm';
 import { createUser, getUser, updateUser } from '../../../store/slices/users';
 import { toast } from 'react-toastify';
 import PhoneModal from '../../../components/Modal/PhoneModal';
+import { getLabelCateogory } from '../../../store/slices/picklist/thunks';
+import { createContact, updateContact } from '../../../store/slices/contacts/thunks';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import moment from 'moment';
 
 const ContactsPage = () => {
   const { isLightTheme } = useSelector((state) => state.ui);
@@ -18,6 +22,7 @@ const ContactsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [openModalContact, setOpenModalContact] = useState(false);
   const [userId, setUserId] = useState(false);
   const [detailsForm, setDetailsForm] = useState([]);
   const [numberPhone, setNumberPhone] = useState([]);
@@ -26,7 +31,11 @@ const ContactsPage = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isReloadData, setIsReloadData] = useState(false);
   const { userDetails } = useSelector((state) => state.users);
+  const { categoryLabel } = useSelector((state) => state.picklist);
 
+  const selectsCreate = new Map();
+  selectsCreate.set('category_id', categoryLabel);
+  console.log('categoryLabel', categoryLabel);
   const {
     control,
     formState: { errors },
@@ -40,78 +49,141 @@ const ContactsPage = () => {
   });
 
   useEffect(() => {
-    setIsReloadData(false)
-    if(isEdit){
-    const details = [
-      { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
-      { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
-      { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:userDetails?.data?.email },
-      { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:userDetails?.data?.username },
-      // { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:userDetails?.data?.password },
-      // { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:userDetails?.data?.password },
-      { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:userDetails?.data?.avatar },
-    ];
-    setDetailsForm(details)
-  }else{
-    const details = [
-      { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text',value:'' },
-      { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:'' },
-      { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:'' },
-      { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:'' },
-      { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:'' },
-      { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:'' },
-      { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:'' },
-    ];
-    setDetailsForm(details)
-  }
-  }, [isEdit,userDetails])
-  
+    setIsReloadData(false);
+    if (isEdit) {
+      const details = [
+        // { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
+        // { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
+        // { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:userDetails?.data?.email },
+        // { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:userDetails?.data?.username },
+        // // { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:userDetails?.data?.password },
+        // // { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:userDetails?.data?.password },
+        // { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:userDetails?.data?.avatar },
+      ];
+      setDetailsForm(details);
+    } else {
+      const details = [
+        { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value: '' },
+        { name_: 'Numero', key: 'number', allowEdit: false, type: 'text', value: '' },
+        { name_: t('category'), key: 'category_id', allowEdit: false, type: 'select', value: '' },
+      ];
+      setDetailsForm(details);
+    }
+  }, [isEdit, userDetails]);
 
   const onSubmit = async (formDataParam) => {
+    console.log("aqui formDataParam",formDataParam)
     if (formDataParam.password === formDataParam.confirmPassword) {
       delete formDataParam.confirmPassword;
-      if(isEdit){
-        const resp = await dispatch(updateUser(userId,formDataParam));
+      if (isEdit) {
+        const resp = await dispatch(updateUser(userId, formDataParam));
         if (resp === 200) {
           toast.success(t('saved'));
           setIsReloadData(true);
-          setOpenModal(false)
+          setOpenModal(false);
         } else {
           toast.error(t('error'));
         }
-      }else{
+      } else {
         const resp = await dispatch(createUser(formDataParam));
+        if (resp === 200) {
+          toast.success(t('saved'));
+          setIsReloadData(true);
+          setOpenModal(false);
+        } else {
+          toast.error(t('error'));
+        }
+      }
+    }
+  };
+
+  const onSubmitCreateContact = async (formDataParam) => {
+    const formData = {};
+    Object.keys(formDataParam).forEach((item) => {
+      if (
+        typeof formDataParam[item] === 'object' &&
+        formDataParam[item]?.value &&
+        formDataParam[item]?.label
+      ) {
+        formData[item] = formDataParam[item].value;
+      } else if (moment.isMoment(formDataParam[item])) {
+        formData[item] = formDataParam[item].format('YYYY-MM-DD');
+      } else if (formDataParam[item] instanceof FileList) {
+        if (formDataParam[item].length > 0) {
+          formData[item] = formDataParam[item][0];
+        } else {
+          formData[item] = null;
+        }
+      } else {
+        formData[item] = formDataParam[item];
+      }
+    });
+
+
+    console.log("formDataParam",formData)
+    if (isEdit) {
+      const resp = await dispatch(updateContact(userId, formData));
       if (resp === 200) {
         toast.success(t('saved'));
         setIsReloadData(true);
-        setOpenModal(false)
+        setOpenModal(false);
+      } else {
+        toast.error(t('error'));
+      }
+    } else {
+      const resp = await dispatch(createContact(formData));
+      if (resp === 200) {
+        toast.success(t('saved'));
+        setIsReloadData(true);
+        setOpenModal(false);
       } else {
         toast.error(t('error'));
       }
     }
-
-    }
   };
 
-  const handleOnClick =  async (id) => {
-    setUserId(id);
-    setIsEdit(true)
-    const resp = await dispatch(getUser(id));
-    if(resp){
-      setOpenModal(true)
-    }
+  const handleOnClick = async (params) => {
+    setOpenModalContact(true)
+    setNumberPhone(params.row.number)
+    console.log("params",params)
+    // setUserId(id);
+    // setIsEdit(true);
+    // const resp = await dispatch(getUser(id));
+    // if (resp) {
+    //   setOpenModalContact(true);
+    // }
+  };
+
+  useEffect(() => {
+    dispatch(getLabelCateogory());
+  }, []);
+
+  const onClose = () => {
+    setOpenModal(false);
   };
 
   return (
     <DashboardLayout>
-<PhoneModal
-        open={openModal}
-        onClose={setOpenModal}
+      <PhoneModal
+        open={openModalContact}
+        onClose={setOpenModalContact}
         onSubmit={onSubmit}
         title={t(`add_chat`)}
-        setExtensionNumber={setExtensionNumber}
-        setNumberPhone={setNumberPhone}
+        number={numberPhone}
+        //setExtensionNumber={setExtensionNumber}
+        //setNumberPhone={setNumberPhone}
         setMessage={setMessage}
+      />
+      <ModalForm
+        open={openModal}
+        onClose={onClose}
+        dataForm={detailsForm}
+        title={'contact'}
+        selectValues={selectsCreate}
+        onSubmit={onSubmitCreateContact}
+        //toScreen={ //toScreen
+        //setIsEdit={ //setIsEdit
+        isEdit={false}
       />
       <Card sx={{ marginTop: '10px', marginLeft: '5px', marginRight: '5px' }}>
         <Grid container sx={{ display: 'flex' }}>
@@ -122,13 +194,12 @@ const ContactsPage = () => {
               size='large'
               color='iconverde'
               onClick={(event) => {
-                setIsEdit(false),
-                setOpenModal(true)
+               setIsEdit(false), setOpenModal(true);
               }}
             >
               <NoteAddIcon color='iconw'></NoteAddIcon>
               <Typography sx={{ paddingLeft: '10px' }} color='white' variant='h2'>
-                {t('create_users')}
+                {t('create_contact')}
               </Typography>
             </Button>
           </Grid>
@@ -138,51 +209,71 @@ const ContactsPage = () => {
       <Card sx={{ marginTop: '10px', marginBottom: '10px', marginLeft: '5px', marginRight: '5px' }}>
         <Grid container>
           <GridTable
-            path='/users'
+            path='/whatsapp/contacts'
             title={t('contacts')}
-            group='/users'
-            prefix='users'
+            group='/contacts'
+            prefix='contacts'
             isReloadData={isReloadData}
             columns={[
+              
               {
-                field: 'username',
-                headerName: t('username'),
+                field: 'name',
+                headerName: t('name'),
                 sortable: false,
                 renderCell: (params) => (
+                  <>
                   <Typography
-                  sx={{cursor:'pointer', textDecoration:'underline'}}
+                    sx={{ }}
                     variant='p'
                     onClick={() => {
-                      handleOnClick(params.id);
+                      handleOnClick(params);
                     }}
                   >
                     {params.value}
                   </Typography>
-                  // <Link
-                  //   style={{ color: isLightTheme === false ? 'white' : '' }}
-                  //   to={`/contacts/${params.id}`}
-                  // >
-                  //   {params.value}
-                  // </Link>
+                 
+                  </>
                 ),
                 flex: 1,
                 align: 'center',
               },
               {
-                field: 'name',
-                headerName: t('name'),
+                field: 'number',
+                headerName: t('number'),
                 sortable: false,
                 flex: 1,
                 align: 'center',
+                renderCell: (params) => (
+                  <>
+                  <Typography
+                    sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    variant='p'
+                    onClick={() => {
+                      handleOnClick(params);
+                    }}
+                  >
+                    {params.value}
+                    <WhatsAppIcon fontSize={'small'}/>
+                  </Typography>
+              
+                  </>
+                ),
               },
+              // {
+              //   field: 'category_id',
+              //   headerName: t('category_id'),
+              //   sortable: false,
+              //   flex: 1,
+              //   align: 'center',
+              // },
               {
-                field: 'last_name',
-                headerName: t('last_name'),
-                sortable: false,
+                field: 'category',
+                headerName: t('category'),
                 flex: 1,
                 align: 'center',
+                sortable: false,
               },
-              { field: 'email', headerName: t('email'), flex: 1, align: 'center', sortable: false },
+              
             ]}
           />
         </Grid>

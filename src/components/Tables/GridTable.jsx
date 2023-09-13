@@ -253,6 +253,8 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
       'contact_email',
       'website',
       'position_title',
+      'number',
+      //'category'
 
     ];
 
@@ -272,7 +274,8 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
       'school_id',
       'schoolprogram_id',
       'student_id',
-      'employer_id'
+      'employer_id',
+      'category'
     ];
 
     let response, data;
@@ -285,6 +288,7 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
       data = response?.data;
     }
     if (data) {
+      console.log('data',data)
       Object.values(data).forEach((item) => {
         const newItem = {};
         Object.entries(item).forEach(([key, value], index) => {
@@ -297,6 +301,9 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
           } else if (specificKeys.includes(key)) {
             if (key === 'school_id') {
               newItem[key] = value?.value?.name;
+            }
+            if (key === 'category') {
+              newItem[key] = value?.name;
             } else{
             newItem[key] = t(value?.value);
             }

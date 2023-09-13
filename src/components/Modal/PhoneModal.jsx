@@ -21,6 +21,7 @@ import DInput from '../Input/DInput';
 const PhoneModal = ({
   open,
   onClose,
+  number,
   title,
   onSubmit,
   setNumberPhone,
@@ -53,26 +54,25 @@ const PhoneModal = ({
     overFlowY: 'visible',
   };
 
-  const [isDisabled, setIsDisabled] = useState(true)
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const handleExtensionNumber = (event) => {
     const value = event.target.value;
-    if (/^\d*$/.test(value) &&  value.length <= 3) {
-      setIsDisabled(false)
-      setExtensionNumber(value);
-    }else{
-      setIsDisabled(true)
+    if (/^\d*$/.test(value) && value.length <= 3) {
+      setIsDisabled(false);
+      //  setExtensionNumber(value);
+    } else {
+      setIsDisabled(true);
     }
-   
   };
 
   const handleNumberPhone = (event) => {
     const value = event.target.value;
-    if (/^\d*$/.test(value) &&  value.length >= 8) {
-      setIsDisabled(false)
-      setNumberPhone(value);
-    }else{
-      setIsDisabled(true)
+    if (/^\d*$/.test(value) && value.length >= 8) {
+      setIsDisabled(false);
+      // setNumberPhone(value);
+    } else {
+      setIsDisabled(true);
     }
   };
 
@@ -80,6 +80,7 @@ const PhoneModal = ({
     const value = event.target.value;
     setMessage(value);
   };
+  console.log('number', number);
 
   const handleClose = () => onClose(false);
   return (
@@ -102,16 +103,19 @@ const PhoneModal = ({
             </Grid>
           </Grid>
           <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-            <Typography sx={{ m: 1 }}>+</Typography>
-            <TextField
+            {/* <Typography sx={{ m: 1 }}>+</Typography>
+            {/* <TextField
               onChange={handleExtensionNumber}
               sx={{ width: '80px', m: 1 }}
               type={'phone'}
               inputProps={{ maxLength: 3 }}
-            />
+            /> */} 
             <TextField
-              onChange={handleNumberPhone}
+            //  onChange={handleNumberPhone}
               sx={{ m: 1 }}
+              control={control}
+              name={'recipient'}
+              defaultValue={number}
               type={'phone'}
               inputProps={{ maxLength: 10 }}
             />
@@ -119,10 +123,15 @@ const PhoneModal = ({
           <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
             <Typography sx={{ m: 1 }}>{t('message')}</Typography>
             <TextareaAutosize
-              onChange={handleMessage}
-              name='Soft'
+            minRows={3}
+            control={control}
+              onChange={() => {
+                handleMessage;
+              }}
+              sx={{m:2}}
+              name='body'
               placeholder='Type message…'
-              color='primary' // Puedes usar 'default', 'primary' o 'secondary'
+              color='primary'
             />
           </Grid>
           <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
@@ -131,7 +140,7 @@ const PhoneModal = ({
               size='large'
               sx={{ margin: '10px', width: '30%' }}
               color='primary'
-              disabled={isDisabled}
+              //disabled={isDisabled}
             >
               {t('send')}
             </Button>

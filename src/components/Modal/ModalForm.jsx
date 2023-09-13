@@ -163,7 +163,7 @@ const ModalForm = ({
                               {...fieldSelect}
                               options={selectValues
                                 ?.get(item.key)
-                                .map((optionSelect) => optionSelect)}
+                                .map((optionSelect) => ({label:optionSelect.name , value: optionSelect.id}))}
                             />
                           )}
                         />
