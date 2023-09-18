@@ -99,7 +99,7 @@ export const LoginPage = () => {
                   >
                     <img
                       style={{ paddingBottom: '40px' }}
-                      src='/images/logochat.png'
+                      src='/images/vivechat.png'
                       width='250px'
                       alt=''
                     />

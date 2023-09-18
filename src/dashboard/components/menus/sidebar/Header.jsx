@@ -39,7 +39,6 @@ function Header(props) {
   const onToggleMenu = () => dispatch(toggleMenu());
   const onToggleTheme = () => dispatch(toggleTheme());
   const navigate = useNavigate();
-
   const userNameStorage = localStorage.getItem('user_name') || '';
   const user = localStorage.getItem('user') || '';
   const userStorage = JSON.parse(user);
@@ -115,37 +114,44 @@ function Header(props) {
   React.useEffect(() => {
     getShowData();
   }, [userDetails, theme]);
-
+console.log('isLightTheme',isLightTheme)
   return (
     <React.Fragment>
       <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 0.5em 0 #979797' }}>
         <Toolbar>
-          <Grid container  alignItems='center'>
-
-            {/* <Link component={RouterLink} to='/'>
-          <Typography variant='h6' component='h6' display='flex'>
-            <img src='/images/LOGOPORTAL.png' width='200px' alt='' />
-          </Typography>
-            </Link> */}
+          <Grid container alignItems='center'>
             <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
               <IconButton aria-label='open drawer' onClick={onDrawerToggle} edge='start'>
                 <MenuIcon />
               </IconButton>
             </Grid>
             <Grid item xs>
-            <Typography variant="p" sx={{ color: 'black' }}>
-              {account === 'Vivetel Networks Ltd' ? (
-                <img src='/images/ViveTel.png' width='35px' alt='' />
-              ) : account === 'ViveCanada Edu Services LTD' ? (
-                <img src='/images/ViveCanada.png' width='35px' alt='' />
-              ) : account === 'Test Number' ? (
-                <img src='/images/labores.png' width='35px' alt='' />
-              ) : (
-                ''
-              )}
-              {account === 'ViveCanada Edu Services LTD' ? 'ViveCanada' :
-              account === 'Vivetel Networks Ltd' ? 'ViveTel':'' }
-            </Typography>
+              <Typography variant='p' sx={isLightTheme ?{ color: 'black' }:{ color: 'white' }}>
+                {account === 'Vivetel Networks Ltd' ? (
+                  <img src='/images/ViveTel.png' width='35px' alt='' />
+                ) : account === 'ViveCanada Edu Services LTD' ? (
+                  <img src='/images/ViveCanada.png' width='35px' alt='' />
+                ) : account === 'Test Number' ? (
+                  <img src='/images/labores.png' width='35px' alt='' />
+                ) : account === 'Immcase Digital Solutions Ltd' ? (
+                  <img src='/images/ImmCaseChat.png' width='40px' alt='' />
+                ) : account === 'Easy Eta by Ger Canada' ? (
+                  <img src='/images/GerCanadaChat.png' width='40px' alt='' />
+                ) : (
+                  ''
+                )}
+                {account === 'ViveCanada Edu Services LTD' ? (
+                  'ViveCanada'
+                ) : account === 'Vivetel Networks Ltd' ? (
+                  'ViveTel'
+                ) : account=== 'Immcase Digital Solutions Ltd' ? (
+                  'ImmCase'
+                ) : account === 'Easy Eta by Ger Canada' ? (
+                  'GerCanada'
+                ) : (
+                  ''
+                )}
+              </Typography>
             </Grid>
             <Grid item />
 

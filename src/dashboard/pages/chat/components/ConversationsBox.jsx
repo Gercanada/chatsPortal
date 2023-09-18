@@ -69,15 +69,16 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
 
   const gridStyle = {
     position: 'relative',
-    width: '100%',
-    height: '75vh',
+    // width: '100%',
+    height: '74vh',
     backgroundImage: `url(${backgroundImageUrl})`,
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: `${backgroundColor}`,
-    display: 'flex',
+    backgroundRepeat: 'repeat', // Esto hace que la imagen de fondo se repita
+    backgroundSize: 'cover', // O usa '100%' si prefieres que se ajuste al 100% del contenedor
+     backgroundColor: `${backgroundColor}`,
+    // display: 'flex',
     overflow: 'auto',
   };
+  
 
   const bubbleStyleResponse = {
     padding: '8px 16px',
@@ -128,6 +129,20 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
             setBackgroundColor(backgroundColor)
             setBackgroundImageUrl(backgroundImageUrl)
             break;
+            case 'Immcase Digital Solutions Ltd':
+              backgroundImageUrl =
+                isLightTheme === 'yes' ? '/images/IMMCASELIGHT.svg' : '/images/IMMCASEDARK.svg';
+              backgroundColor = isLightTheme === 'yes' ? '#a5cd38' : '#151719';
+              setBackgroundColor(backgroundColor)
+              setBackgroundImageUrl(backgroundImageUrl)
+              break;
+              case 'Easy Eta by Ger Canada':
+                backgroundImageUrl =
+                  isLightTheme === 'yes' ? '/images/GERLIGHT.svg' : '/images/GERDARK1.svg';
+                backgroundColor = isLightTheme === 'yes' ? '#cde2ff' : '#151719';
+                setBackgroundColor(backgroundColor)
+                setBackgroundImageUrl(backgroundImageUrl)
+                break;
           default:
             backgroundImageUrl = '';
             backgroundColor = '';
@@ -139,7 +154,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
       container
       style={gridStyle}
       className='box-container'
-      sx={{ backgroundSize: '100% 100%' }}
+     sx={{ backgroundSize: '100% 100%' }}
       ref={gridRef}
     >
       <ImageModal

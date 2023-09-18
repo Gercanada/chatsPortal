@@ -35,6 +35,8 @@ import { Loader } from '../../../../components/Loader';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { setBackgroundThemeBox } from '../../../../store/slices/ui/thunks';
 import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
+import GroupIcon from '@mui/icons-material/Group';
+import ContactsIcon from '@mui/icons-material/Contacts';
 export default function Navigator(props) {
   const { ...other } = props;
   const { id, thread } = useParams();
@@ -180,11 +182,23 @@ export default function Navigator(props) {
                   <img src='/images/ViveCanada.png' width='40px' alt='' />
                 ) : account?.name === 'Test Number' ? (
                   <img src='/images/labores.png' width='40px' alt='' />
+                ) : account?.name === 'Immcase Digital Solutions Ltd' ? (
+                  <img src='/images/ImmCaseChat.png' width='40px' alt='' />
+                ) : account?.name === 'Easy Eta by Ger Canada' ? (
+                  <img src='/images/GerCanadaChat.png' width='40px' alt='' />
                 ) : (
                   ''
                 )}
                 <Typography sx={{ m: 1 }}>
-                  {account?.name === 'ViveCanada Edu Services LTD' ? 'ViveCanada' : account.name}
+                  {account?.name === 'ViveCanada Edu Services LTD'
+                    ? 'ViveCanada'
+                    : account?.name === 'Vivetel Networks Ltd'
+                    ? 'ViveTel'
+                    : account?.name === 'Immcase Digital Solutions Ltd'
+                    ? 'Immcase'
+                    : account?.name === 'Easy Eta by Ger Canada'
+                    ? 'GerCanada'
+                    : account?.name}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails
@@ -282,7 +296,8 @@ export default function Navigator(props) {
             aria-controls='panel1a-content'
             id='panel1a-header'
           >
-            <Typography sx={{ m: 1 }}>{t('users')}</Typography>
+            <GroupIcon sx={{ width: '30px' }} />
+            <Typography sx={{ ml: 2.5 }}>{t('users')}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
             <Grid sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}>
@@ -293,6 +308,7 @@ export default function Navigator(props) {
                   navigateTo(`/users`);
                 }}
               >
+                <GroupIcon />
                 {t('users')}
               </Button>
             </Grid>
@@ -304,7 +320,8 @@ export default function Navigator(props) {
             aria-controls='panel1a-content'
             id='panel1a-header'
           >
-            <Typography sx={{ m: 1 }}>{t('contacts')}</Typography>
+            <ContactsIcon sx={{ width: '30px' }} />
+            <Typography sx={{ ml: 2.5 }}>{t('contacts')}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ paddingBottom: '8px', px: 0 }}>
             <Grid sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', mb: 1 }}>
@@ -315,6 +332,7 @@ export default function Navigator(props) {
                   navigateTo(`/contacts`);
                 }}
               >
+                <ContactsIcon />
                 {t('contacts')}
               </Button>
             </Grid>
