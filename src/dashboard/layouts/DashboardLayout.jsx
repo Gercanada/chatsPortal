@@ -4,26 +4,17 @@ import { SearchBar } from '../../components/search/SearchBar';
 import { Navbar, Sidebar } from '../components';
 import { Footer } from '../components/Footer';
 import SideBarFixed from '../components/menus/sidebar/SideBarFixed';
+import { useSelector } from 'react-redux';
+import { Loader } from '../../components/Loader';
 
 export const DashboardLayout = ({ children }) => {
+  const { loading} = useSelector(
+    (state) => state.whatsApp,
+  );
   return (
     <>
+    {loading && <Loader/>}
       <SideBarFixed children={children}/>
-      {/* <main
-        style={{
-          
-          paddingTop: '50px',
-          maxWidth: '100%',
-          marginLeft: '0.5%',
-          marginRight: '0.5%',
-          
-          minHeight: '100vh'
-        }}
-        sx={{display: 'flex', justifyContent: 'center'}}
-      >
-        {children}
-      </main> */}
-      {/* <Footer  /> */}
     </>
   );
 };
