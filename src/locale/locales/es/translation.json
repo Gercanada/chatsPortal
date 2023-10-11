@@ -465,5 +465,6 @@
    "add_chat":"Mensaje nuevo",
    "new_chat": "Nuevo mensaje",
    "type_message":"Escriba mensaje...",
-   "phone": "Teléfono"
+   "phone": "Teléfono",
+   "new_message":"Nuevo mensaje"
 }

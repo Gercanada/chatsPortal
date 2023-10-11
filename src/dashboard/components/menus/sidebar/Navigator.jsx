@@ -63,6 +63,8 @@ export default function Navigator(props) {
     navigate(url);
   };
 
+  console.log('cchatsukis',chatsAccount);
+
   const handleAccount = (id, event, theme) => {
     if (
       event?.target?.nodeName === 'DIV' ||

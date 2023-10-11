@@ -10,9 +10,12 @@ import { useEffect } from 'react';
 import {
   getMoreMessages,
   getUserChat,
+  setReadMessages,
 } from '../../../store/slices/whatsApp/thunks';
 import { Loader } from '../../../components/Loader';
 import { toast } from 'react-toastify';
+import Pusher from 'pusher-js';
+import { useTranslation } from 'react-i18next';
 
 const ChatView = () => {
 
@@ -27,12 +30,54 @@ const ChatView = () => {
   const { loading } = useSelector((state) => state.whatsApp);
   const [hasMoreChats, setHasMoreChats] = useState(1);
   const [hasChange, setHasChange] = useState(false);
+  const { t } = useTranslation();
+  const [data, setData] = useState([]);
+  const [newMessage, setNewMessage] = useState('')
+  const [responseUser, setResponseUser] = useState([]);
+  const [dataItems, setDataItems] = useState([]);
+  const [notificationBody, setNotificationBody] = useState([]);
+  const [notificationContact, setNotificationContact] = useState([]);
+  const language = localStorage.getItem('i18nextLng');
   
+
+  const playSound = () => {
+    const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
+   audioElement.play();
+ };
+  const allMessages = [];
+
+ useEffect(() => {
+
+   //Pusher.logToConsole = true;
+   const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+   const channel = pusher.subscribe('chat');
+   channel.bind('message', function (data) {
+     playSound();
+     allMessages.push(data);
+     const jsonObject = JSON.parse(data.message);
+     console.log('jsonObject',jsonObject)
+     jsonObject.thread.contact;
+     jsonObject.body;
+     setNotificationBody(jsonObject.body);
+     setNotificationContact(jsonObject.thread.contact);
+    //  toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
+    //    autoClose: false
+    //  })
+      toast.error(t(`new_message`),{
+       autoClose: false
+     })
+     loadChats()
+   });
+ }, []);
 
   const loadChats = async () => {
     const resp = await dispatch(getUserChat(id));
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data)
+      console.log('reverrrrr',reversedArray)
+      const markAsRead = reversedArray?.map((item)=> ( item.id))
+      console.log('mard as read', markAsRead)
+      dispatch(setReadMessages(markAsRead))
       setSortMessages(reversedArray);
       setHasMoreChats(resp?.data?.data?.last_page);
     }
@@ -60,6 +105,9 @@ const ChatView = () => {
     const response = await dispatch(getMoreMessages(thread, page));
     if (response && response?.data) {
       const reversedArray = sortArray(response?.data?.data?.data)
+      const markAsRead = reversedArray?.map((item)=> ( item.id))
+      console.log('mard as read', markAsRead)
+      dispatch(setReadMessages(markAsRead))
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
       setHasMoreChats(response?.data?.data?.last_page);
     } else {
@@ -87,7 +135,7 @@ const ChatView = () => {
           />
         </Grid>
         <Grid item xs={12}>
-        <MessagesField  setHasChange={setHasChange} />
+        <MessagesField  setHasChange={setHasChange} loadChats={loadChats} setNewMessage={setNewMessage} />
       </Grid>
     </Grid>
     </DashboardLayout>

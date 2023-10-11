@@ -452,5 +452,6 @@
    "add_chat": "Nouveau message",
    "new_chat": "Nouveau message",
    "type_message": "Tapez le message...",
-   "phone": "Téléphone"
+   "phone": "Téléphone",
+   "new_message": "Nouveau message"
 }

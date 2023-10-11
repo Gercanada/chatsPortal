@@ -13,7 +13,7 @@ import PopoverField from '../../../../components/Popovers/PopoverField';
 
 //const socket =io("/")
 
-const MessagesField = ({ setHasChange }) => {
+const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
   const [valueMessage, setValueMessage] = useState('');
   const { id, thread, prefix } = useParams();
   const [hasMessage, setHasMessage] = useState(true);
@@ -31,6 +31,7 @@ const MessagesField = ({ setHasChange }) => {
     if (!textValue) {
       setHasMessage(true);
       setValueMessage(textValue);
+      setNewMessage(textValue)
     } else {
       setHasMessage(false);
       setValueMessage(textValue);
@@ -43,6 +44,7 @@ const MessagesField = ({ setHasChange }) => {
     setHasChange(true)
     const resp = await dispatch(sendMessage(id, valueMessage));
     if (resp === 200) {
+      loadChats()
       dispatch(getUserChat(id));
       toast.success(t('sent'));
     }
