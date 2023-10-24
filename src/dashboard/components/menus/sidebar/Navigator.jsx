@@ -163,6 +163,9 @@ export default function Navigator(props) {
         <Typography>{t('conversations')}</Typography>
         {phoneAccounts &&
           phoneAccounts?.map((account, index) => (
+            <React.Fragment>
+{account?.name !== 'Test Number' &&
+            
             <Accordion
               key={index}
               expanded={expanded === index}
@@ -291,6 +294,8 @@ export default function Navigator(props) {
                 </Grid>
               )}
             </Accordion>
+     }
+            </React.Fragment>
           ))}
         <Accordion>
           <AccordionSummary
