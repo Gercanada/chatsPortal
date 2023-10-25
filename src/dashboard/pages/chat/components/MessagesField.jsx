@@ -9,14 +9,10 @@ import { Button } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import PopoverField from '../../../../components/Popovers/PopoverField';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import AudioRecorder from '../../../../components/Audios/AudioRecorder';
 import PopoverItems from '../../../../components/Popovers/PopoverItems';
 import AddIcon from '@mui/icons-material/Add';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import AudioRecorder from '../../../../components/audios/AudioRecorder';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //import io from 'socket.io-client'
@@ -27,12 +23,9 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
   const [valueMessage, setValueMessage] = useState('');
   const [audioMessage, setAudioMessage] = useState('');
   const { id, thread, prefix } = useParams();
-  const [audioMessage, setAudioMessage] = useState('');
   const [isAudio, setIsAudio] = useState(false);
   const [isAudioOpen, setIsAudioOpen] = useState(false);
   const [hasMessage, setHasMessage] = useState(true);
-  const [isAudio, setIsAudio] = useState(false);
-  const [isAudioOpen, setIsAudioOpen] = useState(false);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
