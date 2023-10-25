@@ -12,6 +12,7 @@ export const startLogin = ({ user_name, password }) => {
       });
 
       const { user, token } = data;
+
       localStorage.setItem('x-token', token);
       localStorage.setItem('user', JSON.stringify(user));
 

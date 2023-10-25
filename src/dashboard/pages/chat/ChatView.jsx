@@ -44,28 +44,29 @@ const ChatView = () => {
   };
   const allMessages = [];
 
-  useEffect(() => {
-    //Pusher.logToConsole = true;
-    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
-    const channel = pusher.subscribe('chat');
-    channel.bind('message', function (data) {
-      // playSound();
-      allMessages.push(data);
-      const jsonObject = JSON.parse(data.message);
-      console.log('jsonObject', jsonObject);
-      jsonObject.thread.contact;
-      jsonObject.body;
-      setNotificationBody(jsonObject.body);
-      setNotificationContact(jsonObject.thread.contact);
-      //  toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
-      //    autoClose: false
-      //  })
-      toast.error(t(`new_message`), {
-        autoClose: false,
-      });
-      loadChats();
-    });
-  }, []);
+ useEffect(() => {
+
+   //Pusher.logToConsole = true;
+   const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+   const channel = pusher.subscribe('chat');
+   channel.bind('message', function (data) {
+    // playSound();
+     allMessages.push(data);
+     const jsonObject = JSON.parse(data.message);
+     console.log('jsonObject',jsonObject)
+     jsonObject.thread.contact;
+     jsonObject.body;
+     setNotificationBody(jsonObject.body);
+     setNotificationContact(jsonObject.thread.contact);
+    //  toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
+    //    autoClose: false
+    //  })
+      toast.error(t(`new_message`),{
+       autoClose: false
+     })
+     loadChats()
+   });
+ }, []);
 
   const loadChats = async () => {
     const resp = await dispatch(getUserChat(id));

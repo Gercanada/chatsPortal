@@ -16,17 +16,23 @@ import PopoverItems from '../../../../components/Popovers/PopoverItems';
 import AddIcon from '@mui/icons-material/Add';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import AudioRecorder from '../../../../components/audios/AudioRecorder';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //import io from 'socket.io-client'
 
 //const socket =io("/")
 
-const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
+const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
   const [valueMessage, setValueMessage] = useState('');
+  const [audioMessage, setAudioMessage] = useState('');
   const { id, thread, prefix } = useParams();
   const [audioMessage, setAudioMessage] = useState('');
   const [isAudio, setIsAudio] = useState(false);
   const [isAudioOpen, setIsAudioOpen] = useState(false);
   const [hasMessage, setHasMessage] = useState(true);
+  const [isAudio, setIsAudio] = useState(false);
+  const [isAudioOpen, setIsAudioOpen] = useState(false);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -47,17 +53,16 @@ const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
     if (!textValue) {
       setHasMessage(true);
       setValueMessage(textValue);
-      setNewMessage(textValue)
+      setNewMessage(textValue);
     } else {
       setHasMessage(false);
       setValueMessage(textValue);
-
     }
   };
 
   const handleSendMessage = async () => {
-    setValueMessage('');
-    setHasChange(true)
+    // setValueMessage('');
+    // setHasChange(true);
     if (audioMessage) {
       setIsAudioOpen(false);
       const audio = audioMessage.replace('blob:', '');
@@ -99,42 +104,14 @@ const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
             type={'files'}
           />
         </Grid>
-        {isAudioOpen ? (
-          <>
-            {/* <AudioRecorder setAudioMessage={setAudioMessage} record={isAudio} /> */}
-            <AudioRecorder /> 
-            <IconButton
-              // disabled={hasMessage}
-              onClick={() => {
-                setIsAudioOpen(false), setIsAudio(false);
-              }}
-              aria-label='delete'
-              size='large'
-              color='error'
-            >
-              <DeleteForeverIcon />
-            </IconButton>
-          </>
-        ) : (
-          <TextField
-            onChange={() => {
-              handleOnchange(event);
-            }}
-            value={valueMessage}
-            sx={{ m: 1, width: '80%' }}
-            variant='outlined'
-          />
-        )}
-
-        <IconButton
-          // disabled={hasMessage}
-          onClick={() => handleAudio()}
-          aria-label='delete'
-          size='large'
-          color={isAudio ? 'error' : 'success'}
-        >
-          <KeyboardVoiceIcon />
-        </IconButton>
+        <TextField
+          onChange={() => {
+            handleOnchange(event);
+          }}
+          value={valueMessage}
+          sx={{ m: 1, width: '80%' }}
+          variant='outlined'
+        />
         <IconButton
          // disabled={hasMessage}
           onClick={handleSendMessage}

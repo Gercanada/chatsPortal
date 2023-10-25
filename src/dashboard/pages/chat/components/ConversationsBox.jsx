@@ -66,6 +66,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   }, [lastMessageRef, memoizedLoadMoreChats]);
 
   const memoizedMessages = useMemo(() => messages || [], [messages]);
+  console.log('memoizedMessages', memoizedMessages);
 
   const gridStyle = {
     position: 'relative',
