@@ -39,8 +39,8 @@ export const DashboardPage = () => {
   };
 
   const playSound = () => {
-     const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
-    audioElement.play();
+    //  const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
+    // audioElement.play();
   };
    const allMessages = [];
 

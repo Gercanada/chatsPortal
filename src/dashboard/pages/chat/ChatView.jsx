@@ -41,8 +41,8 @@ const ChatView = () => {
   
 
   const playSound = () => {
-    const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
-   audioElement.play();
+    //const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
+ //  audioElement.play();
  };
   const allMessages = [];
 
@@ -52,7 +52,7 @@ const ChatView = () => {
    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
    const channel = pusher.subscribe('chat');
    channel.bind('message', function (data) {
-     playSound();
+    // playSound();
      allMessages.push(data);
      const jsonObject = JSON.parse(data.message);
      console.log('jsonObject',jsonObject)

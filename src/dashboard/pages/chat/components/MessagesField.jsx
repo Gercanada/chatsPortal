@@ -9,6 +9,9 @@ import { Button } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import PopoverField from '../../../../components/Popovers/PopoverField';
+import AudioRecorder from '../../../../components/Audios/AudioRecorder';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //import io from 'socket.io-client'
 
 //const socket =io("/")
@@ -16,6 +19,9 @@ import PopoverField from '../../../../components/Popovers/PopoverField';
 const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
   const [valueMessage, setValueMessage] = useState('');
   const { id, thread, prefix } = useParams();
+  const [audioMessage, setAudioMessage] = useState('');
+  const [isAudio, setIsAudio] = useState(false);
+  const [isAudioOpen, setIsAudioOpen] = useState(false);
   const [hasMessage, setHasMessage] = useState(true);
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -42,15 +48,34 @@ const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
   const handleSendMessage = async () => {
     setValueMessage('');
     setHasChange(true)
-    const resp = await dispatch(sendMessage(id, valueMessage));
-    if (resp === 200) {
-      loadChats()
-      dispatch(getUserChat(id));
-      toast.success(t('sent'));
+    if (audioMessage) {
+      setIsAudioOpen(false);
+      const audio = audioMessage.replace('blob:', '');
+      const resp = await dispatch(sendMessage(id, audio));
+      if (resp === 200) {
+        loadChats();
+        dispatch(getUserChat(id));
+        toast.success(t('sent'));
+      }
+    } else {
+      const resp = await dispatch(sendMessage(id, valueMessage));
+      if (resp === 200) {
+        loadChats();
+        dispatch(getUserChat(id));
+        toast.success(t('sent'));
+      }
     }
   };
 
-
+  const handleAudio = async () => {
+    if (!isAudio) {
+      setIsAudio(true);
+      setIsAudioOpen(true);
+    } else {
+      setIsAudio(false);
+    }
+  };
+  console.log('audioMessageaudioMessage', audioMessage);
 
   return (
     <Grid>
@@ -63,16 +88,44 @@ const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
             type={'files'}
           />
         </Grid>
-        <TextField
-          onChange={() => {
-            handleOnchange(event);
-          }}
-          value={valueMessage}
-          sx={{ m: 1, width: '80%' }}
-          variant='outlined'
-        />
+        {isAudioOpen ? (
+          <>
+            {/* <AudioRecorder setAudioMessage={setAudioMessage} record={isAudio} /> */}
+            <AudioRecorder /> 
+            <IconButton
+              // disabled={hasMessage}
+              onClick={() => {
+                setIsAudioOpen(false), setIsAudio(false);
+              }}
+              aria-label='delete'
+              size='large'
+              color='error'
+            >
+              <DeleteForeverIcon />
+            </IconButton>
+          </>
+        ) : (
+          <TextField
+            onChange={() => {
+              handleOnchange(event);
+            }}
+            value={valueMessage}
+            sx={{ m: 1, width: '80%' }}
+            variant='outlined'
+          />
+        )}
+
         <IconButton
-          disabled={hasMessage}
+          // disabled={hasMessage}
+          onClick={() => handleAudio()}
+          aria-label='delete'
+          size='large'
+          color={isAudio ? 'error' : 'success'}
+        >
+          <KeyboardVoiceIcon />
+        </IconButton>
+        <IconButton
+         // disabled={hasMessage}
           onClick={handleSendMessage}
           aria-label='delete'
           size='large'
