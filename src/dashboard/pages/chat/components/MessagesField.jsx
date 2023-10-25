@@ -9,9 +9,13 @@ import { Button } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import PopoverField from '../../../../components/Popovers/PopoverField';
-import AudioRecorder from '../../../../components/Audios/AudioRecorder';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AudioRecorder from '../../../../components/Audios/AudioRecorder';
+import PopoverItems from '../../../../components/Popovers/PopoverItems';
+import AddIcon from '@mui/icons-material/Add';
+import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 //import io from 'socket.io-client'
 
 //const socket =io("/")
@@ -27,6 +31,12 @@ const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
   const { t } = useTranslation();
 
   const { userFiles } = useSelector((state) => state.whatsApp);
+
+
+  const menuAttachments =[
+    {attachment:"images",icon:<ImageRoundedIcon color='primary'/>, type:'image/*' },
+    {attachment:"file", icon:<DescriptionRoundedIcon color='error'/>, type:'*/*'  },
+  ]
 
   useEffect(() => {
     dispatch(getUserFiles(thread));
@@ -81,8 +91,9 @@ const MessagesField = ({ setHasChange, loadChats,setNewMessage }) => {
     <Grid>
       <Card sx={{ justifyContent: 'space-around', display: 'flex' }}>
         <Grid sx={{ mt:2.5,ml:1}}>
-          <PopoverField
-            icon={<AttachFileIcon />}
+          <PopoverItems
+            icon={<AddIcon/>}
+            attachments={menuAttachments}
             values={userFiles && userFiles}
             title={'files'}
             type={'files'}
