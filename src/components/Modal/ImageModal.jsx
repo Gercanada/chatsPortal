@@ -18,9 +18,12 @@ import CButton from '../Button/CButton';
 import DInput from '../Input/DInput';
 import './modalImageStyle.css';
 
-const ImageModal = ({
-    open, onClose, imageUrl, title, onSubmit,toScreen
-}) => {
+const modalStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+const ImageModal = ({ open, onClose, imageUrl, title, onSubmit, toScreen }) => {
   const {
     control,
     formState: { errors },
@@ -34,17 +37,29 @@ const ImageModal = ({
   });
   const { t } = useTranslation();
   const [fieldsValues, setFieldsValues] = useState([]);
-  const style = {
-    position: 'relative',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '50%',
-    bgcolor: 'background.paper',
-    border: '1px solid #000',
-    boxShadow: 24,
-    p: 4,
-    overFlowY: 'visible',
+  // const style = {
+  //   position: 'relative',
+  //   top: '50%',
+  //   left: '50%',
+  //   transform: 'translate(-50%, -50%)',
+  //   width: '50%',
+  //   bgcolor: 'background.paper',
+  //   border: '1px solid #000',
+  //   boxShadow: 24,
+  //   p: 4,
+  //   overFlowY: 'visible',
+  // };
+  const contentStyle = {
+    backgroundColor: 'white',
+    border: '2px solid #000',
+    borderRadius: '4px',
+    padding: '20px',
+    width: '60%', // Ancho fijo de 300 píxeles
+    height: '60%', // Alto fijo de 300 píxeles
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flexDirection:'column'
   };
 
   const setDefaultValues = async () => {};
@@ -66,49 +81,44 @@ const ImageModal = ({
     // Programmatically click the download link
     downloadLink.click();
   };
-  
-  
+
   return (
     <Modal
       open={open}
       onClose={handleClose}
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
-      sx={{ overFlowY: 'visible' }}
+      sx={modalStyle}
+      //  sx={{ overFlowY: 'visible' }}
     >
-      <div sx={style}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid  className={'image-container'}>
-            <img src={`https://chat.immcase.com/${imageUrl}`} className='image'  alt='' />
-          </Grid>
-          <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
-            {toScreen && (
-              <CButton
-                title={t('change_password')}
-                type='button'
-                size='large'
-                sx={{ margin: '10px', width: '30%' }}
-                color='primary'
-                onClick={toScreen}
-              >
-                {t('go_to_full_screen')}
-              </CButton>
-            )}
-            <Button  onClick={handleDownloadImage} size='large' className={'buttons'} color='primary'>
-              {t('download')}
-            </Button>
-            <Button
-              type='button'
-              size='large'
-              className={'buttons'}
-              color='primary'
-              onClick={handleClose}
-            >
-              X
-            </Button>
-          </Grid>
-        </form>
-      </div>
+      <Box sx={contentStyle}>
+        <img
+          alt='Preview'
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            width: '90%',
+            height: '60%',
+          }}
+          src={`https://chat.immcase.com/${imageUrl}`}
+          className='image'
+        />
+
+        <Grid sx={{ display: 'flex', justifyContent: 'center' }} item>
+          <Button onClick={handleDownloadImage} size='large' className={'buttons'} color='primary'>
+            {t('download')}
+          </Button>
+          <Button
+            type='button'
+            size='large'
+            className={'buttons'}
+            color='primary'
+            onClick={handleClose}
+          >
+            X
+          </Button>
+        </Grid>
+      </Box>
     </Modal>
   );
 };

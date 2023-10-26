@@ -1,5 +1,9 @@
-import { Box, Modal } from '@mui/material';
+import { Box, Button, Modal } from '@mui/material';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { sendFiles } from '../../store/slices/whatsApp/thunks';
 
 const modalStyle = {
   display: 'flex',
@@ -12,7 +16,7 @@ const contentStyle = {
   border: '2px solid #000',
   borderRadius: '4px',
   padding: '20px',
-  width: '70%', // Ancho fijo de 300 píxeles
+  width: '50%', // Ancho fijo de 300 píxeles
   height: '60%', // Alto fijo de 300 píxeles
   display: 'flex',
   alignItems: 'center',
@@ -20,10 +24,18 @@ const contentStyle = {
 };
 
 const PreviewModal = ({ open, onClose, attachmentFile }) => {
+  const dispatch = useDispatch();
   const [numPages, setNumPages] = useState(null);
-
+  const { id, thread } = useParams();
   const handleClose = () => {
     onClose(false);
+  };
+
+  const handleSendMessages = async () => {
+    const response = await dispatch(sendFiles(id, attachmentFile));
+    if (response !== 200) {
+      toast.error('error');
+    }
   };
 
   return (
@@ -48,7 +60,7 @@ const PreviewModal = ({ open, onClose, attachmentFile }) => {
               }}
             />
           ) : attachmentFile.type === 'application/pdf' ? ( // Comprueba si es un PDF
-          <img
+            <img
               src={'../../../public/images/file.svg'}
               alt='Preview'
               style={{
@@ -61,6 +73,9 @@ const PreviewModal = ({ open, onClose, attachmentFile }) => {
           ) : (
             <p>Formato de archivo no compatible.</p>
           ))}
+        <Button type='submit' color='primary' onClick={handleSendMessages}>
+          Send
+        </Button>
       </Box>
     </Modal>
   );

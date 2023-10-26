@@ -1,11 +1,14 @@
-import { Grid, Paper, TextField, Typography } from '@mui/material';
-import React from 'react';
+import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import PopoverField from '../../../../components/Popovers/PopoverField';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import './chatsStyles.css';
+import PictureAsPdfRoundedIcon from '@mui/icons-material/PictureAsPdfRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 const BoxMessage = ({ isResponse, type, messageContainer }) => {
-  const { value, at, readers, reaction, read, creator } = messageContainer;
+  const { value, at, readers, reaction, read, creator, typeMessage } = messageContainer;
+  const [documentName, setDocumentName] = useState('');
 
   const bubbleStyleRequest = {
     padding: '8px 16px',
@@ -20,6 +23,15 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
     maxWidth: '70%',
     borderRadius: '10px',
   };
+  useEffect(() => {
+    if (typeMessage === 'document') {
+      const url = value;
+      const parts = url.split('/');
+      const nombreDocumento = parts[parts.length - 1];
+      setDocumentName(nombreDocumento);
+    }
+  }, []);
+
   return (
     <>
       <Paper
@@ -32,18 +44,39 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
             <Typography sx={{ width: '100%', color: '#40a3c3' }}>{creator}</Typography>
           </Grid>
         )}
-        <TextField
-          className={isResponse ? 'textField2' : 'textField'}
-          value={value}
-          multiline
-          disabled={isResponse ? false : true}
-          variant='standard'
-          InputProps={{
-            disableUnderline: true,
-            readOnly: true,
-          }}
-        />
-
+        {typeMessage === 'document' ? (
+          <Grid sx={{ display: 'flex', justifyContent:'space-between' }}>
+          <Grid>
+              <PictureAsPdfRoundedIcon
+                sx={{ textAlign: 'end', mr: 1, fontSize:'30px' }}
+                color={'error'}
+              />
+            <Typography sx={{ color: 'white' }} variant='p'>
+              {documentName}
+            </Typography>
+            </Grid>
+            <Grid>
+            <a href={value} target='_blank' download>
+              <DownloadRoundedIcon
+                sx={{ textAlign: 'end', mr: 1,fontSize:'30px' }}
+                color={read === 'read' ? 'primary' : 'info'}
+              />
+            </a>
+            </Grid>
+          </Grid>
+        ) : (
+          <TextField
+            className={isResponse ? 'textField2' : 'textField'}
+            value={value}
+            multiline
+            disabled={isResponse ? false : true}
+            variant='standard'
+            InputProps={{
+              disableUnderline: true,
+              readOnly: true,
+            }}
+          />
+        )}
         <Grid
           sx={
             isResponse

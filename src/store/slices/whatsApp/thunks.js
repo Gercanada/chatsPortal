@@ -64,7 +64,7 @@ export const getUserChat = (phone) => {
       await dispatch(setOneChat(resp.data.data.data));
       if (resp) {
         // dispatch(setLoading(false));
-        return resp
+        return resp;
       }
     } catch (error) {
       console.error(error);
@@ -174,6 +174,32 @@ export const setReadMessages = (ids) => {
   };
 };
 
+export const sendFiles = (number, file) => {
+  return async (dispatch) => {
+    // dispatch(setLoading(true));
+    try {
+      const data = { recipient: number, file: file };
+      const config = {
+        method: 'post',
+        url: '/whatsapp/messages',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data: data,
+      };
+
+      const res = await immcaseApi(config);
+      if (res) {
+        //  dispatch(setLoading(false));
+        return res?.status;
+      }
+    } catch (error) {
+      return error;
+    }
+    // dispatch(setLoading(false));
+  };
+};
+
 export const updateCategoryColor = (idUser, categoryId) => {
   //alert('HOLA');
   return async (dispatch) => {
@@ -209,11 +235,11 @@ export const getMoreMessages = (id, page) => {
     //dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/messages?page=${page}&thread_id=${id}`);
-      
+
       await dispatch(setOneChat(resp.data.data));
       if (resp) {
         //dispatch(setLoading(false));
-        return resp
+        return resp;
       }
     } catch (error) {
       console.error(error);

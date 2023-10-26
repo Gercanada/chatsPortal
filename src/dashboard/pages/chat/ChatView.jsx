@@ -50,9 +50,11 @@ const ChatView = () => {
    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
    const channel = pusher.subscribe('chat');
    channel.bind('message', function (data) {
+   
     // playSound();
      allMessages.push(data);
      const jsonObject = JSON.parse(data.message);
+     if(!jsonObject.status){
      console.log('jsonObject',jsonObject)
      jsonObject.thread.contact;
      jsonObject.body;
@@ -65,16 +67,20 @@ const ChatView = () => {
        autoClose: false
      })
      loadChats()
+    }
    });
+   
  }, []);
 
   const loadChats = async () => {
     const resp = await dispatch(getUserChat(id));
+    console.log('resp',resp)
+    console.log('ididididid',id)
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
       console.log('reverrrrr', reversedArray);
       const markAsRead = reversedArray
-        .filter((item) => item.Contact === item.from) 
+        .filter((item) => item.creator === null) 
         .map((item) => item.id); 
 
       console.log('mard as read', markAsRead);

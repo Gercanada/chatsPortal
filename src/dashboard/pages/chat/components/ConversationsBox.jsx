@@ -244,17 +244,28 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   <BoxMessage
                     isResponse={true}
                     type={'text'}
-                    messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
+                    messageContainer={{
+                      value: item?.body,
+                      at: item?.at,
+                      readers: item?.readers,
+                      typeMessage: item?.type,
+                    }}
                   />
                 )
               ) : item?.type === 'audio' ? (
-                <audio controls>
-                  <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
-                </audio>
+                <Grid>
+                  <audio controls>
+                    <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
+                  </audio>
+                  <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <PopoverField values={item?.readers} title={'readers'} type={'users'} />
+                    <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                  </Grid>
+                </Grid>
               ) : (
                 <>
                   {item?.media_url.split('/')[4] === 'images' ? (
-                    <>
+                    <Grid>
                       <Typography
                         onClick={() => {
                           setOpenModal(true);
@@ -272,27 +283,34 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       >
                         <img
                           src={`https://chat.immcase.com/${item?.media_url}`}
+                          width='200px'
+                          alt=''
+                        />
+                      </Typography>
+                      <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <PopoverField values={item?.readers} title={'readers'} type={'users'} />
+                        <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid>
+                      <Typography
+                        variant='h1'
+                        component='h6'
+                        sx={{
+                          textAlign: 'center',
+                          ml: 10,
+                        }}
+                        display='flex'
+                      >
+                        <img
+                          src={`https://chat.immcase.com/${item?.media_url}`}
                           width='100px'
                           alt=''
                         />
                       </Typography>
-                    </>
-                  ) : (
-                    <Typography
-                      variant='h1'
-                      component='h6'
-                      sx={{
-                        textAlign: 'center',
-                        ml: 10,
-                      }}
-                      display='flex'
-                    >
-                      <img
-                        src={`https://chat.immcase.com/${item?.media_url}`}
-                        width='100px'
-                        alt=''
-                      />
-                    </Typography>
+                      <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                    </Grid>
                   )}
                 </>
               )}
@@ -314,6 +332,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   isResponse={false}
                   type={'text'}
                   messageContainer={{
+                    typeMessage: item?.type,
                     value: item?.body,
                     at: item?.at,
                     readers: item?.readers,
@@ -323,9 +342,12 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   }}
                 />
               ) : item?.type === 'audio' ? (
-                <audio controls>
-                  <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
-                </audio>
+                <Grid>
+                  <audio controls>
+                    <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
+                  </audio>
+                  <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                </Grid>
               ) : (
                 ''
               )}
