@@ -54,7 +54,7 @@ const ChatView = () => {
     // playSound();
      allMessages.push(data);
      const jsonObject = JSON.parse(data.message);
-     if(!jsonObject.status){
+     if(jsonObject.body){
      console.log('jsonObject',jsonObject)
      jsonObject.thread.contact;
      jsonObject.body;
@@ -73,7 +73,7 @@ const ChatView = () => {
  }, []);
 
   const loadChats = async () => {
-    const resp = await dispatch(getUserChat(id));
+    const resp = await dispatch(getUserChat(thread));
     console.log('resp',resp)
     console.log('ididididid',id)
     if (resp) {

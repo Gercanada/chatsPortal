@@ -60,7 +60,7 @@ export const getUserChat = (phone) => {
   return async (dispatch) => {
     //dispatch(setLoading(true));
     try {
-      const resp = await immcaseApi.get(`/whatsapp/messages?contact=${phone}`);
+      const resp = await immcaseApi.get(`/whatsapp/messages?thread_id=${phone}`);
       await dispatch(setOneChat(resp.data.data.data));
       if (resp) {
         // dispatch(setLoading(false));
@@ -264,5 +264,36 @@ export const getMoreChats = (page) => {
     } finally {
       dispatch(setLoading(false));
     }
+  };
+};
+
+
+export const updateContactNameThread = (idUser, name) => {
+
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+    try {
+      let dataForPost = {
+        id: parseInt(idUser),
+        name: name,
+      };
+      const config = {
+        method: 'put',
+        url: `/whatsapp/threads/${idUser}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: dataForPost,
+      };
+
+      const res = await immcaseApi(config);
+      if (res) {
+        dispatch(setLoading(false));
+        return res.status;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    dispatch(setLoading(false));
   };
 };

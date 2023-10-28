@@ -256,7 +256,7 @@ export default function Navigator(props) {
                           sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
                           onClick={(event) => {
                             event.stopPropagation();
-                            navigateTo(`/chat/${item.number}/${item.id}/${item.name}`);
+                            navigateTo(`/chat/${item.client_phone_number}/${item.id}/${item.name}`);
                             handleTheme(account?.name);
                             localStorage.setItem('chat_account_type', account?.name);
                           }}
@@ -264,7 +264,7 @@ export default function Navigator(props) {
                           <Grid sx={{ display: 'flex' }}>
                             <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
                               <Typography>{item.name && `${item?.name}`}</Typography>
-                              <Typography>{`${item?.number} `}</Typography>
+                              <Typography>{`${item?.client_phone_number} `}</Typography>
                             </Grid>
                           </Grid>
                           {item?.unread > 0 ? <AdjustIcon /> : ''}
