@@ -7,9 +7,8 @@ import PictureAsPdfRoundedIcon from '@mui/icons-material/PictureAsPdfRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 const BoxMessage = ({ isResponse, type, messageContainer }) => {
-  const { value, at, readers, reaction, read, creator, typeMessage } = messageContainer;
+  const { value, at, readers, reaction, read, creator, typeMessage, mediaUrl } = messageContainer;
   const [documentName, setDocumentName] = useState('');
-
   const bubbleStyleRequest = {
     padding: '8px 16px',
     marginBottom: '8px',
@@ -24,7 +23,7 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
     borderRadius: '10px',
   };
   useEffect(() => {
-    if (typeMessage === 'document') {
+    if (typeMessage === 'document' ) {
       const url = value;
       const parts = url.split('/');
       const nombreDocumento = parts[parts.length - 1];
@@ -51,7 +50,7 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
                 sx={{ textAlign: 'end', mr: 1, fontSize:'30px' }}
                 color={'error'}
               />
-            <Typography sx={{ color: 'white' }} variant='p'>
+            <Typography sx={isResponse === false ?{ color: 'white' }:{ color: 'grey' }} variant='p'>
               {documentName}
             </Typography>
             </Grid>
@@ -59,7 +58,7 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
             <a href={value} target='_blank' download>
               <DownloadRoundedIcon
                 sx={{ textAlign: 'end', mr: 1,fontSize:'30px' }}
-                color={read === 'read' ? 'primary' : 'info'}
+                color={'black'}
               />
             </a>
             </Grid>

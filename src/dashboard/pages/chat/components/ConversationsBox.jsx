@@ -240,6 +240,18 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       </Grid>
                     </Paper>
                   </>
+                ) : item?.type === 'document' ? (
+                  <BoxMessage
+                    isResponse={true}
+                    type={'text'}
+                    messageContainer={{
+                      value: `https://betachat.immcase.com/${item?.media_url}44444`,
+                      at: item?.at,
+                      readers: item?.readers,
+                      typeMessage: item?.type,
+                      mediaUrl: item?.url,
+                    }}
+                  />
                 ) : (
                   <BoxMessage
                     isResponse={true}
@@ -249,19 +261,35 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       at: item?.at,
                       readers: item?.readers,
                       typeMessage: item?.type,
+                      mediaUrl: item?.url,
                     }}
                   />
                 )
               ) : item?.type === 'audio' ? (
                 <Grid>
                   <audio controls>
-                    <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
+                    <source
+                      src={`https://betachat.immcase.com/${item?.media_url}`}
+                      type='audio/ogg'
+                    />
                   </audio>
                   <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <PopoverField values={item?.readers} title={'readers'} type={'users'} />
                     <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
                   </Grid>
                 </Grid>
+              ) : item?.type === 'document' ? (
+                <BoxMessage
+                  isResponse={true}
+                  type={'text'}
+                  messageContainer={{
+                    value: `https://betachat.immcase.com/${item?.media_url}44444`,
+                    at: item?.at,
+                    readers: item?.readers,
+                    typeMessage: item?.type,
+                    mediaUrl: item?.url,
+                  }}
+                />
               ) : (
                 <>
                   {item?.media_url.split('/')[4] === 'images' ? (
@@ -269,7 +297,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       <Typography
                         onClick={() => {
                           setOpenModal(true);
-                          setMediaUrl(item?.media_url);
+                          setMediaUrl(`https://betachat.immcase.com/${item?.media_url}`);
                         }}
                         variant='h1'
                         component='h6'
@@ -282,7 +310,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         display='flex'
                       >
                         <img
-                          src={`https://chat.immcase.com/${item?.media_url}`}
+                          src={`https://betachat.immcase.com/${item?.media_url}`}
                           width='200px'
                           alt=''
                         />
@@ -304,7 +332,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         display='flex'
                       >
                         <img
-                          src={`https://chat.immcase.com/${item?.media_url}`}
+                          src={`https://betachat.immcase.com/${item?.media_url}`}
                           width='100px'
                           alt=''
                         />
@@ -327,7 +355,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 justifyContent: 'end',
               }}
             >
-              {item?.has_media === 0 ? (
+              {item?.has_media === 0 && item.type === 'text'? (
                 <BoxMessage
                   isResponse={false}
                   type={'text'}
@@ -344,9 +372,36 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
               ) : item?.type === 'audio' ? (
                 <Grid>
                   <audio controls>
-                    <source src={`https://chat.immcase.com/${item?.media_url}`} type='audio/ogg' />
+                    <source
+                      src={`https://betachat.immcase.com/${item?.media_url}`}
+                      type='audio/ogg'
+                    />
                   </audio>
                   <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                </Grid>
+              ) : item?.type === 'image' ? (
+                <Grid>
+                  <Typography
+                    onClick={() => {
+                      setOpenModal(true);
+                      setMediaUrl(item?.body);
+                    }}
+                    variant='h1'
+                    component='h6'
+                    sx={{
+                      textAlign: 'center',
+                      ml: 10,
+                      border: '2px white solid',
+                      cursor: 'pointer',
+                    }}
+                    display='flex'
+                  >
+                    <img src={`${item?.body}`} width='200px' alt='' />
+                  </Typography>
+                  <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <PopoverField values={item?.readers} title={'readers'} type={'users'} />
+                    <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                  </Grid>
                 </Grid>
               ) : (
                 ''

@@ -60,16 +60,15 @@ const ChatView = () => {
      jsonObject.body;
      setNotificationBody(jsonObject.body);
      setNotificationContact(jsonObject.thread.contact);
-    //  toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
-    //    autoClose: false
-    //  })
-      toast.error(t(`new_message`),{
+     toast.error(`${jsonObject.account.name}\n${jsonObject.from}:${jsonObject.body}`,{
        autoClose: false
      })
+    //   toast.error(t(`new_message`),{
+    //    autoClose: false
+    //  })
      loadChats()
     }
    });
-   
  }, []);
 
   const loadChats = async () => {

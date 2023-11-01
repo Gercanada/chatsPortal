@@ -63,7 +63,7 @@ export default function Navigator(props) {
     navigate(url);
   };
 
-  console.log('cchatsukis',chatsAccount);
+  console.log('cchatsukis', chatsAccount);
 
   const handleAccount = (id, event, theme) => {
     if (
@@ -164,137 +164,146 @@ export default function Navigator(props) {
         {phoneAccounts &&
           phoneAccounts?.map((account, index) => (
             <React.Fragment>
-{account?.name !== 'Test Number' &&
-            
-            <Accordion
-              key={index}
-              expanded={expanded === index}
-              name={'organization'}
-              onChange={handleChange(index)}
-              sx={{ boxShadow: '0', background: 'inherit' }}
-              onClick={(event) => {
-                handleAccount(account?.id, event);
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1a-content'
-                id='panel1a-header'
-              >
-                {account?.name === 'Vivetel Networks Ltd' ? (
-                  <img src='/images/ViveTel.png' width='40px' alt='' />
-                ) : account?.name === 'ViveCanada Edu Services LTD' ? (
-                  <img src='/images/ViveCanada.png' width='40px' alt='' />
-                ) : account?.name === 'Test Number' ? (
-                  <img src='/images/labores.png' width='40px' alt='' />
-                ) : account?.name === 'Immcase Digital Solutions Ltd' ? (
-                  <img src='/images/ImmCaseChat.png' width='40px' alt='' />
-                ) : account?.name === 'Easy Eta by Ger Canada' ? (
-                  <img src='/images/GerCanadaChat.png' width='40px' alt='' />
-                ) : (
-                  ''
-                )}
-                <Typography sx={{ m: 1 }}>
-                  {account?.name === 'ViveCanada Edu Services LTD'
-                    ? 'ViveCanada'
-                    : account?.name === 'Vivetel Networks Ltd'
-                    ? 'ViveTel'
-                    : account?.name === 'Immcase Digital Solutions Ltd'
-                    ? 'Immcase'
-                    : account?.name === 'Easy Eta by Ger Canada'
-                    ? 'GerCanada'
-                    : account?.name}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{
-                  paddingBottom: '8px',
-                  px: 0,
-                  overflow: 'auto',
-                  maxHeight: '500px',
-                }}
-              >
-                <Grid
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    mb: 1,
-                    justifyContent: 'space-around',
-                  }}
+              {account?.name !== '' && (
+                <Accordion
                   key={index}
+                  expanded={expanded === index}
+                  name={'organization'}
+                  onChange={handleChange(index)}
+                  sx={{ boxShadow: '0', background: 'inherit' }}
+                  onClick={(event) => {
+                    handleAccount(account?.id, event);
+                  }}
                 >
-                  <Button
-                    name={'newChat'}
-                    id={index}
-                    sx={{ width: '100%', display: 'flex' }}
-                    onClick={() => {
-                      setOpenModalContact(true);
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls='panel1a-content'
+                    id='panel1a-header'
+                  >
+                    {account?.name === 'Vivetel Networks Ltd' ? (
+                      <img src='/images/ViveTel.png' width='40px' alt='' />
+                    ) : account?.name === 'ViveCanada Edu Services LTD' ? (
+                      <img src='/images/ViveCanada.png' width='40px' alt='' />
+                    ) : account?.name === 'Test Number' ? (
+                      <img src='/images/labores.png' width='40px' alt='' />
+                    ) : account?.name === 'Immcase Digital Solutions Ltd' ? (
+                      <img src='/images/ImmCaseChat.png' width='40px' alt='' />
+                    ) : account?.name === 'Easy Eta by Ger Canada' ? (
+                      <img src='/images/GerCanadaChat.png' width='40px' alt='' />
+                    ) : (
+                      ''
+                    )}
+                    <Typography sx={{ m: 1 }}>
+                      {account?.name === 'ViveCanada Edu Services LTD'
+                        ? 'ViveCanada'
+                        : account?.name === 'Vivetel Networks Ltd'
+                        ? 'ViveTel'
+                        : account?.name === 'Immcase Digital Solutions Ltd'
+                        ? 'Immcase'
+                        : account?.name === 'Easy Eta by Ger Canada'
+                        ? 'GerCanada'
+                        : account?.name}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      paddingBottom: '8px',
+                      px: 0,
+                      overflow: 'auto',
+                      maxHeight: '500px',
                     }}
                   >
                     <Grid
-                      sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        mb: 1,
+                        justifyContent: 'space-around',
+                      }}
+                      key={index}
                     >
-                      <AddCommentOutlinedIcon sx={{ mr: 3 }} fontSize='small' />
-                      <Typography>{t('new_chat')}</Typography>
-                    </Grid>
-                  </Button>
-                </Grid>
-                {chatsAccount &&
-                  chatsAccount?.map((item, index) => (
-                    <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
-                      <>
-                        <Circle
-                          id={item?.id}
-                          selected={item?.category?.color !== 'gray'}
-                          values={categoriesColors}
-                          onClick={handleSetChatCategory}
-                          color={item?.category?.color}
-                        />
-                        <Button
-                          name={item.number}
-                          id={index}
-                          sx={{ width: '100%', display: 'flex', justifyContent: 'space-around' }}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            navigateTo(`/chat/${item.client_phone_number}/${item.id}/${item.name}`);
-                            handleTheme(account?.name);
-                            localStorage.setItem('chat_account_type', account?.name);
+                      <Button
+                        name={'newChat'}
+                        id={index}
+                        sx={{ width: '100%', display: 'flex' }}
+                        onClick={() => {
+                          setOpenModalContact(true);
+                        }}
+                      >
+                        <Grid
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
                           }}
                         >
-                          <Grid sx={{ display: 'flex' }}>
-                            <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
-                              <Typography>{item.name && `${item?.name}`}</Typography>
-                              <Typography>{`${item?.client_phone_number} `}</Typography>
-                            </Grid>
-                          </Grid>
-                          {item?.unread > 0 ? <AdjustIcon /> : ''}
-                        </Button>
-                      </>
+                          <AddCommentOutlinedIcon sx={{ mr: 3 }} fontSize='small' />
+                          <Typography>{t('new_chat')}</Typography>
+                        </Grid>
+                      </Button>
                     </Grid>
-                  ))}
-              </AccordionDetails>
-              {pageNumber < hasMoreChats && (
-                <Grid
-                  onClick={loadMoreChats}
-                  sx={{
-                    width: '35px',
-                    height: '35px',
-                    borderRadius: '50%',
-                    backgroundColor: 'gray',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    textAlign: 'center',
-                    margin: 'auto',
-                    color: 'white',
-                  }}
-                >
-                  <ArrowDownwardIcon sx={{ margin: 'auto' }} />
-                </Grid>
+                    {chatsAccount &&
+                      chatsAccount?.map((item, index) => (
+                        <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
+                          <>
+                            <Circle
+                              id={item?.id}
+                              selected={item?.category?.color !== 'gray'}
+                              values={categoriesColors}
+                              onClick={handleSetChatCategory}
+                              color={item?.category?.color}
+                            />
+                            <Button
+                              name={item.number}
+                              id={index}
+                              sx={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-around',
+                              }}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                navigateTo(
+                                  `/chat/${item.client_phone_number}/${item.id}/${item.name}`,
+                                );
+                                handleTheme(account?.name);
+                                localStorage.setItem('chat_account_type', account?.name);
+                              }}
+                            >
+                              <Grid sx={{ display: 'flex' }}>
+                                <Grid display={'flex'} sx={{ flexDirection: 'column' }}>
+                                  <Typography>{item.name && `${item?.name}`}</Typography>
+                                  <Typography>{`${item?.client_phone_number} `}</Typography>
+                                </Grid>
+                              </Grid>
+                              {item?.unread > 0 ? <AdjustIcon /> : ''}
+                            </Button>
+                          </>
+                        </Grid>
+                      ))}
+                  </AccordionDetails>
+                  {pageNumber < hasMoreChats && (
+                    <Grid
+                      onClick={loadMoreChats}
+                      sx={{
+                        width: '35px',
+                        height: '35px',
+                        borderRadius: '50%',
+                        backgroundColor: 'gray',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                        textAlign: 'center',
+                        margin: 'auto',
+                        color: 'white',
+                      }}
+                    >
+                      <ArrowDownwardIcon sx={{ margin: 'auto' }} />
+                    </Grid>
+                  )}
+                </Accordion>
               )}
-            </Accordion>
-     }
             </React.Fragment>
           ))}
         <Accordion>

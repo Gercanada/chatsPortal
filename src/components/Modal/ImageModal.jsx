@@ -70,7 +70,7 @@ const ImageModal = ({ open, onClose, imageUrl, title, onSubmit, toScreen }) => {
 
   const handleDownloadImage = () => {
     // Construct the full image URL
-    const imageUrlFull = `https://chat.immcase.com/${imageUrl}`;
+    const imageUrlFull = imageUrl;
 
     // Create an anchor element for download
     const downloadLink = document.createElement('a');
@@ -100,7 +100,7 @@ const ImageModal = ({ open, onClose, imageUrl, title, onSubmit, toScreen }) => {
             width: '90%',
             height: '60%',
           }}
-          src={`https://chat.immcase.com/${imageUrl}`}
+          src={imageUrl}
           className='image'
         />
 
