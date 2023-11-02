@@ -60,8 +60,13 @@ const ChatView = () => {
      jsonObject.body;
      setNotificationBody(jsonObject.body);
      setNotificationContact(jsonObject.thread.contact);
-     toast.error(`${jsonObject.account.name}\n${jsonObject.from}:${jsonObject.body}`,{
-       autoClose: false
+     if(jsonObject.account){
+      toast.error(`${jsonObject.account.name}\n${jsonObject.from}:${jsonObject.body}`,{
+      timeout: 1500000
+      })
+     }
+     toast.error(`${jsonObject.from}:${jsonObject.body}`,{
+      timeout: 15000000
      })
     //   toast.error(t(`new_message`),{
     //    autoClose: false

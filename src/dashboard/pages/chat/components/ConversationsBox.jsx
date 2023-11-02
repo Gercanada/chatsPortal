@@ -283,7 +283,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   isResponse={true}
                   type={'text'}
                   messageContainer={{
-                    value: `https://betachat.immcase.com/${item?.media_url}44444`,
+                    value: `https://betachat.immcase.com/${item?.media_url}`,
                     at: item?.at,
                     readers: item?.readers,
                     typeMessage: item?.type,
