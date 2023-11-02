@@ -31,11 +31,10 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
 
   const { userFiles } = useSelector((state) => state.whatsApp);
 
-
-  const menuAttachments =[
-    {attachment:"images",icon:<ImageRoundedIcon color='primary'/>, type:'image/*' },
-    {attachment:"file", icon:<DescriptionRoundedIcon color='error'/>, type:'*/*'  },
-  ]
+  const menuAttachments = [
+    { attachment: 'images', icon: <ImageRoundedIcon color='primary' />, type: 'image/*' },
+    { attachment: 'file', icon: <DescriptionRoundedIcon color='error' />, type: '*/*' },
+  ];
 
   useEffect(() => {
     dispatch(getUserFiles(thread));
@@ -54,8 +53,8 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
   };
 
   const handleSendMessage = async () => {
-    // setValueMessage('');
-    // setHasChange(true);
+    setValueMessage('');
+    setHasChange(true);
     if (audioMessage) {
       setIsAudioOpen(false);
       const audio = audioMessage.replace('blob:', '');
@@ -83,39 +82,44 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
       setIsAudio(false);
     }
   };
+  
   console.log('audioMessageaudioMessage', audioMessage);
-
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Evita que el formulario se envíe automáticamente y la página se refresque.
+    handleSendMessage(); // Llama a tu función de envío de mensajes aquí.
+  };
   return (
     <Grid>
-      <Card sx={{ justifyContent: 'space-around', display: 'flex' }}>
-        <Grid sx={{ mt:2.5,ml:1}}>
-          <PopoverItems
-            icon={<AddIcon/>}
-            attachments={menuAttachments}
-            values={userFiles && userFiles}
-            title={'files'}
-            type={'files'}
+      <form onSubmit={handleSubmit}>
+        <Card sx={{ justifyContent: 'space-around', display: 'flex' }}>
+          <Grid sx={{ mt: 2.5, ml: 1 }}>
+            <PopoverItems
+              icon={<AddIcon />}
+              attachments={menuAttachments}
+              values={userFiles && userFiles}
+              title={'files'}
+              type={'files'}
+            />
+          </Grid>
+          <TextField
+            onChange={() => {
+              handleOnchange(event);
+            }}
+            value={valueMessage}
+            sx={{ m: 1, width: '80%' }}
+            variant='outlined'
           />
-        </Grid>
-        <TextField
-          onChange={() => {
-            handleOnchange(event);
-          }}
-          value={valueMessage}
-          sx={{ m: 1, width: '80%' }}
-          variant='outlined'
-        />
-        <IconButton
-         // disabled={hasMessage}
-          onClick={handleSendMessage}
-          aria-label='delete'
-          size='large'
-          color='success'
-          type='submit'
-        >
-          <SendIcon />
-        </IconButton>
-      </Card>
+          <Button
+            disabled={hasMessage}
+          //  onClick={handleSendMessage}
+            aria-label='delete'
+            size='large'
+            color='success'
+          >
+            <SendIcon />
+          </Button>
+        </Card>
+      </form>
     </Grid>
   );
 };

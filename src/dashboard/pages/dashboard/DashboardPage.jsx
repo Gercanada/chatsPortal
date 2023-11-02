@@ -44,6 +44,56 @@ export const DashboardPage = () => {
   };
    const allMessages = [];
 
+   useEffect(() => {
+    //Pusher.logToConsole = true;
+    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+    const channel = pusher.subscribe('chat');
+    channel.bind('message', function (data) {
+      // playSound();
+      allMessages.push(data);
+      const jsonObject = JSON.parse(data.message);
+      if (jsonObject.body) {
+        console.log('jsonObject', jsonObject);
+        jsonObject.thread.contact;
+        jsonObject.body;
+        setNotificationBody(jsonObject.body);
+        setNotificationContact(jsonObject.thread.contact);
+        let color = '';
+        let company = '';
+        jsonObject.account.name === 'Vivetel Networks Ltd'
+          ? ((company = <img src='/images/ViveTel.png' width='30px' alt='' />), (color = 'blue'))
+          : jsonObject.account.name === 'ViveCanada Edu Services LTD'
+          ? ((company = <img src='/images/ViveCanada.png' width='30px' alt='' />),
+            (color = 'orange'))
+          : jsonObject.account.name === 'Test Number'
+          ? ((company = <img src='/images/labores.png' width='30px' alt='' />), (color = 'blue'))
+          : jsonObject.account.name === 'Immcase Digital Solutions Ltd'
+          ? ((company = <img src='/images/ImmCaseChat.png' width='30px' alt='' />),
+            (color = 'green'))
+          : jsonObject.account.name === 'Easy Eta by Ger Canada'
+          ? ((company = <img src='/images/GerCanadaChat.png' width='30px' alt='' />),
+            (color = 'purple'))
+          : '';
+
+        const toastStyle = {
+          backgroundColor: color,
+        };
+        if (jsonObject.account) {
+          toast.error(`${jsonObject.account.name}\n${jsonObject.thread.name}:${jsonObject.body}`, {
+            autoClose: 20000,
+            icon: company,
+            // style:toastStyle,
+            progressStyle: toastStyle,
+          });
+        } else {
+          toast.error(`${jsonObject.from}:${jsonObject.body}`, {
+            autoClose: 20000,
+          });
+        }
+      }
+    });
+  }, []);
+
   // useEffect(() => {
   //   console.log('aqui sss4444444444444444sss');
  

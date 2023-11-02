@@ -129,6 +129,7 @@ export default function Navigator(props) {
       setChatsAccount(resp?.data?.data?.data);
       setHasMoreChats(resp?.data?.data?.last_page);
     }
+    console.log("holaaresp",resp)
   };
   const loadMoreChats = async () => {
     const pageNumberCounter = pageNumber + 1;
@@ -150,6 +151,39 @@ export default function Navigator(props) {
     loadChats();
   }, [idAccount, isInto, changeAccount]);
 
+  useEffect(() => {
+    //Pusher.logToConsole = true;
+    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+    const channel = pusher.subscribe('chat');
+    let userThread = '';
+    channel.bind('message', function (data) {
+      // playSound();
+      // allMessages.push(data);
+      const jsonObject = JSON.parse(data.message);
+      loadChats()
+      console.log("holaaaa")
+      if (jsonObject.body) {
+        userThread = jsonObject.thread.id;
+     //   loadChats()
+        // if (jsonObject.account) {
+        //   toast.error(`${'\n'}${jsonObject.thread.name}:${jsonObject.body}`, {
+        //     autoClose: 20000,
+        //     icon: company,
+        //     // style:toastStyle,
+        //     progressStyle: toastStyle,
+        //   });
+        // } else {
+        //   toast.error(`${jsonObject.from}:${jsonObject.body}`, {
+        //     autoClose: 20000,
+        //   });
+        // }
+        // if (userThread === thread) {
+        //   loadChats();
+        // }
+      }
+    });
+  }, []);
+
   return (
     <Drawer variant='permanent' {...other}>
       <List disablePadding>
@@ -162,7 +196,7 @@ export default function Navigator(props) {
         >
           <img src='/images/vivechat.png' width='75px' alt='' />
         </Typography>
-        <Typography>{t('conversations')}</Typography>
+        {/* <Typography>{t('conversations')}</Typography> */}
         {phoneAccounts &&
           phoneAccounts?.map(
             (account, index) => (
@@ -185,15 +219,15 @@ export default function Navigator(props) {
                         id='panel1a-header'
                       >
                         {account?.name === 'Vivetel Networks Ltd' ? (
-                          <img src='/images/ViveTel.png' width='40px' alt='' />
+                          <img src='/images/ViveTel.png' width='30px' alt='' />
                         ) : account?.name === 'ViveCanada Edu Services LTD' ? (
-                          <img src='/images/ViveCanada.png' width='40px' alt='' />
+                          <img src='/images/ViveCanada.png' width='30px' alt='' />
                         ) : account?.name === 'Test Number' ? (
-                          <img src='/images/labores.png' width='40px' alt='' />
+                          <img src='/images/labores.png' width='30px' alt='' />
                         ) : account?.name === 'Immcase Digital Solutions Ltd' ? (
-                          <img src='/images/ImmCaseChat.png' width='40px' alt='' />
+                          <img src='/images/ImmCaseChat.png' width='30px' alt='' />
                         ) : account?.name === 'Easy Eta by Ger Canada' ? (
-                          <img src='/images/GerCanadaChat.png' width='40px' alt='' />
+                          <img src='/images/GerCanadaChat.png' width='30px' alt='' />
                         ) : (
                           ''
                         )}

@@ -44,49 +44,69 @@ const ChatView = () => {
   };
   const allMessages = [];
 
- useEffect(() => {
+  useEffect(() => {
+    //Pusher.logToConsole = true;
+    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+    const channel = pusher.subscribe('chat');
+    let userThread = '';
+    channel.bind('message', function (data) {
+      // playSound();
+      allMessages.push(data);
+      const jsonObject = JSON.parse(data.message);
+      if (jsonObject.body) {
+        console.log('jsonObject', jsonObject);
+        jsonObject.thread.contact;
+        jsonObject.body;
+        setNotificationBody(jsonObject.body);
+        setNotificationContact(jsonObject.thread.contact);
+        userThread = jsonObject.thread.id;
+        let color = '';
+        let company = '';
+        jsonObject.account.name === 'Vivetel Networks Ltd'
+          ? ((company = <img src='/images/ViveTel.png' width='30px' alt='' />), (color = 'blue'))
+          : jsonObject.account.name === 'ViveCanada Edu Services LTD'
+          ? ((company = <img src='/images/ViveCanada.png' width='30px' alt='' />),
+            (color = 'orange'))
+          : jsonObject.account.name === 'Test Number'
+          ? ((company = <img src='/images/labores.png' width='30px' alt='' />), (color = 'blue'))
+          : jsonObject.account.name === 'Immcase Digital Solutions Ltd'
+          ? ((company = <img src='/images/ImmCaseChat.png' width='30px' alt='' />),
+            (color = 'green'))
+          : jsonObject.account.name === 'Easy Eta by Ger Canada'
+          ? ((company = <img src='/images/GerCanadaChat.png' width='30px' alt='' />),
+            (color = 'purple'))
+          : '';
 
-   //Pusher.logToConsole = true;
-   const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
-   const channel = pusher.subscribe('chat');
-   channel.bind('message', function (data) {
-   
-    // playSound();
-     allMessages.push(data);
-     const jsonObject = JSON.parse(data.message);
-     if(jsonObject.body){
-     console.log('jsonObject',jsonObject)
-     jsonObject.thread.contact;
-     jsonObject.body;
-     setNotificationBody(jsonObject.body);
-     setNotificationContact(jsonObject.thread.contact);
-     if(jsonObject.account){
-      toast.error(`${jsonObject.account.name}\n${jsonObject.from}:${jsonObject.body}`,{
-      timeout: 1500000
-      })
-     }
-     toast.error(`${jsonObject.from}:${jsonObject.body}`,{
-      timeout: 15000000
-     })
-    //   toast.error(t(`new_message`),{
-    //    autoClose: false
-    //  })
-     loadChats()
-    }
-   });
- }, []);
+        const toastStyle = {
+          backgroundColor: color,
+        };
+        if (jsonObject.account) {
+          toast.error(`${'\n'}${jsonObject.thread.name}:${jsonObject.body}`, {
+            autoClose: 20000,
+            icon: company,
+            // style:toastStyle,
+            progressStyle: toastStyle,
+          });
+        } else {
+          toast.error(`${jsonObject.from}:${jsonObject.body}`, {
+            autoClose: 20000,
+          });
+        }
+        if (userThread === thread) {
+          loadChats();
+        }
+      }
+    });
+  }, []);
 
   const loadChats = async () => {
     const resp = await dispatch(getUserChat(thread));
-    console.log('resp',resp)
-    console.log('ididididid',id)
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
       console.log('reverrrrr', reversedArray);
       const markAsRead = reversedArray
-        .filter((item) => item.creator === null) 
-        .map((item) => item.id); 
-
+        .filter((item) => item.creator === null)
+        .map((item) => item.id);
       console.log('mard as read', markAsRead);
       dispatch(setReadMessages(markAsRead));
       setSortMessages(reversedArray);

@@ -130,6 +130,20 @@ export const getUserFiles = (thread) => {
   };
 };
 
+export const getContactThread = (thread) => {
+  return async (dispatch) => {
+    try {
+      const resp = await immcaseApi.get(`/whatsapp/threads?search[number]=${thread}`);
+      if (resp) {
+        return resp.data;
+      }
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+  };
+};
+
 export const getSwitchAccount = (id) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
@@ -267,9 +281,7 @@ export const getMoreChats = (page) => {
   };
 };
 
-
 export const updateContactNameThread = (idUser, name) => {
-
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
