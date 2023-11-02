@@ -9,6 +9,7 @@ import ImageModal from '../../../../components/Modal/ImageModal';
 import { useTranslation } from 'react-i18next';
 import BoxMessage from './BoxMessage';
 
+
 export const styles = {
   root: {
     background: 'black',
@@ -20,6 +21,7 @@ export const styles = {
 
 const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats }) => {
   const newMessageRef = useRef(null);
+  const baseURLFiles = import.meta.env.VITE_IMMCASE_CHAT_FILES
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const gridRef = useRef(null);
@@ -34,7 +36,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const memoizedLoadMoreChats = useCallback(() => {
     loadMoreChats();
   }, [loadMoreChats]);
-
+console.log("baseeee",baseURLFiles)
   const handleIntersection = (entries) => {
     const entry = entries[0];
     if (entry.isIntersecting) {
@@ -245,7 +247,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                     isResponse={true}
                     type={'text'}
                     messageContainer={{
-                      value: `https://betachat.immcase.com/${item?.media_url}44444`,
+                      value: `${baseURLFiles}${item?.media_url}`,
                       at: item?.at,
                       readers: item?.readers,
                       typeMessage: item?.type,
@@ -269,7 +271,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 <Grid>
                   <audio controls>
                     <source
-                      src={`https://betachat.immcase.com/${item?.media_url}`}
+                      src={ `${baseURLFiles}${item?.media_url}`}
                       type='audio/ogg'
                     />
                   </audio>
@@ -283,7 +285,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   isResponse={true}
                   type={'text'}
                   messageContainer={{
-                    value: `https://betachat.immcase.com/${item?.media_url}`,
+                    value:  `${baseURLFiles}${item?.media_url}`,
                     at: item?.at,
                     readers: item?.readers,
                     typeMessage: item?.type,
@@ -297,7 +299,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       <Typography
                         onClick={() => {
                           setOpenModal(true);
-                          setMediaUrl(`https://betachat.immcase.com/${item?.media_url}`);
+                          setMediaUrl( `${baseURLFiles}${item?.media_url}`);
                         }}
                         variant='h1'
                         component='h6'
@@ -310,7 +312,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         display='flex'
                       >
                         <img
-                          src={`https://betachat.immcase.com/${item?.media_url}`}
+                          src={ `${baseURLFiles}${item?.media_url}`}
                           width='200px'
                           alt=''
                         />
@@ -332,7 +334,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         display='flex'
                       >
                         <img
-                          src={`https://betachat.immcase.com/${item?.media_url}`}
+                          src={ `${baseURLFiles}${item?.media_url}`}
                           width='100px'
                           alt=''
                         />
@@ -373,7 +375,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 <Grid>
                   <audio controls>
                     <source
-                      src={`https://betachat.immcase.com/${item?.media_url}`}
+                      src={ `${baseURLFiles}${item?.media_url}`}
                       type='audio/ogg'
                     />
                   </audio>
