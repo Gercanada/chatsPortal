@@ -93,7 +93,7 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
               isResponse ? { textAlign: 'end', mr: 1 } : { textAlign: 'end', mr: 1, color: 'white' }
             }
           >
-          {at.split(' ')[1]}
+          {at}
           </Typography>
           {isResponse === false && (
             <DoneAllIcon

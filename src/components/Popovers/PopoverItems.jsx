@@ -98,8 +98,8 @@ const PopoverItems = ({
             </Button>
           </Box>
           <Grid item sx={{ ml: 1, mr: 1, display: 'flex', flexDirection: 'column' }}>
-            {attachments.map((attach) => (
-              <Grid sx={{ display: 'flex', flexDirection: 'row' }}>
+            {attachments.map((attach,index) => (
+              <Grid sx={{ display: 'flex', flexDirection: 'row' }} key={index}>
                 <TextField
                   // inputProps={{ accept: `${attach.type}` }}
                   style={{ display: 'none' }}

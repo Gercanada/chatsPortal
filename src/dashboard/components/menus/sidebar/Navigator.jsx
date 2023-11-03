@@ -92,15 +92,14 @@ export default function Navigator(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    dispatch(getChats());
-
-    setIsInto(false);
-    if (chats?.data) {
-      let value = chats?.data;
-      setChatsAccount(chats?.data);
-    }
-  }, [idAccount, isInto]);
+  // useEffect(() => {
+  //   dispatch(getChats());
+  //   setIsInto(false);
+  //   if (chats?.data) {
+  //     let value = chats?.data;
+  //     setChatsAccount(chats?.data);
+  //   }
+  // }, [idAccount, isInto]);
 
   useEffect(() => {
     if (chats) {
@@ -144,7 +143,6 @@ export default function Navigator(props) {
     loadChats();
   }, [idAccount, isInto, changeAccount]);
 
-
   useEffect(() => {
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
     const channel = pusher.subscribe('chat');
@@ -172,7 +170,7 @@ export default function Navigator(props) {
         </Typography>
         {phoneAccounts &&
           phoneAccounts?.map((account, index) => (
-            <React.Fragment>
+            <React.Fragment key={index}>
               {account?.name !== '' && (
                 <Accordion
                   key={index}

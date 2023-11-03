@@ -12,9 +12,12 @@ import {
 import ModalForm from '../../../../components/Modal/ModalForm';
 import ModalField from '../../../../components/Modal/ModalField';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 const ConversationNavbar = ({ user }) => {
   const { id, thread } = useParams();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { userFiles } = useSelector((state) => state.whatsApp);
   const [openModal, setOpenModal] = useState(false);
@@ -25,11 +28,12 @@ const ConversationNavbar = ({ user }) => {
   }, [id]);
 
   const details = [{ name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value: '' }];
+
   const onClose = () => {
     setOpenModal(false);
   };
 
-  const onSubmitCreateContact = async (formDataParam) => {;
+  const onSubmitCreateContact = async (formDataParam) => {
     const resp= await dispatch(updateContactNameThread(thread, formDataParam.name));
     if(resp===200){
       onClose();
@@ -54,14 +58,17 @@ const ConversationNavbar = ({ user }) => {
         open={openModal}
         onClose={onClose}
         dataForm={details}
-        title={'edit_name'}
+        title={t('edit_name')}
         onSubmit={onSubmitCreateContact}
         isEdit={false}
       />
       <Card className='navbar_chat'>
-        <Avatar alt='user_photo' src={''} />
-        <Grid onClick={() => setOpenModal(true)}>
-          <Typography sx={{ m: 1 }}>{contactName}</Typography>
+        {/* <Avatar alt='user_photo' src={''} /> */}
+        <Grid >
+          <Typography sx={{cursor:'pointer'}} onClick={() => setOpenModal(true)}>{
+            contactName ? contactName : <>{t('add_name')}<ModeEditOutlineIcon/></>
+            }</Typography>
+          <Typography>{id}</Typography>
         </Grid>
       </Card>
     </Grid>

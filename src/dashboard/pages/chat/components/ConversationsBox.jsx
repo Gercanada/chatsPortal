@@ -69,7 +69,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
 
   const memoizedMessages = useMemo(() => messages || [], [messages]);
 
-  console.log("memoizedMessages",memoizedMessages)
+  // console.log("memoizedMessages",memoizedMessages)
 
   const gridStyle = {
     position: 'relative',
@@ -312,7 +312,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       </Typography>
                       <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <PopoverField values={item?.readers} title={'readers'} type={'users'} />
-                        <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                        <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                       </Grid>
                     </Grid>
                   ) : (
@@ -332,7 +332,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                           alt=''
                         />
                       </Typography>
-                      <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                      <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                     </Grid>
                   )}
                 </>
@@ -372,7 +372,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       type='audio/ogg'
                     />
                   </audio>
-                  <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                  <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                 </Grid>
               ) : item?.type === 'image' ? (
                 <Grid>
@@ -393,9 +393,9 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   >
                     <img src={`${item?.body}`} width='200px' alt='' />
                   </Typography>
-                  <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <PopoverField values={item?.readers} title={'readers'} type={'users'} />
-                    <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                  <Grid sx={{ }}>
+                    {/* <PopoverField values={item?.readers} title={'readers'} type={'users'} /> */}
+                    <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                   </Grid>
                 </Grid>
               ) : (

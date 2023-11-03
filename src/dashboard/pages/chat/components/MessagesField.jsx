@@ -55,6 +55,7 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
   const handleSendMessage = async () => {
     setValueMessage('');
     setHasChange(true);
+    setHasMessage(true);
     if (audioMessage) {
       setIsAudioOpen(false);
       const audio = audioMessage.replace('blob:', '');
@@ -109,7 +110,7 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
             variant='outlined'
           />
           <IconButton
-             disabled={hasMessage}
+            disabled={hasMessage}
             onClick={handleSendMessage}
             aria-label='delete'
             size='large'

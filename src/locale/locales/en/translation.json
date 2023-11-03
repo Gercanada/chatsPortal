@@ -707,6 +707,9 @@
   "new_chat":"New message",
   "type_message":"Type message...",
   "phone":"Phone",
-  "new_message":"New message"
+  "new_message":"New message",
+  "add_name":"Add name",
+  "edit_name":"Edit name"
+  
   
 }
