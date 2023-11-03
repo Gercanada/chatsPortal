@@ -18,9 +18,7 @@ import Pusher from 'pusher-js';
 import { useTranslation } from 'react-i18next';
 
 const ChatView = () => {
-  // const [messagesReponseState , setMessageResponseState] = useState(onechat?.data)
   const { onechat } = useSelector((state) => state.whatsApp);
-  //const [messagesReponseState , setMessageResponseState] = useState(onechat?.data)
 
   const [sortMessages, setSortMessages] = useState([]);
   const [pageNumber, setPageNumber1] = useState(1);
@@ -45,16 +43,13 @@ const ChatView = () => {
   const allMessages = [];
 
   useEffect(() => {
-    //Pusher.logToConsole = true;
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
     const channel = pusher.subscribe('chat');
     let userThread = '';
     channel.bind('message', function (data) {
-      // playSound();
       allMessages.push(data);
       const jsonObject = JSON.parse(data.message);
       if (jsonObject.body) {
-        console.log('jsonObject', jsonObject);
         jsonObject.thread.contact;
         jsonObject.body;
         setNotificationBody(jsonObject.body);
@@ -92,7 +87,7 @@ const ChatView = () => {
             autoClose: 20000,
           });
         }
-        if (userThread === thread) {
+        if (userThread === parseInt(thread)) {
           loadChats();
         }
       }
@@ -103,11 +98,9 @@ const ChatView = () => {
     const resp = await dispatch(getUserChat(thread));
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
-      console.log('reverrrrr', reversedArray);
       const markAsRead = reversedArray
         .filter((item) => item.creator === null)
         .map((item) => item.id);
-      console.log('mard as read', markAsRead);
       dispatch(setReadMessages(markAsRead));
       setSortMessages(reversedArray);
       setHasMoreChats(resp?.data?.data?.last_page);
@@ -115,7 +108,7 @@ const ChatView = () => {
   };
   useEffect(() => {
     loadChats();
-  }, [id, hasChange]);
+  }, [id, hasChange, thread]);
 
   const sortArray = (arrayResponse) => {
     const array = arrayResponse;
@@ -131,13 +124,11 @@ const ChatView = () => {
     } else {
       page = pageNumber + 1;
     }
-    // const pageNumberCounter = pageNumber + 1;
     setPageNumber1(page);
     const response = await dispatch(getMoreMessages(thread, page));
     if (response && response?.data) {
       const reversedArray = sortArray(response?.data?.data?.data);
       const markAsRead = reversedArray?.map((item) => item.id);
-      console.log('mard as read', markAsRead);
       dispatch(setReadMessages(markAsRead));
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
       setHasMoreChats(response?.data?.data?.last_page);
@@ -147,7 +138,7 @@ const ChatView = () => {
   };
 
   useEffect(() => {
-    dispatch(getUserChat(id));
+    dispatch(getUserChat(thread));
   }, [id, thread, hasChange]);
 
   return (

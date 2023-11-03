@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { sendFiles } from '../../store/slices/whatsApp/thunks';
+import { getUserChat, sendFiles } from '../../store/slices/whatsApp/thunks';
 
 const modalStyle = {
   display: 'flex',
@@ -33,8 +33,13 @@ const PreviewModal = ({ open, onClose, attachmentFile }) => {
 
   const handleSendMessages = async () => {
     const response = await dispatch(sendFiles(id, attachmentFile));
+    console.log('responseresponse',response)
     if (response !== 200) {
       toast.error('error');
+    }else{
+      dispatch(getUserChat(thread));
+      handleClose();
+
     }
   };
 

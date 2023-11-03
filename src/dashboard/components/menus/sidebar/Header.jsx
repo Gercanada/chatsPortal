@@ -114,7 +114,6 @@ function Header(props) {
   React.useEffect(() => {
     getShowData();
   }, [userDetails, theme]);
-console.log('isLightTheme',isLightTheme)
   return (
     <React.Fragment>
       <AppBar position='sticky' elevation={0} sx={{ boxShadow: '0 0 0.5em 0 #979797' }}>

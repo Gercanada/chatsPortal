@@ -40,7 +40,7 @@ export const sendMessage = (recipient, message) => {
 
 export const getChats = () => {
   return async (dispatch) => {
-    dispatch(setLoading(true));
+   // dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get('/whatsapp/threads');
       await dispatch(setChats(resp?.data?.data));
@@ -52,7 +52,7 @@ export const getChats = () => {
       console.error(error);
       return error;
     }
-    dispatch(setLoading(false));
+   // dispatch(setLoading(false));
   };
 };
 

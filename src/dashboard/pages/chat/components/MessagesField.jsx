@@ -82,11 +82,10 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
       setIsAudio(false);
     }
   };
-  
-  console.log('audioMessageaudioMessage', audioMessage);
+
   const handleSubmit = (e) => {
-    e.preventDefault(); // Evita que el formulario se envíe automáticamente y la página se refresque.
-    handleSendMessage(); // Llama a tu función de envío de mensajes aquí.
+    e.preventDefault();
+    handleSendMessage();
   };
   return (
     <Grid>
@@ -109,15 +108,15 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
             sx={{ m: 1, width: '80%' }}
             variant='outlined'
           />
-          <Button
-            disabled={hasMessage}
-          //  onClick={handleSendMessage}
+          <IconButton
+             disabled={hasMessage}
+            onClick={handleSendMessage}
             aria-label='delete'
             size='large'
             color='success'
           >
             <SendIcon />
-          </Button>
+          </IconButton>
         </Card>
       </form>
     </Grid>

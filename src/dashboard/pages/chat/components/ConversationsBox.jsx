@@ -36,13 +36,14 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const memoizedLoadMoreChats = useCallback(() => {
     loadMoreChats();
   }, [loadMoreChats]);
-console.log("baseeee",baseURLFiles)
+
   const handleIntersection = (entries) => {
     const entry = entries[0];
     if (entry.isIntersecting) {
       memoizedLoadMoreChats();
     }
   };
+
   useLayoutEffect(() => {
     if (newMessageRef.current && gridRef.current) {
       gridRef.current.scrollTop = newMessageRef.current.offsetTop;
@@ -51,15 +52,14 @@ console.log("baseeee",baseURLFiles)
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
-      root: null, // Use the viewport as the root
-      threshold: 0.1, // Trigger when 10% of the element is visible
+      root: null, 
+      threshold: 0.1, 
     });
 
     if (lastMessageRef.current) {
       observer.observe(lastMessageRef.current);
     }
 
-    // Clean up the observer when the component unmounts
     return () => {
       if (lastMessageRef.current) {
         observer.unobserve(lastMessageRef.current);
@@ -68,17 +68,16 @@ console.log("baseeee",baseURLFiles)
   }, [lastMessageRef, memoizedLoadMoreChats]);
 
   const memoizedMessages = useMemo(() => messages || [], [messages]);
-  console.log('memoizedMessages', memoizedMessages);
+
+  console.log("memoizedMessages",memoizedMessages)
 
   const gridStyle = {
     position: 'relative',
-    // width: '100%',
     height: '74vh',
     backgroundImage: `url(${backgroundImageUrl})`,
-    backgroundRepeat: 'repeat', // Esto hace que la imagen de fondo se repita
-    backgroundSize: 'cover', // O usa '100%' si prefieres que se ajuste al 100% del contenedor
+    backgroundRepeat: 'repeat', 
+    backgroundSize: 'cover',
     backgroundColor: `${backgroundColor}`,
-    // display: 'flex',
     overflow: 'auto',
   };
 
@@ -108,7 +107,6 @@ console.log("baseeee",baseURLFiles)
   useEffect(() => {
     let backgroundImageUrl = '';
     let backgroundColor = '';
-    console.log('backgroundTheme', backgroundTheme);
     switch (backgroundTheme) {
       case 'Iphone chino':
         backgroundImageUrl =
@@ -191,8 +189,8 @@ console.log("baseeee",baseURLFiles)
           item?.Contact === item?.from ? (
             <Grid
               key={index}
-              ref={index === memoizedMessages.length - 1 && pageNumber === 0 ? newMessageRef : null}
-              // ? newMessageRef : null}
+              // ref={index === memoizedMessages.length - 1 && pageNumber === 0 ? newMessageRef : null}
+              ref={ newMessageRef}
               sx={{
                 m: 1,
                 width: '98%',
@@ -204,11 +202,6 @@ console.log("baseeee",baseURLFiles)
               {item?.has_media === 0 ? (
                 item?.reply_to ? (
                   <>
-                    {/* <BoxMessage
-                      isResponse={true}
-                      type={'text'}
-                      messageContainer={{ value: item?.body, at: item?.at, readers: item?.readers }}
-                    /> */}
                     <Paper
                       elevation={0}
                       style={bubbleStyleResponse}
@@ -357,7 +350,7 @@ console.log("baseeee",baseURLFiles)
                 justifyContent: 'end',
               }}
             >
-              {item?.has_media === 0 && item.type === 'text'? (
+              {item?.has_media === 0 && item.type === 'text' || item?.has_media === 0 && item.type === 'document'? (
                 <BoxMessage
                   isResponse={false}
                   type={'text'}

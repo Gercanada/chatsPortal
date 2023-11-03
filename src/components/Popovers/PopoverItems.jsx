@@ -2,10 +2,11 @@ import { Avatar, Box, Button, Card, Grid, Popover, TextField, Typography } from 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import { useForm } from 'react-hook-form';
 import PreviewModal from '../Modal/PreviewModal';
+import { getUserChat } from '../../store/slices/whatsApp/thunks';
 
 const PopoverItems = ({
   values = [],
@@ -27,6 +28,7 @@ const PopoverItems = ({
   const [openPopup, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [attachmentFile, setAttachmentFile] = useState(false);
+
 
   const navigateTo = (url) => {
     navigate(url);
@@ -52,11 +54,11 @@ const PopoverItems = ({
   };
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0]; // Solo se tomará el primer archivo si es una carga múltiple
-    console.log('eeeeeee', event.target.files[0]);
+    const selectedFile = event.target.files[0];
     if (selectedFile) {
       setAttachmentFile(selectedFile);
       setOpenModal(true);
+
       console.log(selectedFile);
     }
   };

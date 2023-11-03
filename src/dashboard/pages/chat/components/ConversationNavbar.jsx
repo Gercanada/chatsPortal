@@ -41,14 +41,12 @@ const ConversationNavbar = ({ user }) => {
 
   const handleGetThread = async () => {
     const resp = await dispatch(getContactThread(id));
-    console.log('resp+++++++++++++++++++++++++++sssssssssssssssssssssssssssssssssssssssssssss',resp?.data?.data[0].name)
     const name = resp?.data?.data[0].name
-    console.log('name',name)
     setContactName(name);
   };
   useEffect(() => {
     handleGetThread()
-  }, [id])
+  }, [id,thread])
   
   return (
     <Grid sx={{ position: 'sticky' }}>
@@ -58,8 +56,6 @@ const ConversationNavbar = ({ user }) => {
         dataForm={details}
         title={'edit_name'}
         onSubmit={onSubmitCreateContact}
-        //toScreen={ //toScreen
-        //setIsEdit={ //setIsEdit
         isEdit={false}
       />
       <Card className='navbar_chat'>
@@ -67,9 +63,6 @@ const ConversationNavbar = ({ user }) => {
         <Grid onClick={() => setOpenModal(true)}>
           <Typography sx={{ m: 1 }}>{contactName}</Typography>
         </Grid>
-        {/* <Grid sx={{m:1}}>
-    <PopoverField values={userFiles && userFiles} title={'files'} type={'files'} />
-    </Grid> */}
       </Card>
     </Grid>
   );
