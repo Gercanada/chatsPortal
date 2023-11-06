@@ -175,7 +175,7 @@ export const BoxComments = () => {
           position: 'relative',
         }}
       >
-        {loading ? <Loader /> : comments}
+        {/* {loading ? <Loader /> : comments} */}
         <Divider variant='inset' component='li' />
 
         <Form reply onSubmit={onSubmit} sx={{ paddingLeft: '10px' }}>

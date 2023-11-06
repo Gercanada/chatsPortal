@@ -4,6 +4,7 @@ import {
   setCategoriesColors,
   setChats,
   setLoading,
+  setLoadingAccount,
   setOneChat,
   setPhoneAccounts,
   setUserFiles,
@@ -146,19 +147,19 @@ export const getContactThread = (thread) => {
 
 export const getSwitchAccount = (id) => {
   return async (dispatch) => {
-    dispatch(setLoading(true));
+    dispatch(setLoadingAccount(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/switch_account/${id}`);
 
       if (resp) {
-        dispatch(setLoading(false));
+        dispatch(setLoadingAccount(false));
         return resp.status;
       }
     } catch (error) {
       console.error(error);
       return error;
     }
-    dispatch(setLoading(false));
+    dispatch(setLoadingAccount(false));
   };
 };
 

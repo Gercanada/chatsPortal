@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   loading: false,
+  loadingAccount: false,
   chats:[], 
   onechat:[],
   phoneAccounts:[],
@@ -16,6 +17,9 @@ export const whatsAppSlice = createSlice({
 
     setLoading: (state, { payload }) => {
       state.loading = payload;
+    },
+    setLoadingAccount: (state, { payload }) => {
+      state.loadingAccount = payload;
     },
     setChats:(state, {payload}) => {
       state.chats = payload;
@@ -35,5 +39,5 @@ export const whatsAppSlice = createSlice({
   }
 });
 
-export const {setLoading, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors } =
+export const {setLoading,setLoadingAccount, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors } =
 whatsAppSlice.actions;

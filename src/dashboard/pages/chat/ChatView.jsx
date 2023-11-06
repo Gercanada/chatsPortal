@@ -22,10 +22,11 @@ const ChatView = () => {
   const [pageNumber, setPageNumber1] = useState(1);
   const dispatch = useDispatch();
   const { id, thread } = useParams();
-  const { loading } = useSelector((state) => state.whatsApp);
+  const { loading,loadingAccount } = useSelector((state) => state.whatsApp);
   const [hasMoreChats, setHasMoreChats] = useState(1);
   const [hasChange, setHasChange] = useState(false);
   const { t } = useTranslation();
+  const [conversationsCache, setConversationsCache] = useState({});
 
   const playSound = () => {
     //const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
@@ -86,6 +87,11 @@ const ChatView = () => {
     const resp = await dispatch(getUserChat(thread));
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
+      setConversationsCache((prevCache) => ({
+        ...prevCache,
+        [thread]: reversedArray,
+      }));
+      localStorage.setItem(`conversation_${thread}`, JSON.stringify(reversedArray));
       const markAsRead = reversedArray
         .filter((item) => item.creator === null)
         .map((item) => item.id);
@@ -129,9 +135,48 @@ const ChatView = () => {
     dispatch(getUserChat(thread));
   }, [id, thread, hasChange]);
 
+    const loadConversation = async (conversationId) => {
+      if (conversationsCache[conversationId]) {
+        console.log("aqui toy 11111")
+        setSortMessages(conversationsCache[conversationId]);
+      } else {
+        console.log("aqui toy 222222222")
+        const cachedData = localStorage.getItem(`conversation_${conversationId}`);
+        if (cachedData) {
+          const conversationData = JSON.parse(cachedData);
+          setSortMessages(conversationData);
+        } else {
+          console.log("aqui toy bakc 333333 ")
+          try {
+            const resp = await dispatch(getUserChat(conversationId));
+            if (resp) {
+              console.log("aqui toy bakc 4444")
+              const reversedArray = sortArray(resp?.data?.data?.data);
+              const markAsRead = reversedArray
+                .filter((item) => item.creator === null)
+                .map((item) => item.id);
+              dispatch(setReadMessages(markAsRead));
+              setSortMessages(reversedArray);
+              setConversationsCache((prevCache) => ({
+                ...prevCache,
+                [conversationId]: reversedArray,
+              }));
+              localStorage.setItem(`conversation_${conversationId}`, JSON.stringify(reversedArray));
+            }
+          } catch (error) {
+            console.error("Error al cargar la conversación", error);
+          }
+        }
+      }
+    };
+
+  useEffect(() => {
+    loadConversation(thread);
+  }, [thread, conversationsCache]);
+
   return (
     <DashboardLayout>
-      {loading && <Loader />}
+      {loadingAccount && <Loader />}
       <Grid sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start' }}>
         <Grid item xs={12}>
           <ConversationNavbar user={id} />

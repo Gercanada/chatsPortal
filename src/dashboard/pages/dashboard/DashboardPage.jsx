@@ -31,12 +31,12 @@ export const DashboardPage = () => {
   const { loading } = useSelector((state) => state.dashboard);
   const dispatch = useDispatch();
 
-  const getShowData = async () => {
-    const resp = await dispatch(getApiDashBoardDetails());
-    const arr = resp && Object.entries(resp?.data.counts).map(([key, value]) => ({ key, value }));
-    setData(arr);
-    setResponseUser(resp?.data.pending_items);
-  };
+  // const getShowData = async () => {
+  //   const resp = await dispatch(getApiDashBoardDetails());
+  //   const arr = resp && Object.entries(resp?.data.counts).map(([key, value]) => ({ key, value }));
+  //   setData(arr);
+  //   setResponseUser(resp?.data.pending_items);
+  // };
 
   const playSound = () => {
     //  const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
@@ -134,13 +134,13 @@ export const DashboardPage = () => {
     setDataItems(pendingItems);
   }, [language, responseUser]);
 
-  useEffect(() => {
-    getShowData();
-  }, []);
+  // useEffect(() => {
+  //   getShowData();
+  // }, []);
 
   return (
     <DashboardLayout>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
       <Grid className={'container'} container>
         <Grid container>
           <Grid item xs={12}>

@@ -52,7 +52,7 @@ export default function Navigator(props) {
   const [idAccount, setIdAccount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMoreChats, setHasMoreChats] = useState(1);
-  const { chats, loading, phoneAccounts, categoriesColors } = useSelector(
+  const { chats, loading, phoneAccounts, categoriesColors,loadingAccount } = useSelector(
     (state) => state.whatsApp,
   );
   const { isLightTheme } = useSelector((state) => state.ui);
@@ -101,12 +101,12 @@ export default function Navigator(props) {
   //   }
   // }, [idAccount, isInto]);
 
-  useEffect(() => {
-    if (chats) {
-      let value = chats?.data;
-      setChatsAccount(value);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (chats) {
+  //     let value = chats?.data;
+  //     setChatsAccount(value);
+  //   }
+  // }, []);
 
   useEffect(() => {
     dispatch(getCategoriesColors());

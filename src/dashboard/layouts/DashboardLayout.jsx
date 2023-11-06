@@ -13,7 +13,7 @@ export const DashboardLayout = ({ children }) => {
   );
   return (
     <>
-    {loading && <Loader/>}
+    {/* {loading && <Loader/>} */}
       <SideBarFixed children={children}/>
     </>
   );

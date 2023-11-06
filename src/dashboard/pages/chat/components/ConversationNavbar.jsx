@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 const ConversationNavbar = ({ user }) => {
-  const { id, thread } = useParams();
+  const { id, thread, prefix } = useParams();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { userFiles } = useSelector((state) => state.whatsApp);
