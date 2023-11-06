@@ -19,7 +19,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 //const socket =io("/")
 
-const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
+const MessagesField = ({ setHasChange, loadChats }) => {
   const [valueMessage, setValueMessage] = useState('');
   const [audioMessage, setAudioMessage] = useState('');
   const { id, thread, prefix } = useParams();
@@ -45,7 +45,6 @@ const MessagesField = ({ setHasChange, loadChats, setNewMessage }) => {
     if (!textValue) {
       setHasMessage(true);
       setValueMessage(textValue);
-      setNewMessage(textValue);
     } else {
       setHasMessage(false);
       setValueMessage(textValue);

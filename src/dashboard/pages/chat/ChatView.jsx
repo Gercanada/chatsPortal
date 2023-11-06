@@ -18,8 +18,6 @@ import Pusher from 'pusher-js';
 import { useTranslation } from 'react-i18next';
 
 const ChatView = () => {
-  const { onechat } = useSelector((state) => state.whatsApp);
-
   const [sortMessages, setSortMessages] = useState([]);
   const [pageNumber, setPageNumber1] = useState(1);
   const dispatch = useDispatch();
@@ -28,13 +26,6 @@ const ChatView = () => {
   const [hasMoreChats, setHasMoreChats] = useState(1);
   const [hasChange, setHasChange] = useState(false);
   const { t } = useTranslation();
-  const [data, setData] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [responseUser, setResponseUser] = useState([]);
-  const [dataItems, setDataItems] = useState([]);
-  const [notificationBody, setNotificationBody] = useState([]);
-  const [notificationContact, setNotificationContact] = useState([]);
-  const language = localStorage.getItem('i18nextLng');
 
   const playSound = () => {
     //const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
@@ -52,8 +43,6 @@ const ChatView = () => {
       if (jsonObject.body) {
         jsonObject.thread.contact;
         jsonObject.body;
-        setNotificationBody(jsonObject.body);
-        setNotificationContact(jsonObject.thread.contact);
         userThread = jsonObject.thread.id;
         let color = '';
         let company = '';
@@ -79,7 +68,6 @@ const ChatView = () => {
           toast.error(`${'\n'}${jsonObject.thread.name}:${jsonObject.body}`, {
             autoClose: 20000,
             icon: company,
-            // style:toastStyle,
             progressStyle: toastStyle,
           });
         } else {
@@ -157,11 +145,7 @@ const ChatView = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <MessagesField
-            setHasChange={setHasChange}
-            loadChats={loadChats}
-            setNewMessage={setNewMessage}
-          />
+          <MessagesField setHasChange={setHasChange} loadChats={loadChats} />
         </Grid>
       </Grid>
     </DashboardLayout>

@@ -37,6 +37,7 @@ import { setBackgroundThemeBox } from '../../../../store/slices/ui/thunks';
 import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import GroupIcon from '@mui/icons-material/Group';
 import ContactsIcon from '@mui/icons-material/Contacts';
+
 export default function Navigator(props) {
   const { ...other } = props;
   const { id, thread } = useParams();
@@ -45,7 +46,6 @@ export default function Navigator(props) {
   const navigate = useNavigate();
   const [changedColor, setChangedColor] = useState(false);
   const [isInto, setIsInto] = useState(false);
-  const [changeAccount, setChangeAccount] = useState(false);
   const [chatsAccount, setChatsAccount] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [openModalContact, setOpenModalContact] = useState(false);
@@ -141,7 +141,7 @@ export default function Navigator(props) {
 
   useEffect(() => {
     loadChats();
-  }, [idAccount, isInto, changeAccount]);
+  }, [idAccount, isInto]);
 
   useEffect(() => {
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
