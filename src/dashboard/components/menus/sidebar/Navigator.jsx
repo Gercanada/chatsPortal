@@ -47,12 +47,14 @@ export default function Navigator(props) {
   const [changedColor, setChangedColor] = useState(false);
   const [isInto, setIsInto] = useState(false);
   const [chatsAccount, setChatsAccount] = useState([]);
+  const [phoneAccountsCached, setPhoneAccountsCached] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [openModalContact, setOpenModalContact] = useState(false);
   const [idAccount, setIdAccount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMoreChats, setHasMoreChats] = useState(1);
-  const { chats, loading, phoneAccounts, categoriesColors,loadingAccount } = useSelector(
+  const [companyAccounts, setCompanyAccounts] = useState([]);
+  const { chats, loading, phoneAccounts, categoriesColors, loadingAccount } = useSelector(
     (state) => state.whatsApp,
   );
   const { isLightTheme } = useSelector((state) => state.ui);
@@ -92,29 +94,24 @@ export default function Navigator(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  // useEffect(() => {
-  //   dispatch(getChats());
-  //   setIsInto(false);
-  //   if (chats?.data) {
-  //     let value = chats?.data;
-  //     setChatsAccount(chats?.data);
-  //   }
-  // }, [idAccount, isInto]);
-
-  // useEffect(() => {
-  //   if (chats) {
-  //     let value = chats?.data;
-  //     setChatsAccount(value);
-  //   }
-  // }, []);
+  const loadAccounts = () => {
+    const cacheData = localStorage.getItem(`phoneAccounts_`);
+    if (cacheData) {
+      const cachedPhoneAccound = JSON.parse(cacheData);
+      setPhoneAccountsCached(cachedPhoneAccound);
+    } else {
+      dispatch(getPhoneAccounts());
+      setPhoneAccountsCached(phoneAccounts);
+    }
+  };
 
   useEffect(() => {
     dispatch(getCategoriesColors());
   }, [changedColor]);
 
   useEffect(() => {
-    dispatch(getPhoneAccounts());
-  }, []);
+    loadAccounts();
+  }, [phoneAccounts]);
 
   const loadChats = async () => {
     const resp = await dispatch(getChats());
@@ -168,8 +165,8 @@ export default function Navigator(props) {
         >
           <img src='/images/vivechat.png' width='75px' alt='' />
         </Typography>
-        {phoneAccounts &&
-          phoneAccounts?.map((account, index) => (
+        {phoneAccountsCached &&
+          phoneAccountsCached?.map((account, index) => (
             <React.Fragment key={index}>
               {account?.name !== '' && (
                 <Accordion

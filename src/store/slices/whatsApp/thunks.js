@@ -81,6 +81,7 @@ export const getPhoneAccounts = () => {
     try {
       const resp = await immcaseApi.get(`/whatsapp/accounts`);
       await dispatch(setPhoneAccounts(resp.data.data));
+      localStorage.setItem(`phoneAccounts_`, JSON.stringify(resp.data.data));
 
       if (resp) {
         dispatch(setLoading(false));

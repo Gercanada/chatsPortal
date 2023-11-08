@@ -22,7 +22,7 @@ const ChatView = () => {
   const [pageNumber, setPageNumber1] = useState(1);
   const dispatch = useDispatch();
   const { id, thread } = useParams();
-  const { loading,loadingAccount } = useSelector((state) => state.whatsApp);
+  const { loading, loadingAccount } = useSelector((state) => state.whatsApp);
   const [hasMoreChats, setHasMoreChats] = useState(1);
   const [hasChange, setHasChange] = useState(false);
   const { t } = useTranslation();
@@ -135,40 +135,36 @@ const ChatView = () => {
     dispatch(getUserChat(thread));
   }, [id, thread, hasChange]);
 
-    const loadConversation = async (conversationId) => {
-      if (conversationsCache[conversationId]) {
-        console.log("aqui toy 11111")
-        setSortMessages(conversationsCache[conversationId]);
+  const loadConversation = async (conversationId) => {
+    if (conversationsCache[conversationId]) {
+      setSortMessages(conversationsCache[conversationId]);
+    } else {
+      const cachedData = localStorage.getItem(`conversation_${conversationId}`);
+      if (cachedData) {
+        const conversationData = JSON.parse(cachedData);
+        setSortMessages(conversationData);
       } else {
-        console.log("aqui toy 222222222")
-        const cachedData = localStorage.getItem(`conversation_${conversationId}`);
-        if (cachedData) {
-          const conversationData = JSON.parse(cachedData);
-          setSortMessages(conversationData);
-        } else {
-          console.log("aqui toy bakc 333333 ")
-          try {
-            const resp = await dispatch(getUserChat(conversationId));
-            if (resp) {
-              console.log("aqui toy bakc 4444")
-              const reversedArray = sortArray(resp?.data?.data?.data);
-              const markAsRead = reversedArray
-                .filter((item) => item.creator === null)
-                .map((item) => item.id);
-              dispatch(setReadMessages(markAsRead));
-              setSortMessages(reversedArray);
-              setConversationsCache((prevCache) => ({
-                ...prevCache,
-                [conversationId]: reversedArray,
-              }));
-              localStorage.setItem(`conversation_${conversationId}`, JSON.stringify(reversedArray));
-            }
-          } catch (error) {
-            console.error("Error al cargar la conversación", error);
+        try {
+          const resp = await dispatch(getUserChat(conversationId));
+          if (resp) {
+            const reversedArray = sortArray(resp?.data?.data?.data);
+            const markAsRead = reversedArray
+              .filter((item) => item.creator === null)
+              .map((item) => item.id);
+            dispatch(setReadMessages(markAsRead));
+            setSortMessages(reversedArray);
+            setConversationsCache((prevCache) => ({
+              ...prevCache,
+              [conversationId]: reversedArray,
+            }));
+            localStorage.setItem(`conversation_${conversationId}`, JSON.stringify(reversedArray));
           }
+        } catch (error) {
+          console.error('Error al cargar la conversación', error);
         }
       }
-    };
+    }
+  };
 
   useEffect(() => {
     loadConversation(thread);
