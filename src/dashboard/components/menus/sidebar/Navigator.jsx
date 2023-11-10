@@ -50,6 +50,7 @@ export default function Navigator(props) {
   const [phoneAccountsCached, setPhoneAccountsCached] = useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [openModalContact, setOpenModalContact] = useState(false);
+  const [changeAccount, setChangeAccount] = useState(false);
   const [idAccount, setIdAccount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMoreChats, setHasMoreChats] = useState(1);
@@ -62,7 +63,10 @@ export default function Navigator(props) {
     navigate(url);
   };
 
-  const handleAccount = (id, event, theme) => {
+  console.log('chatspua***********************',chats)
+
+  const handleAccount = async (id, event, theme) => {
+    console.log('idsuky',id)
     // if (
     //   event?.target?.nodeName === 'DIV' ||
     //   event?.target?.nodeName === 'P' ||
@@ -70,11 +74,15 @@ export default function Navigator(props) {
     //   event?.target?.nodeName === 'path' ||
     //   event?.target?.dataset.testid === 'ExpandMoreIcon'
     // ) {
+      setChatsAccount([])
     setIsInto(true);
     setIdAccount(id);
-    dispatch(getSwitchAccount(id));
-    dispatch(getChats());
-
+   dispatch(getSwitchAccount(id));
+   const resp = await   dispatch(getChats());
+    if(resp){
+      console.log('hola')
+      setChangeAccount(true)
+    }
     setPageNumber(1);
     setHasMoreChats(1);
     // }
@@ -112,6 +120,7 @@ export default function Navigator(props) {
   useEffect(() => {
     loadAccounts();
   }, [phoneAccounts]);
+
 
   const loadChats = async () => {
     const resp = await dispatch(getChats());
@@ -206,12 +215,15 @@ export default function Navigator(props) {
                       </Typography>
                     </Grid>
                   </AccordionSummary>
+                  {console.log('chatsAccount',chatsAccount)}
                   <AccordionDetails
                     sx={{
                       paddingBottom: '8px',
                       px: 0,
                       overflow: 'auto',
                       maxHeight: '500px',
+                      pointerEvents:chatsAccount ? '':'none',  
+                      opacity:chatsAccount ? 1:0.5,  
                     }}
                   >
                     <Grid
@@ -243,8 +255,8 @@ export default function Navigator(props) {
                         </Grid>
                       </Button>
                     </Grid>
-                    {chatsAccount &&
-                      chatsAccount?.map((item, index) => (
+                    {chats &&
+                      chats?.map((item, index) => (
                         <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>
                           <>
                             <Circle

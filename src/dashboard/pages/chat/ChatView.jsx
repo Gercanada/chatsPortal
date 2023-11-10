@@ -95,7 +95,7 @@ const ChatView = () => {
       const markAsRead = reversedArray
         .filter((item) => item.creator === null)
         .map((item) => item.id);
-      dispatch(setReadMessages(markAsRead));
+      dispatch(setReadMessages(thread));
       setSortMessages(reversedArray);
       setHasMoreChats(resp?.data?.data?.last_page);
     }
@@ -123,7 +123,8 @@ const ChatView = () => {
     if (response && response?.data) {
       const reversedArray = sortArray(response?.data?.data?.data);
       const markAsRead = reversedArray?.map((item) => item.id);
-      dispatch(setReadMessages(markAsRead));
+      console.log("ttttttt////////",thread)
+      dispatch(setReadMessages(thread));
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
       setHasMoreChats(response?.data?.data?.last_page);
     } else {
@@ -151,7 +152,7 @@ const ChatView = () => {
             const markAsRead = reversedArray
               .filter((item) => item.creator === null)
               .map((item) => item.id);
-            dispatch(setReadMessages(markAsRead));
+            dispatch(setReadMessages(thread));
             setSortMessages(reversedArray);
             setConversationsCache((prevCache) => ({
               ...prevCache,
