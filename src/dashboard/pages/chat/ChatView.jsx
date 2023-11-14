@@ -76,6 +76,9 @@ const ChatView = () => {
             autoClose: 20000,
           });
         }
+
+        console.log("userThread",userThread)
+        console.log("parseInt(thread)",parseInt(thread))
         if (userThread === parseInt(thread)) {
           loadChats();
         }
@@ -100,6 +103,7 @@ const ChatView = () => {
       setHasMoreChats(resp?.data?.data?.last_page);
     }
   };
+
   useEffect(() => {
     loadChats();
   }, [id, hasChange, thread]);

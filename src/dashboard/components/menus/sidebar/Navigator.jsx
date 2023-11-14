@@ -63,10 +63,7 @@ export default function Navigator(props) {
     navigate(url);
   };
 
-  console.log('chatspua***********************',chats)
-
   const handleAccount = async (id, event, theme) => {
-    console.log('idsuky',id)
     // if (
     //   event?.target?.nodeName === 'DIV' ||
     //   event?.target?.nodeName === 'P' ||
@@ -80,7 +77,6 @@ export default function Navigator(props) {
    dispatch(getSwitchAccount(id));
    const resp = await   dispatch(getChats());
     if(resp){
-      console.log('hola')
       setChangeAccount(true)
     }
     setPageNumber(1);
@@ -215,7 +211,6 @@ export default function Navigator(props) {
                       </Typography>
                     </Grid>
                   </AccordionSummary>
-                  {console.log('chatsAccount',chatsAccount)}
                   <AccordionDetails
                     sx={{
                       paddingBottom: '8px',

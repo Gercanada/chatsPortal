@@ -43,10 +43,12 @@ export const getChats = () => {
   return async (dispatch) => {
    // dispatch(setLoading(true));
     try {
+   //   const chats = localStorage.getItem('chat_account_type');
+
       const resp = await immcaseApi.get('/whatsapp/threads');
-      
+    
+     console.log("aquiiiiii",resp?.data?.data?.data)
       await dispatch(setChats(resp?.data?.data?.data));
-      console.log("estoioiiiii", resp?.data?.data)
       if (resp) {
         dispatch(setLoading(false));
         return resp;
@@ -56,6 +58,25 @@ export const getChats = () => {
       return error;
     }
    // dispatch(setLoading(false));
+  };
+};
+export const getMoreChats = (page) => {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+    try {
+      const cachedChats= localStorage.setItem('chats', JSON.stringify(resp?.data?.data?.data));
+      const resp = await immcaseApi.get(`/whatsapp/threads?page=${page}`);
+      await dispatch(setChats(resp?.data?.data));
+      if (resp) {
+        //dispatch(setLoading(false));
+        return resp;
+      }
+    } catch (error) {
+      console.error(error);
+      return error;
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 };
 
@@ -170,7 +191,6 @@ export const setReadMessages = (id) => {
   return async (dispatch) => {
     // dispatch(setLoading(true));
     try {
-      console.log('id44444444444444444444',id)
       // const data = { messages: id };
       const config = {
         method: 'post',
@@ -267,24 +287,7 @@ export const getMoreMessages = (id, page) => {
     //dispatch(setLoading(false));
   };
 };
-export const getMoreChats = (page) => {
-  return async (dispatch) => {
-    dispatch(setLoading(true));
-    try {
-      const resp = await immcaseApi.get(`/whatsapp/threads?page=${page}`);
-      await dispatch(setChats(resp?.data?.data));
-      if (resp) {
-        //dispatch(setLoading(false));
-        return resp;
-      }
-    } catch (error) {
-      console.error(error);
-      return error;
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-};
+
 
 export const updateContactNameThread = (idUser, name) => {
   return async (dispatch) => {
