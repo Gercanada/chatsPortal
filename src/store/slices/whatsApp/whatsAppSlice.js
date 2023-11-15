@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 export const initialState = {
   loading: false,
   loadingAccount: false,
+  lastPage:0,
+  currentPage:0,
   chats:[], 
   onechat:[],
   phoneAccounts:[],
@@ -17,6 +19,12 @@ export const whatsAppSlice = createSlice({
 
     setLoading: (state, { payload }) => {
       state.loading = payload;
+    },
+    setLastPage: (state, { payload }) => {
+      state.lastPage = payload;
+    },
+    setCurrentPage: (state, { payload }) => {
+      state.currentPage = payload;
     },
     setLoadingAccount: (state, { payload }) => {
       state.loadingAccount = payload;
@@ -39,5 +47,5 @@ export const whatsAppSlice = createSlice({
   }
 });
 
-export const {setLoading,setLoadingAccount, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors } =
+export const {setLoading,setLoadingAccount, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors,setLastPage,setCurrentPage} =
 whatsAppSlice.actions;

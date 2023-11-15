@@ -8,12 +8,12 @@ import { useSelector } from 'react-redux';
 import { Loader } from '../../components/Loader';
 
 export const DashboardLayout = ({ children }) => {
-  const { loading} = useSelector(
+  const { loadingAccount} = useSelector(
     (state) => state.whatsApp,
   );
   return (
     <>
-    {/* {loading && <Loader/>} */}
+ {loadingAccount && <Loader />}
       <SideBarFixed children={children}/>
     </>
   );

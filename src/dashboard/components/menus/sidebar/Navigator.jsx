@@ -51,11 +51,14 @@ export default function Navigator(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [openModalContact, setOpenModalContact] = useState(false);
   const [changeAccount, setChangeAccount] = useState(false);
+  const [hasChangeAccount, setHasChangeAccount] = useState(false);
+  const selecteAccount = localStorage.getItem('chat_account_type');
+
   const [idAccount, setIdAccount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [hasMoreChats, setHasMoreChats] = useState(1);
-  const [companyAccounts, setCompanyAccounts] = useState([]);
-  const { chats, loading, phoneAccounts, categoriesColors, loadingAccount } = useSelector(
+  // const [hasMoreChats, setHasMoreChats] = useState(1);
+  // const [companyAccounts, setCompanyAccounts] = useState([]);
+  const { chats, lastPage, phoneAccounts, categoriesColors, currentPage } = useSelector(
     (state) => state.whatsApp,
   );
   const { isLightTheme } = useSelector((state) => state.ui);
@@ -63,26 +66,28 @@ export default function Navigator(props) {
     navigate(url);
   };
 
-  const handleAccount = async (id, event, theme) => {
-    // if (
-    //   event?.target?.nodeName === 'DIV' ||
-    //   event?.target?.nodeName === 'P' ||
-    //   event?.target?.nodeName === 'IMG' ||
-    //   event?.target?.nodeName === 'path' ||
-    //   event?.target?.dataset.testid === 'ExpandMoreIcon'
-    // ) {
-      setChatsAccount([])
-    setIsInto(true);
-    setIdAccount(id);
-   dispatch(getSwitchAccount(id));
-   const resp = await   dispatch(getChats());
-    if(resp){
-      setChangeAccount(true)
-    }
-    setPageNumber(1);
-    setHasMoreChats(1);
-    // }
-  };
+  // const handleAccount = async (id, event, theme) => {
+  //   console.log('event',event)
+  //   // if (
+  //   //   event?.target?.nodeName === 'DIV' ||
+  //   //   event?.target?.nodeName === 'P' ||
+  //   //   event?.target?.nodeName === 'IMG' ||
+  //   //   event?.target?.nodeName === 'path' ||
+  //   //   event?.target?.dataset.testid === 'ExpandMoreIcon'
+  //   // ) {
+  //     console.log('aquiiiii :c papu')
+  //     setChatsAccount([])
+  //   setIsInto(true);
+  //   setIdAccount(id);
+  //  dispatch(getSwitchAccount(id));
+  //  const resp = await   dispatch(getChats());
+  //   if(resp){
+  //     setChangeAccount(true)
+  //   }
+  //   setPageNumber(1);
+  //   setHasMoreChats(1);
+  //   // }
+  // };
 
   const handleSetChatCategory = async (id, categoryId) => {
     const resp = await dispatch(updateCategoryColor(id, categoryId));
@@ -94,8 +99,27 @@ export default function Navigator(props) {
     }
   };
 
-  const handleChange = (panel) => (event, isExpanded) => {
+  const handleChange = (panel,name) => async (event, isExpanded) => {
+    navigateTo(
+      `/`,
+    );
+    console.log('indsssssssssssssssssssssex',name)
+    handleTheme(name);
+    localStorage.setItem('chat_account_type',name);
     setExpanded(isExpanded ? panel : false);
+    setIsInto(true);
+    setIdAccount(panel);
+    setHasChangeAccount(true);
+    const respAccount = await dispatch(getSwitchAccount(panel));
+    if (respAccount === 200) {
+      setHasChangeAccount(false);
+    }
+
+    const resp = await dispatch(getChats());
+    if (resp) {
+      setChangeAccount(true);
+    }
+    setPageNumber(1);
   };
 
   const loadAccounts = () => {
@@ -117,23 +141,19 @@ export default function Navigator(props) {
     loadAccounts();
   }, [phoneAccounts]);
 
-
   const loadChats = async () => {
-    const resp = await dispatch(getChats());
-    if (resp) {
-      setChatsAccount(resp?.data?.data?.data);
-      setHasMoreChats(resp?.data?.data?.last_page);
-    }
+    await dispatch(getChats());
   };
+
   const loadMoreChats = async () => {
     const pageNumberCounter = pageNumber + 1;
     setPageNumber(pageNumberCounter);
-    const response = await dispatch(getMoreChats(pageNumberCounter));
-    if (response && response.data) {
-      setChatsAccount((prevChats) => [...prevChats, ...response?.data?.data?.data]);
-      setHasMoreChats(response?.data?.data?.last_page);
+    const response = await dispatch(getMoreChats(pageNumberCounter, true));
+    if (response) {
+      // setChatsAccount((prevChats) => [...prevChats, ...response?.data?.data?.data]);
+      // setHasMoreChats(response?.data?.data?.last_page);
     } else {
-      toast.error(t('error'));
+      // toast.error(t('error'));
     }
   };
 
@@ -175,14 +195,22 @@ export default function Navigator(props) {
             <React.Fragment key={index}>
               {account?.name !== '' && (
                 <Accordion
-                  key={index}
-                  expanded={expanded === index}
+                  key={account.id}
+                  id={'accordion'}
+                 expanded={expanded === account.id}
+           
                   name={'organization'}
-                  onChange={handleChange(index)}
-                  sx={{ boxShadow: '0', background: 'inherit' }}
-                  onClick={(event) => {
-                    handleAccount(account?.id, event);
+                  onChange={handleChange(account.id,account?.name)}
+                  sx={{
+                    boxShadow: '0',
+                    background: 'inherit',
+                    pointerEvents: hasChangeAccount ? 'none' : '',
+                    opacity: hasChangeAccount ? 0.5 : 1,
                   }}
+
+                  // onClick={(event) => {
+                  //   handleAccount(account?.id, event);
+                  // }}
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -217,8 +245,8 @@ export default function Navigator(props) {
                       px: 0,
                       overflow: 'auto',
                       maxHeight: '500px',
-                      pointerEvents:chatsAccount ? '':'none',  
-                      opacity:chatsAccount ? 1:0.5,  
+                      // pointerEvents:hasChangeAccount ? '':'none',
+                      // opacity:hasChangeAccount ? 1:0.5,
                     }}
                   >
                     <Grid
@@ -270,12 +298,12 @@ export default function Navigator(props) {
                                 justifyContent: 'space-around',
                               }}
                               onClick={(event) => {
-                                event.stopPropagation();
+                             //   event.stopPropagation();
                                 navigateTo(
                                   `/chat/${item.client_phone_number}/${item.id}/${item.name}`,
                                 );
-                                handleTheme(account?.name);
-                                localStorage.setItem('chat_account_type', account?.name);
+                                // handleTheme(account?.name);
+                                // localStorage.setItem('chat_account_type', account?.name);
                               }}
                             >
                               <Grid sx={{ display: 'flex' }}>
@@ -290,7 +318,7 @@ export default function Navigator(props) {
                         </Grid>
                       ))}
                   </AccordionDetails>
-                  {pageNumber < hasMoreChats && (
+                  {currentPage !== lastPage && (
                     <Grid
                       onClick={loadMoreChats}
                       sx={{

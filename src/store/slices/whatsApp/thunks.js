@@ -3,6 +3,8 @@ import { immcaseApi } from '../../../api';
 import {
   setCategoriesColors,
   setChats,
+  setCurrentPage,
+  setLastPage,
   setLoading,
   setLoadingAccount,
   setOneChat,
@@ -43,12 +45,12 @@ export const getChats = () => {
   return async (dispatch) => {
    // dispatch(setLoading(true));
     try {
-   //   const chats = localStorage.getItem('chat_account_type');
-
       const resp = await immcaseApi.get('/whatsapp/threads');
-    
-     console.log("aquiiiiii",resp?.data?.data?.data)
+      console.log("resp?.data?.data?.last_page",resp?.data)
+      await dispatch(setLastPage(resp?.data?.data?.last_page))
+      await dispatch(setCurrentPage(resp?.data?.data?.current_page))
       await dispatch(setChats(resp?.data?.data?.data));
+      localStorage.setItem('chats', JSON.stringify(resp?.data?.data?.data));
       if (resp) {
         dispatch(setLoading(false));
         return resp;
@@ -60,17 +62,22 @@ export const getChats = () => {
    // dispatch(setLoading(false));
   };
 };
-export const getMoreChats = (page) => {
+export const getMoreChats = (page, prefix) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      const cachedChats= localStorage.setItem('chats', JSON.stringify(resp?.data?.data?.data));
+      console.log("page",page)
+      const chats = await localStorage.getItem('chats');
+      const chatsCached = JSON.parse(chats);
       const resp = await immcaseApi.get(`/whatsapp/threads?page=${page}`);
-      await dispatch(setChats(resp?.data?.data));
-      if (resp) {
-        //dispatch(setLoading(false));
-        return resp;
-      }
+    dispatch(setLastPage(resp?.data?.data?.last_page))
+       dispatch(setCurrentPage(resp?.data?.data?.current_page))
+      console.log('respukiuiiiiiiiiiiiiiii',resp?.data?.data)
+      const newChats = resp?.data?.data?.data;
+      const combinedChats = chatsCached.concat(newChats);
+      localStorage.setItem('chats', JSON.stringify(combinedChats));
+      await dispatch(setChats(combinedChats));
+      return
     } catch (error) {
       console.error(error);
       return error;
@@ -79,6 +86,7 @@ export const getMoreChats = (page) => {
     }
   };
 };
+
 
 export const getUserChat = (phone) => {
   return async (dispatch) => {
@@ -182,8 +190,9 @@ export const getSwitchAccount = (id) => {
     } catch (error) {
       console.error(error);
       return error;
+    }finally{
+      dispatch(setLoadingAccount(false));
     }
-    dispatch(setLoadingAccount(false));
   };
 };
 
