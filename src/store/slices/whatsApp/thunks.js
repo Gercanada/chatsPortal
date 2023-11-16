@@ -43,12 +43,11 @@ export const sendMessage = (recipient, message) => {
 
 export const getChats = () => {
   return async (dispatch) => {
-   // dispatch(setLoading(true));
+    // dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get('/whatsapp/threads');
-      console.log("resp?.data?.data?.last_page",resp?.data)
-      await dispatch(setLastPage(resp?.data?.data?.last_page))
-      await dispatch(setCurrentPage(resp?.data?.data?.current_page))
+      await dispatch(setLastPage(resp?.data?.data?.last_page));
+      await dispatch(setCurrentPage(resp?.data?.data?.current_page));
       await dispatch(setChats(resp?.data?.data?.data));
       localStorage.setItem('chats', JSON.stringify(resp?.data?.data?.data));
       if (resp) {
@@ -59,25 +58,23 @@ export const getChats = () => {
       console.error(error);
       return error;
     }
-   // dispatch(setLoading(false));
+    // dispatch(setLoading(false));
   };
 };
 export const getMoreChats = (page, prefix) => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
-      console.log("page",page)
       const chats = await localStorage.getItem('chats');
       const chatsCached = JSON.parse(chats);
       const resp = await immcaseApi.get(`/whatsapp/threads?page=${page}`);
-    dispatch(setLastPage(resp?.data?.data?.last_page))
-       dispatch(setCurrentPage(resp?.data?.data?.current_page))
-      console.log('respukiuiiiiiiiiiiiiiii',resp?.data?.data)
+      dispatch(setLastPage(resp?.data?.data?.last_page));
+      dispatch(setCurrentPage(resp?.data?.data?.current_page));
       const newChats = resp?.data?.data?.data;
       const combinedChats = chatsCached.concat(newChats);
       localStorage.setItem('chats', JSON.stringify(combinedChats));
       await dispatch(setChats(combinedChats));
-      return
+      return;
     } catch (error) {
       console.error(error);
       return error;
@@ -87,6 +84,26 @@ export const getMoreChats = (page, prefix) => {
   };
 };
 
+export const getPhoneAccounts = () => {
+  return async (dispatch) => {
+    dispatch(setLoading(true));
+    try {
+      const resp = await immcaseApi.get(`/whatsapp/accounts`);
+      console.log('resp?.data?.data', resp?.data?.data);
+      await dispatch(setPhoneAccounts(resp?.data?.data));
+      localStorage.setItem(`phoneAccounts_`, JSON.stringify(resp?.data?.data));
+
+      if (resp) {
+        dispatch(setLoading(false));
+        return resp.status;
+      }
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+    dispatch(setLoading(false));
+  };
+};
 
 export const getUserChat = (phone) => {
   return async (dispatch) => {
@@ -106,25 +123,7 @@ export const getUserChat = (phone) => {
   };
 };
 
-export const getPhoneAccounts = () => {
-  return async (dispatch) => {
-    dispatch(setLoading(true));
-    try {
-      const resp = await immcaseApi.get(`/whatsapp/accounts`);
-      await dispatch(setPhoneAccounts(resp.data.data));
-      localStorage.setItem(`phoneAccounts_`, JSON.stringify(resp.data.data));
 
-      if (resp) {
-        dispatch(setLoading(false));
-        return resp.status;
-      }
-    } catch (error) {
-      console.error(error);
-      return error;
-    }
-    dispatch(setLoading(false));
-  };
-};
 export const getCategoriesColors = () => {
   return async (dispatch) => {
     dispatch(setLoading(true));
@@ -190,7 +189,7 @@ export const getSwitchAccount = (id) => {
     } catch (error) {
       console.error(error);
       return error;
-    }finally{
+    } finally {
       dispatch(setLoadingAccount(false));
     }
   };
@@ -296,7 +295,6 @@ export const getMoreMessages = (id, page) => {
     //dispatch(setLoading(false));
   };
 };
-
 
 export const updateContactNameThread = (idUser, name) => {
   return async (dispatch) => {
