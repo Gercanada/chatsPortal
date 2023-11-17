@@ -9,6 +9,7 @@ import {
   setLoadingAccount,
   setOneChat,
   setPhoneAccounts,
+  setTemplatesOptions,
   setUserFiles,
 } from './whatsAppSlice';
 
@@ -61,6 +62,28 @@ export const getChats = () => {
     // dispatch(setLoading(false));
   };
 };
+
+export const getTemplatesOptions = () => {
+  return async (dispatch) => {
+    // dispatch(setLoading(true));
+    try {
+      const resp = await immcaseApi.get('/whatsapp/templates');
+      console.log('resptemplates',resp?.data?.data)
+      await dispatch(setTemplatesOptions(resp?.data?.data));
+      // localStorage.setItem('templates', JSON.stringify(resp?.data?.data?.data));
+      if (resp) {
+       // dispatch(setLoading(false));
+        return resp;
+      }
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+    // dispatch(setLoading(false));
+  };
+};
+
+
 export const getMoreChats = (page, prefix) => {
   return async (dispatch) => {
     dispatch(setLoading(true));

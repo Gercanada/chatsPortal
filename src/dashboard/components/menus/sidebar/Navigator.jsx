@@ -69,7 +69,6 @@ export default function Navigator(props) {
       toast.error(t('error'));
     }
   };
-  console.log('phoneAccounts',phoneAccounts)
 
   const handleChange = (panel, name) => async (event, isExpanded) => {
     navigateTo(`/`);

@@ -35,7 +35,6 @@ const ContactsPage = () => {
 
   const selectsCreate = new Map();
   selectsCreate.set('category_id', categoryLabel);
-  console.log('categoryLabel', categoryLabel);
   const {
     control,
     formState: { errors },
@@ -52,13 +51,6 @@ const ContactsPage = () => {
     setIsReloadData(false);
     if (isEdit) {
       const details = [
-        // { name_: 'Nombre', key: 'name', allowEdit: false, type: 'text', value:userDetails?.data?.name },
-        // { name_: 'Apellido', key: 'last_name', allowEdit: false, type: 'text',value:userDetails?.data?.last_name },
-        // { name_: 'Email', key: 'email', allowEdit: false, type: 'email',value:userDetails?.data?.email },
-        // { name_: t('username'), key: 'username', allowEdit: false, type: 'text',value:userDetails?.data?.username },
-        // // { name_: t('password'), key: 'password', allowEdit: false, type: 'password',value:userDetails?.data?.password },
-        // // { name_: t('confirm_password'), key: 'confirmPassword', allowEdit: false, type: 'password',value:userDetails?.data?.password },
-        // { name_: t('avatar'), key: 'avatar', allowEdit: false, type: 'avatar',value:userDetails?.data?.avatar },
       ];
       setDetailsForm(details);
     } else {
@@ -72,7 +64,6 @@ const ContactsPage = () => {
   }, [isEdit, userDetails]);
 
   const onSubmit = async (formDataParam) => {
-    console.log("aqui formDataParam",formDataParam)
     if (formDataParam.password === formDataParam.confirmPassword) {
       delete formDataParam.confirmPassword;
       if (isEdit) {
@@ -120,7 +111,6 @@ const ContactsPage = () => {
     });
 
 
-    console.log("formDataParam",formData)
     if (isEdit) {
       const resp = await dispatch(updateContact(userId, formData));
       if (resp === 200) {
@@ -145,7 +135,6 @@ const ContactsPage = () => {
   const handleOnClick = async (params) => {
     setOpenModalContact(true)
     setNumberPhone(params.row.number)
-    console.log("params",params)
     // setUserId(id);
     // setIsEdit(true);
     // const resp = await dispatch(getUser(id));

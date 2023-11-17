@@ -63,9 +63,7 @@ const PhoneModal = ({ open, onClose, title, number }) => {
 
   const handleNumberPhone = (event) => {
     const value = event.target.value;
-    console.log('value phone', value);
     if (/^\d*$/.test(value) && value.length === 10) {
-      console.log('aqui phone');
       setIsDisabled(false);
       setNumberPhone(value);
     } else {
@@ -83,7 +81,6 @@ const PhoneModal = ({ open, onClose, title, number }) => {
       recipient: number ? number + numberPhone : extensionNumber + numberPhone,
       body: messageBody,
     };
-    console.log('form', formData);
     const resp = await dispatch(sendMessage(formData.recipient, formData.body));
     if (resp === 200) {
       toast.success(t('sent'));

@@ -9,6 +9,7 @@ export const initialState = {
   onechat:[],
   phoneAccounts:[],
   userFiles:[],
+  templatesOptions:[],
   categoriesColors:[]
 };
 
@@ -44,8 +45,11 @@ export const whatsAppSlice = createSlice({
    setCategoriesColors:(state, {payload}) => {
     state.categoriesColors = payload;
  },
+ setTemplatesOptions:(state, {payload}) => {
+  state.templatesOptions = payload;
+},
   }
 });
 
-export const {setLoading,setLoadingAccount, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors,setLastPage,setCurrentPage} =
+export const {setLoading,setLoadingAccount, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors,setLastPage,setCurrentPage,setTemplatesOptions} =
 whatsAppSlice.actions;

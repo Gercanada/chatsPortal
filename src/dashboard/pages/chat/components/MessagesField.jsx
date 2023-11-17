@@ -2,7 +2,7 @@ import { Card, Grid, IconButton, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import React, { useEffect, useState } from 'react';
-import { getUserChat, getUserFiles, sendMessage } from '../../../../store/slices/whatsApp/thunks';
+import { getTemplatesOptions, getUserChat, getUserFiles, sendMessage } from '../../../../store/slices/whatsApp/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from 'semantic-ui-react';
@@ -16,6 +16,7 @@ import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 //import io from 'socket.io-client'
+import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 
 //const socket =io("/")
 
@@ -34,10 +35,12 @@ const MessagesField = ({ setHasChange, loadChats }) => {
   const menuAttachments = [
     { attachment: 'images', icon: <ImageRoundedIcon color='primary' />, type: 'image/*' },
     { attachment: 'file', icon: <DescriptionRoundedIcon color='error' />, type: '*/*' },
+    { attachment: 'plantillas', icon: <DocumentScannerIcon color='success' />, type: '*/*', selectOptions:'' },
   ];
 
   useEffect(() => {
     dispatch(getUserFiles(thread));
+    dispatch(getTemplatesOptions());
   }, [id]);
 
   const handleOnchange = (e) => {
@@ -91,7 +94,7 @@ const MessagesField = ({ setHasChange, loadChats }) => {
     <Grid>
       <form onSubmit={handleSubmit}>
         <Card sx={{ justifyContent: 'space-around', display: 'flex' }}>
-          <Grid sx={{ mt: 2.5, ml: 1 }}>
+          <Grid sx={{ mt: 2.5,ml:1 }}>
             <PopoverItems
               icon={<AddIcon />}
               attachments={menuAttachments}

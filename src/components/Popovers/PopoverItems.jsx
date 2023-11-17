@@ -59,7 +59,6 @@ const PopoverItems = ({
       setAttachmentFile(selectedFile);
       setOpenModal(true);
 
-      console.log(selectedFile);
     }
   };
 

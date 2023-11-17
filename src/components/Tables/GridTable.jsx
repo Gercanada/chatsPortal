@@ -288,7 +288,6 @@ const GridTable = ({ path, title, isReloadData, prefix, columns, service, id, id
       data = response?.data;
     }
     if (data) {
-      console.log('data',data)
       Object.values(data).forEach((item) => {
         const newItem = {};
         Object.entries(item).forEach(([key, value], index) => {

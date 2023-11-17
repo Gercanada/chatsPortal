@@ -33,7 +33,6 @@ const PreviewModal = ({ open, onClose, attachmentFile }) => {
 
   const handleSendMessages = async () => {
     const response = await dispatch(sendFiles(id, attachmentFile));
-    console.log('responseresponse',response)
     if (response !== 200) {
       toast.error('error');
     }else{

@@ -53,7 +53,6 @@ export const DashboardPage = () => {
       allMessages.push(data);
       const jsonObject = JSON.parse(data.message);
       if (jsonObject.body) {
-        console.log('jsonObject', jsonObject);
         jsonObject.thread.contact;
         jsonObject.body;
         setNotificationBody(jsonObject.body);

@@ -76,9 +76,6 @@ const ChatView = () => {
             autoClose: 20000,
           });
         }
-
-        console.log("userThread",userThread)
-        console.log("parseInt(thread)",parseInt(thread))
         if (userThread === parseInt(thread)) {
           loadChats();
         }
@@ -127,7 +124,6 @@ const ChatView = () => {
     if (response && response?.data) {
       const reversedArray = sortArray(response?.data?.data?.data);
       const markAsRead = reversedArray?.map((item) => item.id);
-      console.log("ttttttt////////",thread)
       dispatch(setReadMessages(thread));
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
       setHasMoreChats(response?.data?.data?.last_page);
