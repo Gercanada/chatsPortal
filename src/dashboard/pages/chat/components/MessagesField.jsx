@@ -2,7 +2,12 @@ import { Card, Grid, IconButton, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import React, { useEffect, useState } from 'react';
-import { getTemplatesOptions, getUserChat, getUserFiles, sendMessage } from '../../../../store/slices/whatsApp/thunks';
+import {
+  getTemplatesOptions,
+  getUserChat,
+  getUserFiles,
+  sendMessage,
+} from '../../../../store/slices/whatsApp/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from 'semantic-ui-react';
@@ -30,14 +35,38 @@ const MessagesField = ({ setHasChange, loadChats }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const { userFiles } = useSelector((state) => state.whatsApp);
+  const { userFiles, templatesOptions } = useSelector((state) => state.whatsApp);
+  const modalDetails = [{ name_: t('templates'), key: 'templates', type: 'select' }];
+  
+  const selectsCreate = new Map();
+  selectsCreate.set('templates', templatesOptions && templatesOptions );
 
   const menuAttachments = [
-    { attachment: 'images', icon: <ImageRoundedIcon color='primary' />, type: 'image/*' },
-    { attachment: 'file', icon: <DescriptionRoundedIcon color='error' />, type: '*/*' },
-    { attachment: 'plantillas', icon: <DocumentScannerIcon color='success' />, type: '*/*', selectOptions:'' },
+    {
+      attachment: 'images',
+      icon: <ImageRoundedIcon color='primary' />,
+      type: 'image/*',
+      attachType: 'file',
+    },
+    {
+      attachment: 'file',
+      icon: <DescriptionRoundedIcon color='error' />,
+      type: '*/*',
+      attachType: 'file',
+    },
+    {
+      attachment: 'templates',
+      key:'templates',
+      icon: <DocumentScannerIcon color='success' />,
+      type: '*/*',
+      selectOptions: selectsCreate,
+      attachType: 'select',
+      modalDetails:modalDetails,
+    },
   ];
 
+  console.log('templatesOptions', templatesOptions);
+  
   useEffect(() => {
     dispatch(getUserFiles(thread));
     dispatch(getTemplatesOptions());
@@ -94,7 +123,7 @@ const MessagesField = ({ setHasChange, loadChats }) => {
     <Grid>
       <form onSubmit={handleSubmit}>
         <Card sx={{ justifyContent: 'space-around', display: 'flex' }}>
-          <Grid sx={{ mt: 2.5,ml:1 }}>
+          <Grid sx={{ mt: 2.5, ml: 1 }}>
             <PopoverItems
               icon={<AddIcon />}
               attachments={menuAttachments}

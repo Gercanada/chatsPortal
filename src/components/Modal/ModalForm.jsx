@@ -28,6 +28,7 @@ const ModalForm = ({
   toScreen,
   setIsEdit,
   isEdit,
+  onChange,
   data,
 }) => {
   const {
@@ -48,10 +49,10 @@ const ModalForm = ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '80%',
+    width: '50%',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
+    border: '1px solid #000',
+    // boxShadow: 24,
     p: 4,
     overFlowY: 'visible',
   };
@@ -94,6 +95,7 @@ const ModalForm = ({
     if(setIsEdit)setIsEdit(false);
   };
 
+ 
   return (
     <Modal
       open={open}
@@ -108,12 +110,12 @@ const ModalForm = ({
             <Grid
               item
               xs={12}
-              sx={{ display: 'flex', justifyContent: 'center', marginBottom: '30px' }}
+              sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}
             >
               <Typography variant='h4'>{title}</Typography>
             </Grid>
           </Grid>
-          <Grid container sx={{ display: 'flex' }}>
+          <Grid container sx={{ display: 'flex', justifyContent:'space-around' }}>
             {dataForm &&
               dataForm?.map((item, index) => (
                 <React.Fragment key={index}>
@@ -143,7 +145,7 @@ const ModalForm = ({
                         item
                         xs={12}
                         md={5.8}
-                        sx={{ marginTop: '8px', marginLeft: '5px' }}
+                        sx={{ marginTop: '2px', marginLeft: '5px' }}
                         key={index}
                       >
                         <InputLabel>
@@ -164,6 +166,7 @@ const ModalForm = ({
                               options={selectValues
                                 ?.get(item.key)
                                 .map((optionSelect) => ({label:optionSelect.name , value: optionSelect.id}))}
+                                onChange={onChange}
                             />
                           )}
                         />
@@ -229,36 +232,36 @@ const ModalForm = ({
                 </React.Fragment>
               ))}
           </Grid>
-          <Grid sx={{ display: 'flex', justifyContent: 'center' }} item xs={12}>
+          <Grid sx={{ display: 'flex', justifyContent: 'center',mt:2 }} item xs={12}>
             {toScreen && (
-              <CButton
+              <Button
                 title={t('change_password')}
                 type='button'
                 size='large'
-                sx={{ margin: '10px', width: '30%' }}
+                sx={{ margin: '10px', width: '15%' }}
                 color='primary'
                 onClick={toScreen}
               >
                 {t('go_to_full_screen')}
-              </CButton>
+              </Button>
             )}
             <Button
               type='submit'
               size='large'
-              sx={{ margin: '10px', width: '30%' }}
+              sx={{ margin: '10px', width: '15%' }}
               color='primary'
             >
               {t('save')}
             </Button>
-            <CButton
+            <Button
               type='button'
               size='large'
-              sx={{ margin: '10px', width: '30%' }}
+              sx={{ margin: '10px', width: '15%' }}
               color='primary'
               onClick={handleClose}
             >
               {t('cancel')}
-            </CButton>
+            </Button>
           </Grid>
         </form>
       </Box>

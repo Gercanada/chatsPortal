@@ -83,6 +83,31 @@ export const getTemplatesOptions = () => {
   };
 };
 
+export const sendTemplate = (number, template, language) => {
+  return async (dispatch) => {
+    // dispatch(setLoading(true));
+    try {
+      const data = { recipient: number, type: 'template',template:template,language:language };
+      const config = {
+        method: 'post',
+        url: '/whatsapp/messages',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data: data,
+      };
+
+      const res = await immcaseApi(config);
+      if (res) {
+        //  dispatch(setLoading(false));
+        return res?.status;
+      }
+    } catch (error) {
+      return error;
+    }
+    // dispatch(setLoading(false));
+  };
+};
 
 export const getMoreChats = (page, prefix) => {
   return async (dispatch) => {

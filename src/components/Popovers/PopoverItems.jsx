@@ -7,6 +7,7 @@ import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import { useForm } from 'react-hook-form';
 import PreviewModal from '../Modal/PreviewModal';
 import { getUserChat } from '../../store/slices/whatsApp/thunks';
+import ModalForm from '../Modal/ModalForm';
 
 const PopoverItems = ({
   values = [],
@@ -23,12 +24,12 @@ const PopoverItems = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [openModalForm, setOpenModalForm] = useState(false);
   const [firstTime, setFirstTime] = useState(false);
   const [modalValues, setModalValues] = useState(null);
   const [openPopup, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [attachmentFile, setAttachmentFile] = useState(false);
-
 
   const navigateTo = (url) => {
     navigate(url);
@@ -58,10 +59,14 @@ const PopoverItems = ({
     if (selectedFile) {
       setAttachmentFile(selectedFile);
       setOpenModal(true);
-
     }
   };
-
+  const onClose = () => {
+    setOpenModalForm(false);
+  };
+   const onChange=(selectedOption)=>{
+    console.log("selectedOption",selectedOption)
+  }
   return (
     <Grid>
       <Typography
@@ -97,29 +102,58 @@ const PopoverItems = ({
             </Button>
           </Box>
           <Grid item sx={{ ml: 1, mr: 1, display: 'flex', flexDirection: 'column' }}>
-            {attachments.map((attach,index) => (
+            {attachments.map((attach, index) => (
               <Grid sx={{ display: 'flex', flexDirection: 'row' }} key={index}>
-                <TextField
-                  // inputProps={{ accept: `${attach.type}` }}
-                  style={{ display: 'none' }}
-                  id='raised-button-file'
-                  multiple
-                  type='file'
-                  onChange={handleFileChange}
-                />
-                <label htmlFor='raised-button-file'>
-                  <Button
-                    sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}
-                    variant='raised'
-                    component='span'
-                  >
-                    <Typography sx={{}}>{attach.icon}</Typography>
-                    <Typography>{attach.attachment}</Typography>
-                  </Button>
-                </label>
+                {attach.attachType === 'file' ? (
+                  <>
+                    <TextField
+                      // inputProps={{ accept: `${attach.type}` }}
+                      style={{ display: 'none' }}
+                      id='raised-button-file'
+                      multiple
+                      type='file'
+                      onChange={handleFileChange}
+                    />
+                    <label htmlFor='raised-button-file'>
+                      <Button
+                        sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}
+                        variant='raised'
+                        component='span'
+                      >
+                        <Typography sx={{}}>{attach.icon}</Typography>
+                        <Typography>{attach.attachment}</Typography>
+                      </Button>
+                    </label>
+                  </>
+                ) : attach.attachType === 'select' ? (
+                  <>
+                    <Button
+                      sx={{ width: '100%', display: 'flex', justifyContent: 'start' }}
+                      variant='raised'
+                      component='span'
+                      onClick={()=>setOpenModalForm(true)}
+                    >
+                      <Typography>{attach.icon}</Typography>
+                      <Typography>{attach.attachment}</Typography>
+                    </Button>
+                    <ModalForm
+                      open={openModalForm}
+                      onClose={onClose}
+                      dataForm={attach.modalDetails}
+                      title={'templates'}
+                      selectValues={attach.selectOptions}
+                     // onSubmit={onSubmitCreateContact}
+                      //toScreen={ //toScreen
+                      //setIsEdit={ //setIsEdit
+                      onChange={onChange}
+                      isEdit={false}
+                    />
+                  </>
+                ) : (
+                  '4'
+                )}
               </Grid>
             ))}
-
           </Grid>
           <PreviewModal attachmentFile={attachmentFile} open={openModal} onClose={setOpenModal} />
         </Popover>
