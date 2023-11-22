@@ -17,6 +17,7 @@ const PopoverItems = ({
   icon,
   onClick,
   id,
+  onSubmit,
   attachments,
 }) => {
   const { isLightTheme } = useSelector((state) => state.ui);
@@ -64,9 +65,7 @@ const PopoverItems = ({
   const onClose = () => {
     setOpenModalForm(false);
   };
-   const onChange=(selectedOption)=>{
-    console.log("selectedOption",selectedOption)
-  }
+
   return (
     <Grid>
       <Typography
@@ -142,10 +141,10 @@ const PopoverItems = ({
                       dataForm={attach.modalDetails}
                       title={'templates'}
                       selectValues={attach.selectOptions}
-                     // onSubmit={onSubmitCreateContact}
+                      onSubmit={onSubmit}
                       //toScreen={ //toScreen
                       //setIsEdit={ //setIsEdit
-                      onChange={onChange}
+                    //  onChange={onChange}
                       isEdit={false}
                     />
                   </>

@@ -8,6 +8,7 @@ import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 const BoxMessage = ({ isResponse, type, messageContainer }) => {
   const { value, at, readers, reaction, read, creator, typeMessage, mediaUrl } = messageContainer;
+  console.log("typeMessage",typeMessage);
   const [documentName, setDocumentName] = useState('');
   const bubbleStyleRequest = {
     padding: '8px 16px',

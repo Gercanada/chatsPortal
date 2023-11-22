@@ -7,6 +7,7 @@ import {
   getUserChat,
   getUserFiles,
   sendMessage,
+  sendTemplate,
 } from '../../../../store/slices/whatsApp/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -37,6 +38,10 @@ const MessagesField = ({ setHasChange, loadChats }) => {
 
   const { userFiles, templatesOptions } = useSelector((state) => state.whatsApp);
   const modalDetails = [{ name_: t('templates'), key: 'templates', type: 'select' }];
+
+  const handleSendTemplate = (values) => {
+    dispatch(sendTemplate(id,values.name,values.language))
+  }
   
   const selectsCreate = new Map();
   selectsCreate.set('templates', templatesOptions && templatesOptions );
@@ -64,8 +69,6 @@ const MessagesField = ({ setHasChange, loadChats }) => {
       modalDetails:modalDetails,
     },
   ];
-
-  console.log('templatesOptions', templatesOptions);
   
   useEffect(() => {
     dispatch(getUserFiles(thread));
@@ -130,6 +133,7 @@ const MessagesField = ({ setHasChange, loadChats }) => {
               values={userFiles && userFiles}
               title={'files'}
               type={'files'}
+              onSubmit={handleSendTemplate}
             />
           </Grid>
           <TextField

@@ -28,7 +28,7 @@ const ModalForm = ({
   toScreen,
   setIsEdit,
   isEdit,
-  onChange,
+ // onChange,
   data,
 }) => {
   const {
@@ -44,6 +44,8 @@ const ModalForm = ({
   });
   const { t } = useTranslation();
   const [fieldsValues, setFieldsValues] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
+  
   const style = {
     position: 'relative',
     top: '50%',
@@ -94,6 +96,11 @@ const ModalForm = ({
     onClose(false);
     if(setIsEdit)setIsEdit(false);
   };
+
+  const onChange=(selectedOption)=>{
+      setValue('templates',{ value: selectedOption.value, label: selectedOption.label } )
+      setSelectedOption(selectedOption)
+  }
 
  
   return (
@@ -153,7 +160,7 @@ const ModalForm = ({
                           <span className='text-danger'> * </span>
                         </InputLabel>
                         <Controller
-                          name={item.key}
+                          name={title === 'templates'?'templates':item?.key}
                           control={control}
                           defaultValue={
                             isEdit
@@ -163,9 +170,9 @@ const ModalForm = ({
                           render={({ field: fieldSelect }) => (
                             <StyledReactSelect
                               {...fieldSelect}
-                              options={selectValues
-                                ?.get(item.key)
-                                .map((optionSelect) => ({label:optionSelect.name , value: optionSelect.id}))}
+                              options={selectValues?.get(item.key)}
+                                // ?.get(item.key)
+                                // .map((optionSelect) => ({label:optionSelect.name , value: optionSelect.id}))}
                                 onChange={onChange}
                             />
                           )}
@@ -246,10 +253,11 @@ const ModalForm = ({
               </Button>
             )}
             <Button
-              type='submit'
+             // type='submit'
               size='large'
               sx={{ margin: '10px', width: '15%' }}
               color='primary'
+              onClick={()=>{onSubmit(selectedOption)}}
             >
               {t('save')}
             </Button>

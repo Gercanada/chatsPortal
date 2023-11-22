@@ -9,7 +9,6 @@ import ImageModal from '../../../../components/Modal/ImageModal';
 import { useTranslation } from 'react-i18next';
 import BoxMessage from './BoxMessage';
 
-
 export const styles = {
   root: {
     background: 'black',
@@ -21,7 +20,7 @@ export const styles = {
 
 const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats }) => {
   const newMessageRef = useRef(null);
-  const baseURLFiles = import.meta.env.VITE_IMMCASE_CHAT_FILES
+  const baseURLFiles = import.meta.env.VITE_IMMCASE_CHAT_FILES;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const gridRef = useRef(null);
@@ -52,8 +51,8 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
-      root: null, 
-      threshold: 0.1, 
+      root: null,
+      threshold: 0.1,
     });
 
     if (lastMessageRef.current) {
@@ -70,12 +69,20 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
   const memoizedMessages = useMemo(() => messages || [], [messages]);
 
   // console.log("memoizedMessages",memoizedMessages)
+  const bubbleStyleRequest = {
+    // padding: '8px 16px',
+    // marginBottom: '8px',
+    // maxWidth: '70%',
+    color:'white',
+    backgroundColor: '#005c4b',
+    borderRadius: '10px',
+  };
 
   const gridStyle = {
     position: 'relative',
     height: '74vh',
     backgroundImage: `url(${backgroundImageUrl})`,
-    backgroundRepeat: 'repeat', 
+    backgroundRepeat: 'repeat',
     backgroundSize: 'cover',
     backgroundColor: `${backgroundColor}`,
     overflow: 'auto',
@@ -190,7 +197,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
             <Grid
               key={index}
               // ref={index === memoizedMessages.length - 1 && pageNumber === 0 ? newMessageRef : null}
-              ref={ newMessageRef}
+              ref={newMessageRef}
               sx={{
                 m: 1,
                 width: '98%',
@@ -263,10 +270,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
               ) : item?.type === 'audio' ? (
                 <Grid>
                   <audio controls>
-                    <source
-                      src={ `${baseURLFiles}${item?.media_url}`}
-                      type='audio/ogg'
-                    />
+                    <source src={`${baseURLFiles}${item?.media_url}`} type='audio/ogg' />
                   </audio>
                   <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <PopoverField values={item?.readers} title={'readers'} type={'users'} />
@@ -278,7 +282,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   isResponse={true}
                   type={'text'}
                   messageContainer={{
-                    value:  `${baseURLFiles}${item?.media_url}`,
+                    value: `${baseURLFiles}${item?.media_url}`,
                     at: item?.at,
                     readers: item?.readers,
                     typeMessage: item?.type,
@@ -292,7 +296,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                       <Typography
                         onClick={() => {
                           setOpenModal(true);
-                          setMediaUrl( `${baseURLFiles}${item?.media_url}`);
+                          setMediaUrl(`${baseURLFiles}${item?.media_url}`);
                         }}
                         variant='h1'
                         component='h6'
@@ -304,11 +308,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         }}
                         display='flex'
                       >
-                        <img
-                          src={ `${baseURLFiles}${item?.media_url}`}
-                          width='200px'
-                          alt=''
-                        />
+                        <img src={`${baseURLFiles}${item?.media_url}`} width='200px' alt='' />
                       </Typography>
                       <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <PopoverField values={item?.readers} title={'readers'} type={'users'} />
@@ -326,11 +326,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                         }}
                         display='flex'
                       >
-                        <img
-                          src={ `${baseURLFiles}${item?.media_url}`}
-                          width='100px'
-                          alt=''
-                        />
+                        <img src={`${baseURLFiles}${item?.media_url}`} width='100px' alt='' />
                       </Typography>
                       <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                     </Grid>
@@ -350,7 +346,8 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 justifyContent: 'end',
               }}
             >
-              {item?.has_media === 0 && item.type === 'text' || item?.has_media === 0 && item.type === 'document'? (
+              {(item?.has_media === 0 && item.type === 'text') ||
+              (item?.has_media === 0 && item.type === 'document') ? (
                 <BoxMessage
                   isResponse={false}
                   type={'text'}
@@ -367,12 +364,31 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
               ) : item?.type === 'audio' ? (
                 <Grid>
                   <audio controls>
-                    <source
-                      src={ `${baseURLFiles}${item?.media_url}`}
-                      type='audio/ogg'
-                    />
+                    <source src={`${baseURLFiles}${item?.media_url}`} type='audio/ogg' />
                   </audio>
                   <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
+                </Grid>
+              ) : item?.type === 'template' ? (
+                <Grid>
+                  <Paper
+                    elevation={0}
+                    style={bubbleStyleRequest}
+                    // sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
+                  >
+                    Template:
+                    <TextField
+                      className={'textField'}
+                      value={JSON.parse(item?.body).name}
+                      multiline
+                      disabled={false}
+                      variant='standard'
+                      InputProps={{
+                        disableUnderline: true,
+                        readOnly: true,
+                      }}
+                    />
+                    <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
+                  </Paper>
                 </Grid>
               ) : item?.type === 'image' ? (
                 <Grid>
@@ -393,7 +409,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   >
                     <img src={`${item?.body}`} width='200px' alt='' />
                   </Typography>
-                  <Grid sx={{ }}>
+                  <Grid sx={{}}>
                     {/* <PopoverField values={item?.readers} title={'readers'} type={'users'} /> */}
                     <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                   </Grid>

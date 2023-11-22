@@ -68,8 +68,8 @@ export const getTemplatesOptions = () => {
     // dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get('/whatsapp/templates');
-      console.log('resptemplates',resp?.data?.data)
-      await dispatch(setTemplatesOptions(resp?.data?.data));
+      const selectOptions = resp?.data?.data?.map((i) => ({ value:  i.id, label:`${i.name}_${i.language}`,language:i.language,name:i.name }));
+      await dispatch(setTemplatesOptions(selectOptions));
       // localStorage.setItem('templates', JSON.stringify(resp?.data?.data?.data));
       if (resp) {
        // dispatch(setLoading(false));
@@ -137,7 +137,7 @@ export const getPhoneAccounts = () => {
     dispatch(setLoading(true));
     try {
       const resp = await immcaseApi.get(`/whatsapp/accounts`);
-      console.log('resp?.data?.data', resp?.data?.data);
+
       await dispatch(setPhoneAccounts(resp?.data?.data));
       localStorage.setItem(`phoneAccounts_`, JSON.stringify(resp?.data?.data));
 

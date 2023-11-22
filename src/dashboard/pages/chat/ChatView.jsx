@@ -167,6 +167,8 @@ const ChatView = () => {
     }
   };
 
+  console.log('sortMessages',sortMessages)
+
   useEffect(() => {
     loadConversation(thread);
   }, [thread, conversationsCache]);
