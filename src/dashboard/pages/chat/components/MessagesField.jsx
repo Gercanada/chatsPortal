@@ -39,8 +39,12 @@ const MessagesField = ({ setHasChange, loadChats }) => {
   const { userFiles, templatesOptions } = useSelector((state) => state.whatsApp);
   const modalDetails = [{ name_: t('templates'), key: 'templates', type: 'select' }];
 
-  const handleSendTemplate = (values) => {
-    dispatch(sendTemplate(id,values.name,values.language))
+  const handleSendTemplate = async (values) => {
+    const resp = await dispatch(sendTemplate(id,values.name,values.language))
+    console.log("respssss",resp)
+    if(resp === 200){
+      loadChats();
+    }
   }
   
   const selectsCreate = new Map();

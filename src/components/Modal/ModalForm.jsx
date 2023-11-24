@@ -257,7 +257,7 @@ const ModalForm = ({
               size='large'
               sx={{ margin: '10px', width: '15%' }}
               color='primary'
-              onClick={()=>{onSubmit(selectedOption)}}
+              onClick={()=>{onSubmit(selectedOption),onClose(false)}}
             >
               {t('save')}
             </Button>
