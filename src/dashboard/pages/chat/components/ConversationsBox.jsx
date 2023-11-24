@@ -368,29 +368,22 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   </audio>
                   <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                 </Grid>
-              ) : item?.type === 'template' ? (
-                <Grid>
-                  <Paper
-                    elevation={0}
-                    style={bubbleStyleRequest}
-                    // sx={{ display: 'flex', flexDirection: 'column', width: '45%' }}
-                  >
-                    Template:
-                    <TextField
-                      className={'textField'}
-                      value={JSON.parse(item?.body).name}
-                      multiline
-                      disabled={false}
-                      variant='standard'
-                      InputProps={{
-                        disableUnderline: true,
-                        readOnly: true,
-                      }}
-                    />
-                    <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
-                  </Paper>
-                </Grid>
-              ) : item?.type === 'image' ? (
+              )  : item?.type === 'template' ? (
+                <BoxMessage
+                  isResponse={false}
+                  type={'text'}
+                  messageContainer={{
+                    typeMessage: item?.type,
+                    value:JSON.parse(item?.body).name,
+                    at: item?.at,
+                    readers: item?.readers,
+                    reaction: item?.reaction?.body,
+                    read: item?.status,
+                    creator: item?.creator?.name,
+                  }}
+                />
+                
+              )  : item?.type === 'image' ? (
                 <Grid>
                   <Typography
                     onClick={() => {

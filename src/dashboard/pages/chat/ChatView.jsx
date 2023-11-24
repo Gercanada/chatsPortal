@@ -92,9 +92,6 @@ const ChatView = () => {
         [thread]: reversedArray,
       }));
       localStorage.setItem(`conversation_${thread}`, JSON.stringify(reversedArray));
-      const markAsRead = reversedArray
-        .filter((item) => item.creator === null)
-        .map((item) => item.id);
       dispatch(setReadMessages(thread));
       setSortMessages(reversedArray);
       setHasMoreChats(resp?.data?.data?.last_page);
@@ -149,9 +146,6 @@ const ChatView = () => {
           const resp = await dispatch(getUserChat(conversationId));
           if (resp) {
             const reversedArray = sortArray(resp?.data?.data?.data);
-            const markAsRead = reversedArray
-              .filter((item) => item.creator === null)
-              .map((item) => item.id);
             dispatch(setReadMessages(thread));
             setSortMessages(reversedArray);
             setConversationsCache((prevCache) => ({
@@ -166,8 +160,6 @@ const ChatView = () => {
       }
     }
   };
-
-  console.log('sortMessages',sortMessages)
 
   useEffect(() => {
     loadConversation(thread);

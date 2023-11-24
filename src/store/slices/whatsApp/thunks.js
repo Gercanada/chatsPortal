@@ -136,11 +136,14 @@ export const getPhoneAccounts = () => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
+      const phoneAccountsCached =  localStorage.getItem(`phoneAccounts_`);
+      if(phoneAccountsCached){
+        await dispatch(setPhoneAccounts(JSON.parse(phoneAccountsCached)));
+      }else{
       const resp = await immcaseApi.get(`/whatsapp/accounts`);
-
       await dispatch(setPhoneAccounts(resp?.data?.data));
       localStorage.setItem(`phoneAccounts_`, JSON.stringify(resp?.data?.data));
-
+      }
       if (resp) {
         dispatch(setLoading(false));
         return resp.status;
@@ -176,12 +179,13 @@ export const getCategoriesColors = () => {
   return async (dispatch) => {
     dispatch(setLoading(true));
     try {
+      const categoriesColorsCached =  localStorage.getItem(`categories_colors`);
+      if(categoriesColorsCached){
+        await dispatch(setCategoriesColors(JSON.parse(categoriesColorsCached)));
+      }else{
       const resp = await immcaseApi.get(`/whatsapp/threads/categories`);
-      await dispatch(setCategoriesColors(resp.data.data));
-
-      if (resp) {
-        dispatch(setLoading(false));
-        return resp.status;
+      localStorage.setItem(`categories_colors`, JSON.stringify(resp?.data?.data));
+      await dispatch(setCategoriesColors(resp?.data?.data));
       }
     } catch (error) {
       console.error(error);

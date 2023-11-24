@@ -64,6 +64,20 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
             </a>
             </Grid>
           </Grid>
+        ) : typeMessage === 'template' ? (
+          <>
+            <TextField
+              className={isResponse ? 'textField2' : 'textField'}
+              value={`Template: ${value}`}
+              multiline
+              disabled={isResponse ? false : true}
+              variant='standard'
+              InputProps={{
+                disableUnderline: true,
+                readOnly: true,
+              }}
+            />
+          </>
         ) : (
           <TextField
             className={isResponse ? 'textField2' : 'textField'}
