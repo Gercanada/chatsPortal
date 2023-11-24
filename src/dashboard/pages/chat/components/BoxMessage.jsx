@@ -10,7 +10,6 @@ import CheckIcon from '@mui/icons-material/Check';
 
 const BoxMessage = ({ isResponse, type, messageContainer }) => {
   const { value, at, readers, reaction, read, creator, typeMessage, mediaUrl } = messageContainer;
-  console.log('readstatus', read);
 
   const [documentName, setDocumentName] = useState('');
   const bubbleStyleRequest = {
