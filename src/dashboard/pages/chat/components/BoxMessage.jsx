@@ -5,10 +5,13 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import './chatsStyles.css';
 import PictureAsPdfRoundedIcon from '@mui/icons-material/PictureAsPdfRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import CheckIcon from '@mui/icons-material/Check';
 
 const BoxMessage = ({ isResponse, type, messageContainer }) => {
   const { value, at, readers, reaction, read, creator, typeMessage, mediaUrl } = messageContainer;
-  console.log("typeMessage",typeMessage);
+  console.log('readstatus', read);
+
   const [documentName, setDocumentName] = useState('');
   const bubbleStyleRequest = {
     padding: '8px 16px',
@@ -24,7 +27,7 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
     borderRadius: '10px',
   };
   useEffect(() => {
-    if (typeMessage === 'document' ) {
+    if (typeMessage === 'document') {
       const url = value;
       const parts = url.split('/');
       const nombreDocumento = parts[parts.length - 1];
@@ -45,23 +48,26 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
           </Grid>
         )}
         {typeMessage === 'document' ? (
-          <Grid sx={{ display: 'flex', justifyContent:'space-between' }}>
-          <Grid>
+          <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Grid>
               <PictureAsPdfRoundedIcon
-                sx={{ textAlign: 'end', mr: 1, fontSize:'30px' }}
+                sx={{ textAlign: 'end', mr: 1, fontSize: '30px' }}
                 color={'error'}
               />
-            <Typography sx={isResponse === false ?{ color: 'white' }:{ color: 'grey' }} variant='p'>
-              {documentName}
-            </Typography>
+              <Typography
+                sx={isResponse === false ? { color: 'white' } : { color: 'grey' }}
+                variant='p'
+              >
+                {documentName}
+              </Typography>
             </Grid>
             <Grid>
-            <a href={value} target='_blank' download>
-              <DownloadRoundedIcon
-                sx={{ textAlign: 'end', mr: 1,fontSize:'30px' }}
-                color={'black'}
-              />
-            </a>
+              <a href={value} target='_blank' download>
+                <DownloadRoundedIcon
+                  sx={{ textAlign: 'end', mr: 1, fontSize: '30px' }}
+                  color={'black'}
+                />
+              </a>
             </Grid>
           </Grid>
         ) : typeMessage === 'template' ? (
@@ -108,14 +114,25 @@ const BoxMessage = ({ isResponse, type, messageContainer }) => {
               isResponse ? { textAlign: 'end', mr: 1 } : { textAlign: 'end', mr: 1, color: 'white' }
             }
           >
-          {at}
+            {at}
           </Typography>
-          {isResponse === false && (
-            <DoneAllIcon
-              sx={{ textAlign: 'end', mr: 1 }}
-              color={read === 'read' ? 'primary' : 'info'}
-            />
-          )}
+          {isResponse === false &&
+            (read === 'failed' ? (
+              <ReportGmailerrorredIcon
+                sx={{ textAlign: 'end', mr: 1 }}
+                color={'error'}
+              />
+            ): read === 'draft' ? (
+              <CheckIcon
+                sx={{ textAlign: 'end', mr: 1 }}
+                color={'info'}
+              />
+            ) : (
+              <DoneAllIcon
+                sx={{ textAlign: 'end', mr: 1 }}
+                color={read === 'read' ? 'primary' : 'info'}
+              />
+            ))}
         </Grid>
       </Paper>
     </>

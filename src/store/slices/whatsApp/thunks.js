@@ -144,10 +144,10 @@ export const getPhoneAccounts = () => {
       await dispatch(setPhoneAccounts(resp?.data?.data));
       localStorage.setItem(`phoneAccounts_`, JSON.stringify(resp?.data?.data));
       }
-      if (resp) {
-        dispatch(setLoading(false));
-        return resp.status;
-      }
+      // if (resp) {
+      //   dispatch(setLoading(false));
+      //   return resp.status;
+      // }
     } catch (error) {
       console.error(error);
       return error;
