@@ -196,8 +196,8 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
           item?.Contact === item?.from ? (
             <Grid
               key={index}
-              // ref={index === memoizedMessages.length - 1 && pageNumber === 0 ? newMessageRef : null}
-              ref={newMessageRef}
+               ref={index === memoizedMessages.length - 1 && pageNumber === 0 ? newMessageRef : null}
+              //ref={newMessageRef}
               sx={{
                 m: 1,
                 width: '98%',

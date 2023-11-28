@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ConversationNavbar from './components/ConversationNavbar';
 import ConversationsBox from './components/ConversationsBox';
 import MessagesField from './components/MessagesField';
@@ -34,14 +34,38 @@ const ChatView = () => {
   };
   const allMessages = [];
 
+  const chatId=localStorage.getItem('chat_id');
+  const pusherChannel = useRef(null);
+
   useEffect(() => {
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
     const channel = pusher.subscribe('chat');
+    pusherChannel.current = pusher.subscribe('chat');
     let userThread = '';
-    channel.bind('message', function (data) {
+    pusherChannel.current.bind('message', function(data) {
       allMessages.push(data);
       const jsonObject = JSON.parse(data.message);
-      if (jsonObject.body) {
+      console.log('jsonObject',jsonObject)
+      localStorage.setItem(`message_id`, JSON.stringify(jsonObject.id));
+      const messageId = localStorage.getItem(`message_id`);
+      console.log('messageId',parseInt(messageId))
+      if (jsonObject.error) {
+       
+        console.log('jsonObject.error.thread_id',jsonObject.thread_id)
+        console.log(' parseInt(chatId)', parseInt(chatId))
+        if(jsonObject.thread_id === parseInt(chatId) && messageId !== jsonObject.id ){
+          console.log('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+          loadChatsNoRead();
+        }
+      }else{
+
+        if(jsonObject.status === 'sent'  ||jsonObject.status==='delivered' ){
+          if(jsonObject.thread_id === parseInt(chatId)){
+            console.log('sssssssssssssssssssssssssssssssssssssssssssssssssssss')
+            loadChatsNoRead();
+          }
+        }else{
+          console.log('hiiioiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
         jsonObject.thread.contact;
         jsonObject.body;
         userThread = jsonObject.thread.id;
@@ -80,10 +104,18 @@ const ChatView = () => {
           loadChats();
         }
       }
+      }
     });
-  }, []);
+    return () => {
+      if (pusherChannel.current) {
+        pusher.unsubscribe('chat');
+        pusherChannel.current = null;
+      }
+    };
+  }, [chatId]);
 
   const loadChats = async () => {
+    console.log('aquii--------------------------------------------------')
     const resp = await dispatch(getUserChat(thread));
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
@@ -98,9 +130,28 @@ const ChatView = () => {
     }
   };
 
+  const loadChatsNoRead = async () => {
+    console.log('dispatch///////////////////////////////////////////////////////////')
+    const resp = await dispatch(getUserChat(thread));
+    if (resp) {
+      const reversedArray = sortArray(resp?.data?.data?.data);
+      setConversationsCache((prevCache) => ({
+        ...prevCache,
+        [thread]: reversedArray,
+      }));
+      localStorage.setItem(`conversation_${thread}`, JSON.stringify(reversedArray));
+      setSortMessages(reversedArray);
+      setHasMoreChats(resp?.data?.data?.last_page);
+    }
+  };
+
   useEffect(() => {
     loadChats();
-  }, [id, hasChange, thread]);
+  }, [id, thread]);
+
+  useEffect(() => {
+    loadChatsNoRead();
+  }, [hasChange]);
 
   const sortArray = (arrayResponse) => {
     const array = arrayResponse;
@@ -120,7 +171,6 @@ const ChatView = () => {
     const response = await dispatch(getMoreMessages(thread, page));
     if (response && response?.data) {
       const reversedArray = sortArray(response?.data?.data?.data);
-      const markAsRead = reversedArray?.map((item) => item.id);
       dispatch(setReadMessages(thread));
       setSortMessages((prevChats) => [...reversedArray, ...prevChats]);
       setHasMoreChats(response?.data?.data?.last_page);
@@ -181,7 +231,7 @@ const ChatView = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <MessagesField setHasChange={setHasChange} loadChats={loadChats} />
+          <MessagesField setHasChange={setHasChange} loadChats={loadChatsNoRead} />
         </Grid>
       </Grid>
     </DashboardLayout>

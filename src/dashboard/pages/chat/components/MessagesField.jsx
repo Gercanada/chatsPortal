@@ -100,14 +100,14 @@ const MessagesField = ({ setHasChange, loadChats }) => {
       const resp = await dispatch(sendMessage(id, audio));
       if (resp === 200) {
         loadChats();
-        dispatch(getUserChat(id));
+     //   dispatch(getUserChat(id));
         toast.success(t('sent'));
       }
     } else {
       const resp = await dispatch(sendMessage(id, valueMessage));
       if (resp === 200) {
         loadChats();
-        dispatch(getUserChat(id));
+       // dispatch(getUserChat(id));
         toast.success(t('sent'));
       }
     }

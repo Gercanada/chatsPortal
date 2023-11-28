@@ -120,18 +120,18 @@ export default function Navigator(props) {
     loadChats();
   }, [idAccount, isInto]);
 
-  useEffect(() => {
-    const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
-    const channel = pusher.subscribe('chat');
-    let userThread = '';
-    channel.bind('message', function (data) {
-      const jsonObject = JSON.parse(data.message);
-      if (jsonObject.body) {
-        userThread = jsonObject.thread.id;
-        loadChats();
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
+  //   const channel = pusher.subscribe('chat');
+  //   let userThread = '';
+  //   channel.bind('message', function (data) {
+  //     const jsonObject = JSON.parse(data.message);
+  //     if (jsonObject.body) {
+  //       userThread = jsonObject.thread.id;
+  //       loadChats();
+  //     }
+  //   });
+  // }, []);
 
   return (
     <Drawer variant='permanent' {...other}>
@@ -251,6 +251,7 @@ export default function Navigator(props) {
                                 navigateTo(
                                   `/chat/${item.client_phone_number}/${item.id}/${item.name}`,
                                 );
+                                localStorage.setItem(`chat_id`, JSON.stringify(item.id));
                               }}
                             >
                               <Grid sx={{ display: 'flex' }}>
