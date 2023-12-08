@@ -58,7 +58,7 @@ const ConversationNavbar = ({ user }) => {
         open={openModal}
         onClose={onClose}
         dataForm={details}
-        title={t('edit_name')}
+        title={t('save_contact')}
         onSubmit={onSubmitCreateContact}
         isEdit={false}
       />

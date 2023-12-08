@@ -198,7 +198,7 @@ export default function Navigator(props) {
                       maxHeight: '500px',
                     }}
                   >
-                    <Grid
+                    {/* <Grid
                       sx={{
                         display: 'flex',
                         flexDirection: 'row',
@@ -226,7 +226,7 @@ export default function Navigator(props) {
                           <Typography>{t('new_chat')}</Typography>
                         </Grid>
                       </Button>
-                    </Grid>
+                    </Grid> */}
                     {chats &&
                       chats?.map((item, index) => (
                         <Grid sx={{ display: 'flex', flexDirection: 'row', mb: 1 }} key={index}>

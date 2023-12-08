@@ -171,8 +171,6 @@ const ModalForm = ({
                             <StyledReactSelect
                               {...fieldSelect}
                               options={selectValues?.get(item.key)}
-                                // ?.get(item.key)
-                                // .map((optionSelect) => ({label:optionSelect.name , value: optionSelect.id}))}
                                 onChange={onChange}
                             />
                           )}

@@ -109,8 +109,6 @@ const ContactsPage = () => {
         formData[item] = formDataParam[item];
       }
     });
-
-
     if (isEdit) {
       const resp = await dispatch(updateContact(userId, formData));
       if (resp === 200) {

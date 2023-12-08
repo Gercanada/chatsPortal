@@ -376,3 +376,23 @@ export const updateContactNameThread = (idUser, name) => {
     dispatch(setLoading(false));
   };
 };
+
+export const getCompanyDashboard = (id) => {
+  return async (dispatch) => {
+    //dispatch(setLoading(true));
+    try {
+      const resp = await immcaseApi.get(`/whatsapp/accounts/${id}}`);
+
+      await dispatch(setOneChat(resp.data.data));
+      if (resp) {
+        //dispatch(setLoading(false));
+        return resp;
+      }
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+    //dispatch(setLoading(false));
+  };
+};
+

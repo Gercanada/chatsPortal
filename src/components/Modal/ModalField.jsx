@@ -201,10 +201,11 @@ import {
                       </Grid>
                     ) : (
                       <Grid
-                        item
-                        xs={12}
-                        md={5.8}
-                        sx={{ marginTop: '8px', marginLeft: '5px' }}
+                      container
+                        // item
+                        // xs={12}
+                        md={10}
+                        sx={{ marginTop: '8px', marginLeft: '5px',margin:'auto' }}
                         key={index}
                       >
                        <InputLabel>
@@ -217,6 +218,7 @@ import {
                           })}
                           sx={{ width: '100%' }}
                           label={t(item?.name_)}
+                          fullWidth
                           name={item?.key}
                           type={'text'}
                           //  defaultValue={item?.value || ''}
