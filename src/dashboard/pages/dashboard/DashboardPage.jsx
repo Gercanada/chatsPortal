@@ -18,33 +18,17 @@ import Pusher from 'pusher-js';
 import { toast } from 'react-toastify';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import NotificationBox from '../../../components/Notifications/NotificationBox';
 
 export const DashboardPage = () => {
   const { t } = useTranslation();
-  const [data, setData] = useState([]);
-  const [responseUser, setResponseUser] = useState([]);
-  const [dataItems, setDataItems] = useState([]);
-  const [notificationBody, setNotificationBody] = useState([]);
-  const [notificationContact, setNotificationContact] = useState([]);
   const { isLightTheme } = useSelector((state) => state.ui);
   const language = localStorage.getItem('i18nextLng');
-  const { loading } = useSelector((state) => state.dashboard);
   const dispatch = useDispatch();
 
-  // const getShowData = async () => {
-  //   const resp = await dispatch(getApiDashBoardDetails());
-  //   const arr = resp && Object.entries(resp?.data.counts).map(([key, value]) => ({ key, value }));
-  //   setData(arr);
-  //   setResponseUser(resp?.data.pending_items);
-  // };
+  const allMessages = [];
 
-  const playSound = () => {
-    //  const audioElement = new Audio('/public/images/whistle-campana-whatsapp.mp3');
-    // audioElement.play();
-  };
-   const allMessages = [];
-
-   useEffect(() => {
+  useEffect(() => {
     //Pusher.logToConsole = true;
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
     const channel = pusher.subscribe('chat');
@@ -55,8 +39,6 @@ export const DashboardPage = () => {
       if (jsonObject.body) {
         jsonObject.thread.contact;
         jsonObject.body;
-        setNotificationBody(jsonObject.body);
-        setNotificationContact(jsonObject.thread.contact);
         let color = '';
         let company = '';
         jsonObject.account.name === 'Vivetel Networks Ltd'
@@ -93,58 +75,91 @@ export const DashboardPage = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   console.log('aqui sss4444444444444444sss');
- 
-  //   //Pusher.logToConsole = true;
-  //   const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
-  //   const channel = pusher.subscribe('chat');
-  //   channel.bind('message', function (data) {
-  //     playSound();
-  //     allMessages.push(data);
-  //     const jsonObject = JSON.parse(data.message);
-  //     console.log('aqui oaou', jsonObject);
-  //     jsonObject.thread.contact;
-  //     jsonObject.body;
-  //     setNotificationBody(jsonObject.body);
-  //     setNotificationContact(jsonObject.thread.contact);
-  //     toast.error(`${jsonObject.thread.name}:${jsonObject.body}`,{
-  //       autoClose: false
-  //     })
-  //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   Pusher.logToConsole = true;
-  //   const pusher = new Pusher('a6f0142583a796bae3a3', { cluster: 'us2' });
-  //   const channel = pusher.subscribe('chat');
-  //   channel.bind('message', function (data) {
-  //     allMessages.push(data);
-  //     setMessages(allMessages);
-  //   });
-  // });
-
-  useEffect(() => {
-    const pendingItems = responseUser?.map((item) => ({
-      ...item,
-      category: t(item.category),
-      item_status: t(item.item_status),
-    }));
-    setDataItems(pendingItems);
-  }, [language, responseUser]);
-
-  // useEffect(() => {
-  //   getShowData();
-  // }, []);
-
   return (
     <DashboardLayout>
-      {/* {loading && <Loader />} */}
       <Grid className={'container'} container>
         <Grid container>
           <Grid item xs={12}>
             <Card sx={{ textAlign: 'center', width: '100%', height: '100%' }}>
-              <img src='/images/vivechat.png' width='15%' alt='' style={{ marginTop: '20%' }} />
+              {/* <img src='/images/vivechat.png' width='15%' alt='' style={{ marginTop: '20%' }} /> */}
+              <Grid className='containerBoxes'>
+                <Grid
+                  className='notificationBox'
+                  sx={{ border: '1px solid red', width: '100%', height: '100%' }}
+                >
+                  Notfications
+                  <NotificationBox
+                    userName={'Josue'}
+                    bodyMessage={'Hola'}
+                    stylesContainer={{
+                      backgroundColor: '#fff', 
+                      border: '1px solid #000' ,
+                      borderRadius: '10px',
+                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
+                      padding: '10px 10px',
+                      margin: '5px',
+                    }}
+                  />
+                    <NotificationBox
+                    userName={'Josue'}
+                    bodyMessage={'Hola'}
+                    stylesContainer={{
+                      backgroundColor: '#fff', 
+                      border: '1px solid #000' ,
+                      borderRadius: '10px',
+                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
+                      padding: '10px 10px',
+                      margin: '5px',
+                    }}
+                  />
+                    <NotificationBox
+                    userName={'Josue'}
+                    bodyMessage={'Hola'}
+                    stylesContainer={{
+                      backgroundColor: '#fff', 
+                      border: '1px solid #000' ,
+                      borderRadius: '10px',
+                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
+                      padding: '10px 10px',
+                      margin: '5px',
+                    }}
+                  />
+                    <NotificationBox
+                    userName={'Josue'}
+                    bodyMessage={'Hola'}
+                    stylesContainer={{
+                      backgroundColor: '#fff', 
+                      border: '1px solid #000' ,
+                      borderRadius: '10px',
+                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
+                      padding: '10px 10px',
+                      margin: '5px',
+                    }}
+                  />
+                    <NotificationBox
+                    userName={'Josue'}
+                    bodyMessage={'Hola'}
+                    stylesContainer={{
+                      backgroundColor: '#fff', 
+                      border: '1px solid #000' ,
+                      borderRadius: '10px',
+                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
+                      padding: '10px 10px',
+                      margin: '5px',
+                    }}
+                  />
+                   
+                </Grid>
+                <Grid
+                  className='activeMessageBox'
+                  sx={{ border: '1px solid yellow', width: '100%', height: '100%' }}
+                >
+                  Messages
+                </Grid>
+                <Grid className='stadisticsBox' sx={{ border: '1px solid blue' }}>
+                  Statistics
+                </Grid>
+              </Grid>
             </Card>
           </Grid>
         </Grid>

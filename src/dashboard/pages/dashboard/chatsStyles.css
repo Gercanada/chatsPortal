@@ -1,3 +1,8 @@
+* {
+    margin: 0;
+    padding: 0;
+    /* This is a reset. Be careful, as it removes all margins and paddings. You'll need to re-apply them as needed. */
+  }
 .container{
     background-image: '/images/LOGOPORTAL.png' !important ;
     /* background-color: red; */
@@ -16,3 +21,57 @@
     margin-left: 10px;
     
 }
+.notificationBox {
+    grid-area: notificationBox;
+    max-height: 420px;
+    min-height: 420px;
+    overflow-y: auto; 
+  }
+  .activeMessageBox {
+    grid-area: activeMessageBox;
+    max-height: 420px;
+    min-height: 420px;
+    overflow-y: auto; 
+  }
+  .stadisticsBox {
+    grid-area: stadisticsBox;
+  }
+.containerBoxes{
+    width: 100% !important;
+    height:'auto';
+    display: grid;
+    gap: 0px; 
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+    "notificationBox notificationBox activeMessageBox activeMessageBox"
+    "stadisticsBox stadisticsBox stadisticsBox stadisticsBox"
+}
+
+@media (max-width:768px) {
+    .notificationBox {
+        grid-area: notificationBox;
+        max-height: 150px;
+        min-height: 250px;
+      }
+      .activeMessageBox {
+        grid-area: activeMessageBox;
+        max-height: 150px;
+        min-height: 250px;
+      }
+      .stadisticsBox {
+        grid-area: stadisticsBox;
+      }
+    .containerBoxes{
+        width: 100% !important;
+        height:'auto';
+        display: grid;
+        gap: 0px; 
+        grid-template-rows: auto auto;
+        grid-template-areas: 
+        "notificationBox notificationBox"
+        "activeMessageBox activeMessageBox"
+        "stadisticsBox stadisticsBox"
+    }
+
+}
+
