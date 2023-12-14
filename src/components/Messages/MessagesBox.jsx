@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const NotificationBox = ({ userName, bodyMessage, stylesContainer, icon }) => {
+const MessagesBox = ({ userName, contactnumber, stylesContainer, icon }) => {
   const { isLightTheme } = useSelector((state) => state.ui);
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -24,20 +24,21 @@ const NotificationBox = ({ userName, bodyMessage, stylesContainer, icon }) => {
   });
 
   return (
-    <Box sx={stylesContainer}>
-      <Grid sx={{ display: 'flex'}}>
-        <Typography >
-          {userName}:
-        </Typography>
-        <Typography
-        noWrap      
-        >
-          {bodyMessage}
-        </Typography>
+    <Box sx={{
+        ...stylesContainer,
+        boxSizing: 'border-box', // Include padding and border in the element's width
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        // Reduce padding and margin if necessary to fit within the parent's width
+      }}>
+      <Grid sx={{display:'flex'}}>
+        <Typography noWrap  >{userName}:</Typography>
+        <Typography>{contactnumber}</Typography>
       </Grid>
       {icon}
     </Box>
   );
 };
 
-export default NotificationBox;
+export default MessagesBox;

@@ -1,8 +1,10 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     /* This is a reset. Be careful, as it removes all margins and paddings. You'll need to re-apply them as needed. */
   }
+  
 .container{
     background-image: '/images/LOGOPORTAL.png' !important ;
     /* background-color: red; */
@@ -22,31 +24,33 @@
     
 }
 .notificationBox {
-    grid-area: notificationBox;
-    max-height: 420px;
+
     min-height: 420px;
+    flex: 1 1 48%; /* Allows boxes to grow and shrink but with a base width of 48% */
+    max-height: 420px;
     overflow-y: auto; 
   }
   .activeMessageBox {
-    grid-area: activeMessageBox;
-    max-height: 420px;
     min-height: 420px;
+    flex: 1 1 48%; /* Allows boxes to grow and shrink but with a base width of 48% */
+    max-height: 420px;
     overflow-y: auto; 
   }
   .stadisticsBox {
-    grid-area: stadisticsBox;
+    /* grid-area: stadisticsBox; */
   }
+  
 .containerBoxes{
     width: 100% !important;
     height:'auto';
-    display: grid;
-    gap: 0px; 
-    grid-template-rows: auto auto;
-    grid-template-areas: 
-    "notificationBox notificationBox activeMessageBox activeMessageBox"
-    "stadisticsBox stadisticsBox stadisticsBox stadisticsBox"
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap onto the next line */
+    justify-content: space-between; /* Distributes space between and around content items */
+    align-items: flex-start; /* Aligns items to the start of the container */
 }
-
+.containerBoxes > :nth-child(3) {
+  flex-basis: 100%; /* Makes the third box take full width */
+}
 @media (max-width:768px) {
     .notificationBox {
         grid-area: notificationBox;

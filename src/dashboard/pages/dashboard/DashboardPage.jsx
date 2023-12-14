@@ -1,25 +1,25 @@
 import { Avatar, Box, Card, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { DashboardLayout } from '../../layouts/DashboardLayout';
-import { Loader } from '../../../components/Loader';
 import { useTranslation } from 'react-i18next';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { useDispatch, useSelector } from 'react-redux';
-import { getApiDashBoardDetails } from '../../../store/slices/dashboard/thunks';
 import { useEffect, useState } from 'react';
-import GridTable from '../../../components/Tables/GridTable';
-import { Link } from 'react-router-dom';
-import PersonIcon from '@mui/icons-material/Person';
-import ArticleIcon from '@mui/icons-material/Article';
-
 import './chatsStyles.css';
-import ChatView from '../chat/ChatView';
 import Pusher from 'pusher-js';
 import { toast } from 'react-toastify';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import NotificationBox from '../../../components/Notifications/NotificationBox';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MessagesBox from '../../../components/Messages/MessagesBox';
 
+const notificationData = [
+  { id: 1, userName: 'Josue', body: 'Hello' },
+  { id: 2, userName: 'Josue', body: 'Papusssssssssssssssssssssssssssgggggggggggggggggssssssssssssss' },
+  { id: 3, userName: 'Heri', body: 'Hello' },
+];
+const activeChats = [
+  { id: 1, userName: 'Josue', number: 3311066485 },
+  { id: 2, userName: 'Josue', number: 3345021142 },
+];
 export const DashboardPage = () => {
   const { t } = useTranslation();
   const { isLightTheme } = useSelector((state) => state.ui);
@@ -85,76 +85,46 @@ export const DashboardPage = () => {
               <Grid className='containerBoxes'>
                 <Grid
                   className='notificationBox'
-                  sx={{ border: '1px solid red', width: '100%', height: '100%' }}
+                  sx={{ border: '1px solid red', height: '100%', maxWidth:500 }}
                 >
                   Notfications
-                  <NotificationBox
-                    userName={'Josue'}
-                    bodyMessage={'Hola'}
-                    stylesContainer={{
-                      backgroundColor: '#fff', 
-                      border: '1px solid #000' ,
-                      borderRadius: '10px',
-                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
-                      padding: '10px 10px',
-                      margin: '5px',
-                    }}
-                  />
+                  {notificationData.map((notify) => (
                     <NotificationBox
-                    userName={'Josue'}
-                    bodyMessage={'Hola'}
-                    stylesContainer={{
-                      backgroundColor: '#fff', 
-                      border: '1px solid #000' ,
-                      borderRadius: '10px',
-                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
-                      padding: '10px 10px',
-                      margin: '5px',
-                    }}
-                  />
-                    <NotificationBox
-                    userName={'Josue'}
-                    bodyMessage={'Hola'}
-                    stylesContainer={{
-                      backgroundColor: '#fff', 
-                      border: '1px solid #000' ,
-                      borderRadius: '10px',
-                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
-                      padding: '10px 10px',
-                      margin: '5px',
-                    }}
-                  />
-                    <NotificationBox
-                    userName={'Josue'}
-                    bodyMessage={'Hola'}
-                    stylesContainer={{
-                      backgroundColor: '#fff', 
-                      border: '1px solid #000' ,
-                      borderRadius: '10px',
-                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
-                      padding: '10px 10px',
-                      margin: '5px',
-                    }}
-                  />
-                    <NotificationBox
-                    userName={'Josue'}
-                    bodyMessage={'Hola'}
-                    stylesContainer={{
-                      backgroundColor: '#fff', 
-                      border: '1px solid #000' ,
-                      borderRadius: '10px',
-                      boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' ,
-                      padding: '10px 10px',
-                      margin: '5px',
-                    }}
-                  />
-                   
+                      userName={notify.userName}
+                      bodyMessage={notify.body}
+                      // icon={}
+                      stylesContainer={{
+                        backgroundColor: '#fff',
+                        border: '1px solid #000',
+                        borderRadius: '10px',
+                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                        padding: '10px 10px',
+                        margin: '5px'
+                      }}
+                    />
+                  ))}
                 </Grid>
                 <Grid
                   className='activeMessageBox'
-                  sx={{ border: '1px solid yellow', width: '100%', height: '100%' }}
+                  sx={{ border: '1px solid yellow', height: '100%', maxWidth:500 }}
                 >
-                  Messages
+                  Active chats
+                  {activeChats.map((chat) => (
+                    <MessagesBox
+                      userName={chat.userName}
+                      contactnumber={chat.number}
+                      // icon={}
+                      stylesContainer={{
+                        backgroundColor: '#fff',
+                        border: '1px solid #000',
+                        borderRadius: '10px',
+                        boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                        padding: '10px 10px',
+                        margin: '5px',
+                      }}
+                    />
+                  ))}
+                
                 </Grid>
                 <Grid className='stadisticsBox' sx={{ border: '1px solid blue' }}>
                   Statistics
