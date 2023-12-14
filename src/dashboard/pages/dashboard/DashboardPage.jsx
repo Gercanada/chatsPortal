@@ -10,10 +10,11 @@ import { toast } from 'react-toastify';
 import NotificationBox from '../../../components/Notifications/NotificationBox';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MessagesBox from '../../../components/Messages/MessagesBox';
+import ThreePIcon from '@mui/icons-material/ThreeP';
 
 const notificationData = [
   { id: 1, userName: 'Josue', body: 'Hello' },
-  { id: 2, userName: 'Josue', body: 'Papusssssssssssssssssssssssssssgggggggggggggggggssssssssssssss' },
+  { id: 2, userName: 'Josue', body: 'Papussssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss' },
   { id: 3, userName: 'Heri', body: 'Hello' },
 ];
 const activeChats = [
@@ -85,17 +86,18 @@ export const DashboardPage = () => {
               <Grid className='containerBoxes'>
                 <Grid
                   className='notificationBox'
-                  sx={{ border: '1px solid red', height: '100%', maxWidth:500 }}
+                  sx={{ border: '1px solid red', height: '100%', width:'100%'}}
                 >
                   Notfications
                   {notificationData.map((notify) => (
                     <NotificationBox
                       userName={notify.userName}
                       bodyMessage={notify.body}
-                      // icon={}
+                      icon={<NotificationsIcon/>}
                       stylesContainer={{
                         backgroundColor: '#fff',
                         border: '1px solid #000',
+                        // maxWidth:500,
                         borderRadius: '10px',
                         boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
                         padding: '10px 10px',
@@ -106,14 +108,14 @@ export const DashboardPage = () => {
                 </Grid>
                 <Grid
                   className='activeMessageBox'
-                  sx={{ border: '1px solid yellow', height: '100%', maxWidth:500 }}
+                  sx={{ border: '1px solid yellow', height: '100%',  width:'100%' }}
                 >
                   Active chats
                   {activeChats.map((chat) => (
                     <MessagesBox
                       userName={chat.userName}
                       contactnumber={chat.number}
-                      // icon={}
+                      icon={<ThreePIcon/>}
                       stylesContainer={{
                         backgroundColor: '#fff',
                         border: '1px solid #000',

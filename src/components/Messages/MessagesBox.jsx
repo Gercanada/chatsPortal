@@ -33,10 +33,10 @@ const MessagesBox = ({ userName, contactnumber, stylesContainer, icon }) => {
         // Reduce padding and margin if necessary to fit within the parent's width
       }}>
       <Grid sx={{display:'flex'}}>
-        <Typography noWrap  >{userName}:</Typography>
+        <Typography noWrap  > {icon}{userName}:</Typography>
         <Typography>{contactnumber}</Typography>
       </Grid>
-      {icon}
+  
     </Box>
   );
 };

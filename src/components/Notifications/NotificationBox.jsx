@@ -25,17 +25,12 @@ const NotificationBox = ({ userName, bodyMessage, stylesContainer, icon }) => {
 
   return (
     <Box sx={stylesContainer}>
-      <Grid sx={{ display: 'flex'}}>
-        <Typography >
-          {userName}:
+      <Grid sx={{ display: 'flex' }}>
+        <Typography>
+          {icon} {userName}:
         </Typography>
-        <Typography
-        noWrap      
-        >
-          {bodyMessage}
-        </Typography>
+        <Typography noWrap>{bodyMessage}</Typography>
       </Grid>
-      {icon}
     </Box>
   );
 };
