@@ -10,7 +10,7 @@ import ContactsPage from '../pages/contacts/ContactsPage';
 export const DashboardRouter = () => {
   return (
     <Routes>
-      <Route path='/' element={<DashboardPage />} />
+      <Route path='/:account' element={<DashboardPage />} />
       <Route path='/profile' element={<ProfileDetails />}>
         <Route path='/profile' element={<ProfilePage />} />
       </Route>

@@ -11,6 +11,8 @@ import NotificationBox from '../../../components/Notifications/NotificationBox';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MessagesBox from '../../../components/Messages/MessagesBox';
 import ThreePIcon from '@mui/icons-material/ThreeP';
+import { useParams } from 'react-router-dom';
+import { getActiveChats, getNotifications } from '../../../store/slices/whatsApp/thunks';
 
 const notificationData = [
   { id: 1, userName: 'Josue', body: 'Hello' },
@@ -23,10 +25,16 @@ const activeChats = [
 ];
 export const DashboardPage = () => {
   const { t } = useTranslation();
+  const { account } = useParams();
   const { isLightTheme } = useSelector((state) => state.ui);
+  const { accountInfo,notificationsInfo } = useSelector((state) => state.whatsApp);
   const language = localStorage.getItem('i18nextLng');
   const dispatch = useDispatch();
 
+
+  console.log('accountInfo',accountInfo)
+  
+  console.log('notificationsInfo',notificationsInfo)
   const allMessages = [];
 
   useEffect(() => {
@@ -76,6 +84,12 @@ export const DashboardPage = () => {
     });
   }, []);
 
+  useEffect(() => {
+dispatch(getNotifications(account))
+dispatch(getActiveChats(account))
+  }, [account])
+  
+
   return (
     <DashboardLayout>
       <Grid className={'container'} container>
@@ -89,9 +103,10 @@ export const DashboardPage = () => {
                   sx={{ border: '1px solid red', height: '100%', width:'100%'}}
                 >
                   Notfications
-                  {notificationData.map((notify) => (
+                  
+                  {notificationsInfo?.data?.map((notify) => (
                     <NotificationBox
-                      userName={notify.userName}
+                      userName={notify.threadName}
                       bodyMessage={notify.body}
                       icon={<NotificationsIcon/>}
                       stylesContainer={{
@@ -111,10 +126,10 @@ export const DashboardPage = () => {
                   sx={{ border: '1px solid yellow', height: '100%',  width:'100%' }}
                 >
                   Active chats
-                  {activeChats.map((chat) => (
+                  {accountInfo?.active_chats?.map((chat) => (
                     <MessagesBox
-                      userName={chat.userName}
-                      contactnumber={chat.number}
+                      userName={chat.name}
+                      contactnumber={chat.contact}
                       icon={<ThreePIcon/>}
                       stylesContainer={{
                         backgroundColor: '#fff',

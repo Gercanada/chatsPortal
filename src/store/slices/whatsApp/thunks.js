@@ -1,12 +1,14 @@
 import { toast } from 'react-toastify';
 import { immcaseApi } from '../../../api';
 import {
+  setAccountInfo,
   setCategoriesColors,
   setChats,
   setCurrentPage,
   setLastPage,
   setLoading,
   setLoadingAccount,
+  setNotificationsInfo,
   setOneChat,
   setPhoneAccounts,
   setTemplatesOptions,
@@ -399,12 +401,12 @@ export const getNotifications = (id) => {
   return async (dispatch) => {
     //dispatch(setLoading(true));
     try {
-      const resp = await immcaseApi.get(`/whatsapp/notifications`);
-      console.log("respuki",resp)
-      // await dispatch(setOneChat(resp.data.data));
-      if (resp) {
+      const {data} = await immcaseApi.get(`/whatsapp/${id}/notifications`);
+      console.log("respukidatya",data)
+      await dispatch(setNotificationsInfo(data));
+      if (data) {
         //dispatch(setLoading(false));
-        return resp;
+        return data;
       }
     } catch (error) {
       console.error(error);
@@ -417,12 +419,12 @@ export const getActiveChats = (id) => {
   return async (dispatch) => {
     //dispatch(setLoading(true));
     try {
-      const resp = await immcaseApi.get(`/whatsapp/accounts/${id}}`);
+      const {data}= await immcaseApi.get(`/whatsapp/accounts/${id}}`);
 
-      await dispatch(setOneChat(resp.data.data));
-      if (resp) {
+      await dispatch(setAccountInfo(data));
+      if (data) {
         //dispatch(setLoading(false));
-        return resp;
+        return data;
       }
     } catch (error) {
       console.error(error);

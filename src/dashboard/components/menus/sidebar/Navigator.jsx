@@ -71,7 +71,7 @@ export default function Navigator(props) {
   };
 
   const handleChange = (panel, name) => async (event, isExpanded) => {
-    navigateTo(`/`);
+    navigateTo(`/${panel}`);
     handleTheme(name);
     localStorage.setItem('chat_account_type', name);
     setExpanded(isExpanded ? panel : false);
