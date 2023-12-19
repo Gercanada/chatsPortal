@@ -74,7 +74,7 @@
         grid-template-areas: 
         "notificationBox notificationBox"
         "activeMessageBox activeMessageBox"
-        "stadisticsBox stadisticsBox"
+        /* "stadisticsBox stadisticsBox" */
     }
 
 }

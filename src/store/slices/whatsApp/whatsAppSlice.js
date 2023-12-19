@@ -12,7 +12,8 @@ export const initialState = {
   templatesOptions:[],
   accountInfo:[],
   notificationsInfo:[],
-  categoriesColors:[]
+  categoriesColors:[],
+  activeChats:[]
 };
 
 export const whatsAppSlice = createSlice({
@@ -53,6 +54,9 @@ export const whatsAppSlice = createSlice({
 setAccountInfo:(state, {payload}) => {
   state.accountInfo = payload;
 },
+setActiveChats:(state, {payload}) => {
+  state.activeChats = payload;
+},
 setNotificationsInfo:(state, {payload}) => {
   state.notificationsInfo = payload;
 },
@@ -61,5 +65,5 @@ setNotificationsInfo:(state, {payload}) => {
   }
 });
 
-export const {setLoading,setLoadingAccount,setNotificationsInfo, setAccountInfo, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors,setLastPage,setCurrentPage,setTemplatesOptions} =
+export const {setLoading,setLoadingAccount,setNotificationsInfo,setActiveChats, setAccountInfo, setChats,setOneChat,setPhoneAccounts, setUserFiles, setCategoriesColors,setLastPage,setCurrentPage,setTemplatesOptions} =
 whatsAppSlice.actions;

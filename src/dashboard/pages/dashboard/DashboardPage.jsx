@@ -14,27 +14,19 @@ import ThreePIcon from '@mui/icons-material/ThreeP';
 import { useParams } from 'react-router-dom';
 import { getActiveChats, getNotifications } from '../../../store/slices/whatsApp/thunks';
 
-const notificationData = [
-  { id: 1, userName: 'Josue', body: 'Hello' },
-  { id: 2, userName: 'Josue', body: 'Papussssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss' },
-  { id: 3, userName: 'Heri', body: 'Hello' },
-];
-const activeChats = [
-  { id: 1, userName: 'Josue', number: 3311066485 },
-  { id: 2, userName: 'Josue', number: 3345021142 },
-];
+
 export const DashboardPage = () => {
   const { t } = useTranslation();
   const { account } = useParams();
   const { isLightTheme } = useSelector((state) => state.ui);
-  const { accountInfo,notificationsInfo } = useSelector((state) => state.whatsApp);
+  const { accountInfo,notificationsInfo,activeChats } = useSelector((state) => state.whatsApp);
   const language = localStorage.getItem('i18nextLng');
   const dispatch = useDispatch();
 
 
   console.log('accountInfo',accountInfo)
   
-  console.log('notificationsInfo',notificationsInfo)
+  console.log('activeChats',activeChats)
   const allMessages = [];
 
   useEffect(() => {
@@ -81,12 +73,14 @@ export const DashboardPage = () => {
           });
         }
       }
+      dispatch(getNotifications(account))
+      dispatch(getActiveChats(account))
     });
   }, []);
 
   useEffect(() => {
-dispatch(getNotifications(account))
-dispatch(getActiveChats(account))
+  dispatch(getNotifications(account))
+  dispatch(getActiveChats(account))
   }, [account])
   
 
@@ -100,15 +94,15 @@ dispatch(getActiveChats(account))
               <Grid className='containerBoxes'>
                 <Grid
                   className='notificationBox'
-                  sx={{ border: '1px solid red', height: '100%', width:'100%'}}
+                  // sx={{ border: '1px solid red', height: '100%', width:'100%'}}
                 >
-                  Notfications
+                 <NotificationsIcon/> Notifications
                   
                   {notificationsInfo?.data?.map((notify) => (
                     <NotificationBox
                       userName={notify.threadName}
                       bodyMessage={notify.body}
-                      icon={<NotificationsIcon/>}
+                      // icon={<NotificationsIcon/>}
                       stylesContainer={{
                         backgroundColor: '#fff',
                         border: '1px solid #000',
@@ -123,14 +117,14 @@ dispatch(getActiveChats(account))
                 </Grid>
                 <Grid
                   className='activeMessageBox'
-                  sx={{ border: '1px solid yellow', height: '100%',  width:'100%' }}
+                  // sx={{ border: '1px solid yellow', height: '100%',  width:'100%' }}
                 >
-                  Active chats
-                  {accountInfo?.active_chats?.map((chat) => (
+                <ThreePIcon/>  Active chats
+                  {activeChats?.map((chat) => (
                     <MessagesBox
                       userName={chat.name}
                       contactnumber={chat.contact}
-                      icon={<ThreePIcon/>}
+                      // icon={<ThreePIcon/>}
                       stylesContainer={{
                         backgroundColor: '#fff',
                         border: '1px solid #000',
@@ -143,9 +137,9 @@ dispatch(getActiveChats(account))
                   ))}
                 
                 </Grid>
-                <Grid className='stadisticsBox' sx={{ border: '1px solid blue' }}>
+                {/* <Grid className='stadisticsBox' >
                   Statistics
-                </Grid>
+                </Grid> */}
               </Grid>
             </Card>
           </Grid>

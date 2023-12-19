@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import { immcaseApi } from '../../../api';
 import {
   setAccountInfo,
+  setActiveChats,
   setCategoriesColors,
   setChats,
   setCurrentPage,
@@ -402,7 +403,7 @@ export const getNotifications = (id) => {
     //dispatch(setLoading(true));
     try {
       const {data} = await immcaseApi.get(`/whatsapp/${id}/notifications`);
-      console.log("respukidatya",data)
+      //console.log("respukidatya",data)
       await dispatch(setNotificationsInfo(data));
       if (data) {
         //dispatch(setLoading(false));
@@ -419,9 +420,10 @@ export const getActiveChats = (id) => {
   return async (dispatch) => {
     //dispatch(setLoading(true));
     try {
-      const {data}= await immcaseApi.get(`/whatsapp/accounts/${id}}`);
+      const {data}= await immcaseApi.get(`/whatsapp/accounts/${id}/active_chats`);
+      console.log('dataaa',data)
 
-      await dispatch(setAccountInfo(data));
+      await dispatch(setActiveChats(data?.data));
       if (data) {
         //dispatch(setLoading(false));
         return data;
