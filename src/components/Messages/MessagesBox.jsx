@@ -26,6 +26,7 @@ const MessagesBox = ({ userName, contactnumber, stylesContainer, icon }) => {
   return (
     <Box sx={{
         ...stylesContainer,
+        
         boxSizing: 'border-box', // Include padding and border in the element's width
         display: 'flex',
         justifyContent: 'space-between',
@@ -33,8 +34,8 @@ const MessagesBox = ({ userName, contactnumber, stylesContainer, icon }) => {
         // Reduce padding and margin if necessary to fit within the parent's width
       }}>
       <Grid sx={{display:'flex'}}>
-        <Typography noWrap  > {icon}{userName}:</Typography>
-        <Typography>{contactnumber}</Typography>
+        <Typography noWrap sx={{color:'black'}} > {icon}{userName}:</Typography>
+        <Typography sx={{color:'black'}}>{contactnumber}</Typography>
       </Grid>
   
     </Box>
