@@ -291,7 +291,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                 />
               ) : (
                 <>
-                  {item?.media_url.split('/')[4] === 'images' ? (
+                  {item?.media_url.split('/')[3] === 'images' ? (
                     <Grid>
                       <Typography
                         onClick={() => {

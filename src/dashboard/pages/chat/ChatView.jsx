@@ -50,22 +50,16 @@ const ChatView = () => {
       const messageId = localStorage.getItem(`message_id`);
       console.log('messageId',parseInt(messageId))
       if (jsonObject.error) {
-       
-        console.log('jsonObject.error.thread_id',jsonObject.thread_id)
-        console.log(' parseInt(chatId)', parseInt(chatId))
         if(jsonObject.thread_id === parseInt(chatId) && messageId !== jsonObject.id ){
-          console.log('errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
           loadChatsNoRead();
         }
       }else{
 
         if(jsonObject.status === 'sent'  ||jsonObject.status==='delivered' ){
           if(jsonObject.thread_id === parseInt(chatId)){
-            console.log('sssssssssssssssssssssssssssssssssssssssssssssssssssss')
             loadChatsNoRead();
           }
         }else{
-          console.log('hiiioiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
         jsonObject.thread.contact;
         jsonObject.body;
         userThread = jsonObject.thread.id;
@@ -115,7 +109,6 @@ const ChatView = () => {
   }, [chatId]);
 
   const loadChats = async () => {
-    console.log('aquii--------------------------------------------------')
     const resp = await dispatch(getUserChat(thread));
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
@@ -131,7 +124,6 @@ const ChatView = () => {
   };
 
   const loadChatsNoRead = async () => {
-    console.log('dispatch///////////////////////////////////////////////////////////')
     const resp = await dispatch(getUserChat(thread));
     if (resp) {
       const reversedArray = sortArray(resp?.data?.data?.data);
