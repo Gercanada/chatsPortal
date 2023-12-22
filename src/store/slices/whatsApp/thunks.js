@@ -421,8 +421,6 @@ export const getActiveChats = (id) => {
     //dispatch(setLoading(true));
     try {
       const {data}= await immcaseApi.get(`/whatsapp/accounts/${id}/active_chats`);
-      console.log('dataaa',data)
-
       await dispatch(setActiveChats(data?.data));
       if (data) {
         //dispatch(setLoading(false));

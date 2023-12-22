@@ -1,5 +1,5 @@
 import { Avatar, Box, Card, Grid, Typography } from '@mui/material';
-import React from 'react';
+import React, { useRef } from 'react';
 import { DashboardLayout } from '../../layouts/DashboardLayout';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,16 +23,15 @@ export const DashboardPage = () => {
   const { accountInfo, notificationsInfo, activeChats } = useSelector((state) => state.whatsApp);
   const language = localStorage.getItem('i18nextLng');
   const dispatch = useDispatch();
-  let location = useLocation();
-  console.log(' console.log(location.pathname);', location.pathname);
   const allMessages = [];
+  const account_id = localStorage.getItem('account_id');
+  console.log('account_id;', account_id);
+  const pusherChannel = useRef(null);
 
   useEffect(() => {
-    //Pusher.logToConsole = true;
     const pusher = new Pusher('87a001442582afe960c1', { cluster: 'us2' });
-    const channel = pusher.subscribe('chat');
-    channel.bind('message', function (data) {
-      // playSound();
+    pusherChannel.current = pusher.subscribe('chat');
+    pusherChannel.current.bind('message', function (data) {
       allMessages.push(data);
       const jsonObject = JSON.parse(data.message);
       if (jsonObject.status === 'sent' || jsonObject.status === 'delivered') {
@@ -40,7 +39,7 @@ export const DashboardPage = () => {
           loadChatsNoRead();
         }
       } else {
-        if (`/${jsonObject.account.id}` === location.pathname) {
+        let accounId = jsonObject.account.id.toString();
           jsonObject.thread.contact;
           jsonObject.body;
           let color = '';
@@ -77,17 +76,24 @@ export const DashboardPage = () => {
               autoClose: 20000,
             });
           }
-          dispatch(getNotifications(account));
-          dispatch(getActiveChats(account));
-        }
+          if (accounId === account_id) {
+            dispatch(getNotifications(account_id));
+            dispatch(getActiveChats(account_id));
+          }
       }
     });
-  }, []);
+    return () => {
+      if (pusherChannel.current) {
+        pusher.unsubscribe('chat');
+        pusherChannel.current = null;
+      }
+    };
+  }, [account_id]);
 
   useEffect(() => {
     dispatch(getNotifications(account));
     dispatch(getActiveChats(account));
-  }, [account]);
+  }, [account_id, account]);
 
   return (
     <DashboardLayout>
@@ -127,7 +133,7 @@ export const DashboardPage = () => {
                     ) : (
                       <Grid>
                         <NotificationsOffIcon fontSize='large' />
-                        'No data'
+                        Void
                       </Grid>
                     )}
                   </Grid>
@@ -170,7 +176,7 @@ export const DashboardPage = () => {
                     ) : (
                       <Grid>
                         <MailLockIcon fontSize='large' />
-                        'No data'
+                        Void
                       </Grid>
                     )}
                   </Grid>

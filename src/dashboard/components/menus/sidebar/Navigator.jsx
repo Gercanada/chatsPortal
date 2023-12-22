@@ -71,7 +71,7 @@ export default function Navigator(props) {
   };
 
   const handleChange = (panel, name) => async (event, isExpanded) => {
-    navigateTo(`/${panel}`);
+    localStorage.setItem(`account_id`, JSON.stringify(panel));
     handleTheme(name);
     localStorage.setItem('chat_account_type', name);
     setExpanded(isExpanded ? panel : false);
@@ -88,6 +88,7 @@ export default function Navigator(props) {
       setChangeAccount(true);
     }
     setPageNumber(1);
+    navigateTo(`/${panel}`);
   };
 
   const loadAccounts = () => {
