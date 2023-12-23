@@ -388,7 +388,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   <Typography
                     onClick={() => {
                       setOpenModal(true);
-                      setMediaUrl(item?.body);
+                      setMediaUrl(item?.media_url);
                     }}
                     variant='h1'
                     component='h6'
@@ -400,7 +400,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                     }}
                     display='flex'
                   >
-                    <img src={`${item?.body}`} width='200px' alt='' />
+                    <img src={`${item?.media_url}`} width='200px' alt='' />
                   </Typography>
                   <Grid sx={{}}>
                     {/* <PopoverField values={item?.readers} title={'readers'} type={'users'} /> */}
