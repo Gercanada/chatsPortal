@@ -274,7 +274,7 @@ const ConversationsBox = ({ messages, hasMoreChats, pageNumber, loadMoreChats })
                   </audio>
                   <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <PopoverField values={item?.readers} title={'readers'} type={'users'} />
-                    <Typography sx={{ textAlign: 'end' }}>{item.at.split(' ')[1]}</Typography>
+                    <Typography sx={{ textAlign: 'end' }}>{item.at}</Typography>
                   </Grid>
                 </Grid>
               ) : item?.type === 'document' ? (
